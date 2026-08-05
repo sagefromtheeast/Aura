@@ -32,7 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
-
+.agents/
+.cursor/
+SCREENS AURA/
 # Symbolication related
 app.*.symbols
 
@@ -43,3 +45,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# ── Aura Project Docs & Design Assets ─────────────────────────────────────────
+ARCHITECTURE.md
+CLAUDE.md
+GEMINI.md
+PRD.md
+design.md
+DESIGN.md
+SCREENS AURA/
+
