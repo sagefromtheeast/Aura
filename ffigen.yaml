@@ -1,0 +1,51 @@
+# ffigen.yaml
+# Aura — ffigen configuration for auto-generating Dart FFI bindings.
+# Architecture §4.1: "Dart bindings generated with ffigen."
+#
+# Usage (Sprint 2, once C++ headers exist):
+#   dart run ffigen --config ffigen.yaml
+#
+# This generates lib/native/audio_engine_bindings.dart from the C header.
+# In Sprint 1, this file is committed as a placeholder and not regenerated.
+
+name: AudioEngineBindings
+description: 'Auto-generated FFI bindings for the Aura C++ audio engine.'
+
+output: 'lib/native/audio_engine_bindings.dart'
+
+headers:
+  entry-points:
+    - 'native/include/audio_engine.h'
+  include-directives:
+    - 'native/include/audio_engine.h'
+
+functions:
+  include:
+    - 'aura_.*'   # Include only Aura-prefixed functions.
+
+structs:
+  include:
+    - 'AuraEngineConfig'
+
+enums:
+  include:
+    - 'AuraEventType'
+    - 'AuraPlaybackState'
+
+comments:
+  style: any
+  length: full
+
+preamble: |
+  // AUTO-GENERATED — DO NOT EDIT MANUALLY.
+  // Run: dart run ffigen --config ffigen.yaml
+  // Coverage: Aura C++ audio engine public API.
+  // ignore_for_file: always_specify_types, camel_case_extensions
+
+compiler-opts:
+  - '-std=c99'
+
+llvm-path:
+  - '/usr/lib/llvm-14/lib'        # Linux
+  - 'C:\Program Files\LLVM\lib'  # Windows
+  - '/opt/homebrew/opt/llvm/lib' # macOS Apple Silicon

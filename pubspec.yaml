@@ -1,0 +1,72 @@
+name: aura
+description: "Aura — Privacy-first, offline-only intelligent music player."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── State Management ──────────────────────────────────────────
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # ── Local Database (SQLite via Drift) ─────────────────────────
+  drift: ^2.23.0
+  drift_flutter: ^0.2.4      # bundles sqlite3 native for Android/iOS
+
+  # ── Immutable Data Classes ────────────────────────────────────
+  freezed_annotation: ^2.4.4
+
+  # ── File System & Permissions ─────────────────────────────────
+  path_provider: ^2.1.5
+  path: ^1.9.1
+  permission_handler: ^11.3.1
+
+  # ── Native / FFI ─────────────────────────────────────────────
+  ffi: ^2.1.3
+  plugin_platform_interface: ^2.1.8
+
+  # ── Audio (fallback + session management) ─────────────────────
+  just_audio: ^0.10.4
+  audio_session: ^0.1.21
+
+  # ── UI / Theming ──────────────────────────────────────────────
+  palette_generator: ^0.3.3+3
+  dynamic_color: ^1.7.0
+
+  # ── Notifications & Widgets ───────────────────────────────────
+  flutter_local_notifications: ^18.0.1
+  home_widget: ^0.7.0
+
+  # ── Background Tasks ─────────────────────────────────────────
+  workmanager: ^0.5.2
+
+  # ── Utilities ─────────────────────────────────────────────────
+  collection: ^1.19.1        # binarySearch, etc.
+  uuid: ^4.5.1
+  string_similarity: ^2.0.0  # Jaro-Winkler / Levenshtein for fuzzy dedup
+  equatable: ^2.0.7
+  json_annotation: ^4.9.0    # @JsonSerializable for entity JSON codegen
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+  # ── Code Generation ───────────────────────────────────────────
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0     # Generates .g.dart for @freezed fromJson/toJson
+  riverpod_generator: ^2.6.3
+  drift_dev: ^2.23.0
+  ffigen: ^14.0.1
+
+  # ── Testing ───────────────────────────────────────────────────
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
