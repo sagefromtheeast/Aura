@@ -2,8 +2,10 @@
 // Aura — Root Riverpod providers.
 // All providers are defined here and consumed by UI layers in Sprint 2.
 
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/services/widget_notification_service.dart';
 import '../data/database/app_database.dart';
 import '../data/repositories/local_music_repository.dart';
 import '../data/repositories/local_behavior_repository.dart';
@@ -16,6 +18,7 @@ import '../domain/use_cases/smart_mix_generator.dart';
 import '../domain/use_cases/duplicate_detector.dart';
 import '../domain/use_cases/stats_calculator.dart';
 import '../domain/use_cases/playback_orchestrator.dart';
+import '../domain/entities/playback_state.dart';
 import '../domain/entities/shuffle_config.dart';
 import '../native/audio_engine_ffi.dart';
 
@@ -103,10 +106,41 @@ final playbackOrchestratorProvider = Provider<PlaybackOrchestrator>((ref) {
     if (eventType == EngineEvent.position) {
       orchestrator.onPositionUpdate(value);
     }
-    // State-change and error events are handled in Sprint 2 UI providers.
   };
 
+  ref.onDispose(() => orchestrator.dispose());
   return orchestrator;
+});
+
+final widgetNotificationServiceProvider = Provider<WidgetNotificationService>((ref) {
+  final service = WidgetNotificationService();
+  service.init();
+  return service;
+});
+
+class PlaybackStateController extends StateNotifier<PlaybackState> {
+  PlaybackStateController(this._orchestrator, this._widgetService) : super(_orchestrator.state) {
+    _subscription = _orchestrator.stateStream.listen((newState) {
+      state = newState;
+      _widgetService.updatePlaybackState(newState);
+    });
+  }
+
+  final PlaybackOrchestrator _orchestrator;
+  final WidgetNotificationService _widgetService;
+  late final StreamSubscription<PlaybackState> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
+final playbackStateProvider = StateNotifierProvider<PlaybackStateController, PlaybackState>((ref) {
+  final orchestrator = ref.watch(playbackOrchestratorProvider);
+  final widgetService = ref.watch(widgetNotificationServiceProvider);
+  return PlaybackStateController(orchestrator, widgetService);
 });
 
 // ── Library Data ──────────────────────────────────────────────────────────────

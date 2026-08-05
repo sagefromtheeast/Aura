@@ -3,6 +3,7 @@
 // Architecture §4.1: thin Dart wrapper coordinating AudioEngine, shuffle,
 // and behavior recording.
 
+import 'dart:async';
 import '../entities/playback_state.dart';
 import '../entities/track.dart';
 import '../entities/shuffle_config.dart';
@@ -34,12 +35,16 @@ class PlaybackOrchestrator {
   final IntelliShuffleEngine _shuffleEngine;
   final MusicRepository _musicRepo;
   final BehaviorRepository _behaviorRepo;
+  final _stateController = StreamController<PlaybackState>.broadcast();
 
   PlaybackState _state = PlaybackState.initial;
   Track? _currentTrack;
 
   /// Current immutable snapshot.
   PlaybackState get state => _state;
+
+  /// Reactive stream of playback state transitions.
+  Stream<PlaybackState> get stateStream => _stateController.stream;
 
   // ── Playback Controls ──────────────────────────────────────────────────────
 
@@ -167,7 +172,12 @@ class PlaybackOrchestrator {
 
   void _updateState(PlaybackState newState) {
     _state = newState;
-    // In the full app, this notifies a StateNotifier / StreamController.
-    // The Riverpod provider wraps this class and calls ref.notifyListeners().
+    if (!_stateController.isClosed) {
+      _stateController.add(newState);
+    }
+  }
+
+  void dispose() {
+    _stateController.close();
   }
 }
