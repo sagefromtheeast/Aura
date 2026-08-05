@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import 'aura_wrapped_screen.dart';
 
 /// Insights & Listening Habits screen.
-/// Computes offline behavior metrics without streaming telemetry to cloud servers.
+/// Computes offline behavior metrics and presents Aura Wrapped without streaming telemetry to cloud servers.
 class StatsScreen extends ConsumerWidget {
   const StatsScreen({super.key});
 
@@ -22,6 +23,41 @@ class StatsScreen extends ConsumerWidget {
               '100% locally computed listening habits and engagement analytics.',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
+            const SizedBox(height: DesignTokens.spacing24),
+
+            // Aura Offline Wrapped Banner
+            GlassCard(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const AuraWrappedScreen()),
+                );
+              },
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: DesignTokens.accentSparkle.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.auto_awesome_rounded, color: DesignTokens.accentSparkle, size: 32),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Aura Offline Wrapped 2026', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18, color: DesignTokens.accentSparkle)),
+                        const SizedBox(height: 4),
+                        Text('Relive your listening year in a liquid glass story presentation.', style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: DesignTokens.accentSparkle),
+                ],
+              ),
+            ),
+
             const SizedBox(height: DesignTokens.spacing24),
 
             // Hero Stats Summary Card

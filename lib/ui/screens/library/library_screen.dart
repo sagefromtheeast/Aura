@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../domain/entities/playlist.dart';
 import '../../../shared/providers.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import '../settings/tag_editor_sheet.dart';
+import 'album_detail_screen.dart';
+import 'artist_detail_screen.dart';
+import 'folder_browser_screen.dart';
+import 'playlist_detail_screen.dart';
+import 'search_screen.dart';
 
 /// Main Library View featuring tabs for Tracks, Albums, Artists, Playlists, and Smart Mixes.
-/// Utilizes custom GlassCard widgets without stacking blur layers.
+/// Utilizes custom GlassCard widgets without stacking blur layers and full navigation wiring.
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({super.key});
 
@@ -42,8 +49,21 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
                   Text('Library & Mixes', style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 26)),
                   const Spacer(),
                   IconButton(
+                    icon: const Icon(Icons.folder_open_rounded, color: DesignTokens.primarySeed),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(builder: (_) => const FolderBrowserScreen()),
+                      );
+                    },
+                    tooltip: 'Folders & Genres',
+                  ),
+                  IconButton(
                     icon: const Icon(Icons.search_rounded),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(builder: (_) => const SearchScreen()),
+                      );
+                    },
                     tooltip: 'Search library',
                   ),
                 ],
@@ -117,10 +137,16 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
                         ],
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Text(
                       '${(track.durationMs ~/ 60000)}:${((track.durationMs ~/ 1000) % 60).toString().padLeft(2, "0")}',
                       style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(width: 4),
+                    IconButton(
+                      icon: const Icon(Icons.edit_note_rounded, size: 22, color: DesignTokens.primarySeed),
+                      onPressed: () => TagEditorSheet.show(context, track),
+                      tooltip: 'Edit ID3 Tags',
                     ),
                   ],
                 ),
@@ -153,7 +179,11 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
           itemBuilder: (context, index) {
             final album = albums[index];
             return GlassCard(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: album)),
+                );
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -195,7 +225,11 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
             return Padding(
               padding: const EdgeInsets.only(bottom: DesignTokens.spacing12),
               child: GlassCard(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (_) => ArtistDetailScreen(artist: artist)),
+                  );
+                },
                 child: Row(
                   children: [
                     CircleAvatar(
@@ -238,7 +272,11 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
             return Padding(
               padding: const EdgeInsets.only(bottom: DesignTokens.spacing12),
               child: GlassCard(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (_) => PlaylistDetailScreen(playlist: p)),
+                  );
+                },
                 child: Row(
                   children: [
                     const Icon(Icons.playlist_play_rounded, size: 36, color: DesignTokens.primarySeed),
@@ -280,7 +318,18 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
           padding: const EdgeInsets.only(bottom: DesignTokens.spacing16),
           child: GlassCard(
             onTap: () {
-              // Generate mix via SmartMixGenerator
+              final playlist = Playlist(
+                id: 'mix_$index',
+                name: mix.$1,
+                description: mix.$2,
+                type: PlaylistType.smartMix,
+                createdAtMs: DateTime.now().millisecondsSinceEpoch,
+                updatedAtMs: DateTime.now().millisecondsSinceEpoch,
+                trackIds: const ['t1', 't2', 't3', 't4'],
+              );
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => PlaylistDetailScreen(playlist: playlist)),
+              );
             },
             child: Row(
               children: [

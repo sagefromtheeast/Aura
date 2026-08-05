@@ -10,6 +10,7 @@ class DesignTokens {
   static const double spacing8 = 8.0;
   static const double spacing12 = 12.0;
   static const double spacing16 = 16.0;
+  static const double spacing20 = 20.0;
   static const double spacing24 = 24.0;
   static const double spacing32 = 32.0;
   static const double spacing48 = 48.0;
@@ -17,6 +18,7 @@ class DesignTokens {
 
   // ── Corner Radii ──────────────────────────────────────────────────────────
   static final BorderRadius radius8 = BorderRadius.circular(8.0);
+  static final BorderRadius radius12 = BorderRadius.circular(12.0);
   static final BorderRadius radius16 = BorderRadius.circular(16.0);
   static final BorderRadius radius24 = BorderRadius.circular(24.0);
   static final BorderRadius radius32 = BorderRadius.circular(32.0);
@@ -92,4 +94,6 @@ class DesignTokens {
     letterSpacing: 0.4,
     height: 1.2,
   );
+
+  static const String fontMono = 'monospace';
 }

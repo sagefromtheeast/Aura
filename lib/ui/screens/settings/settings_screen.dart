@@ -4,10 +4,12 @@ import '../../theme/design_tokens.dart';
 import '../../theme/dynamic_theme_provider.dart';
 import '../../widgets/glass_card.dart';
 import 'duplicate_wizard_sheet.dart';
+import 'intelli_shuffle_sheet.dart';
+import 'pro_upgrade_sheet.dart';
 import '../onboarding/onboarding_wizard.dart';
 
 /// Settings and Enclave Preferences view.
-/// Features platform-adaptive theme switching, duplicate management wizard trigger, and privacy audits.
+/// Features platform-adaptive theme switching, duplicate management wizard trigger, IntelliShuffle customization, Pro Upgrade, and privacy audits.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -23,7 +25,52 @@ class SettingsScreen extends ConsumerWidget {
           children: [
             Text('Settings & Preferences', style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 26)),
             const SizedBox(height: DesignTokens.spacing8),
-            Text('Configure visual Liquid Glass effects and local library management.', style: Theme.of(context).textTheme.bodyMedium),
+            Text('Configure visual Liquid Glass effects, playback algorithms, and library management.', style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: DesignTokens.spacing24),
+
+            // ── Engine & Membership ─────────────────────────────────────────────
+            Text('Engine & Membership', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: DesignTokens.spacing12),
+            GlassCard(
+              onTap: () => IntelliShuffleSheet.show(context),
+              child: Row(
+                children: [
+                  const Icon(Icons.psychology_rounded, color: DesignTokens.primarySeed, size: 32),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('IntelliShuffle Algorithmic Weights', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 16)),
+                        Text('Customize tempo, rating, and artist variance factors', style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                ],
+              ),
+            ),
+            const SizedBox(height: DesignTokens.spacing12),
+            GlassCard(
+              onTap: () => ProUpgradeSheet.show(context),
+              child: Row(
+                children: [
+                  const Icon(Icons.workspace_premium_rounded, color: DesignTokens.accentSparkle, size: 32),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Aura Pro Enclave Upgrade', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 16, color: DesignTokens.accentSparkle)),
+                        Text('Unlock DSD/FLAC bypass, acoustic cleaning & infinite mixes', style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                ],
+              ),
+            ),
+
             const SizedBox(height: DesignTokens.spacing24),
 
             // ── Theme Mode Picker ──────────────────────────────────────────────
