@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
 import 'aura_wrapped_screen.dart';
+import 'listening_history_screen.dart';
 
 /// Insights & Listening Habits screen.
 /// Computes offline behavior metrics and presents Aura Wrapped without streaming telemetry to cloud servers.
@@ -54,6 +55,41 @@ class StatsScreen extends ConsumerWidget {
                     ),
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: DesignTokens.accentSparkle),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: DesignTokens.spacing16),
+
+            // Listening History & CSV Export Banner
+            GlassCard(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const ListeningHistoryScreen()),
+                );
+              },
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: DesignTokens.primarySeed.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.history_rounded, color: DesignTokens.primarySeed, size: 28),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Listening History & Logs', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18, color: DesignTokens.primarySeed)),
+                        const SizedBox(height: 4),
+                        Text('Review your full playback timeline and export play logs to CSV.', style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: DesignTokens.primarySeed),
                 ],
               ),
             ),

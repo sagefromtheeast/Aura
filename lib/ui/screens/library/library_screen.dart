@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../domain/entities/playlist.dart';
 import '../../../shared/providers.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
@@ -10,6 +9,7 @@ import 'artist_detail_screen.dart';
 import 'folder_browser_screen.dart';
 import 'playlist_detail_screen.dart';
 import 'search_screen.dart';
+import 'smart_mix_detail_screen.dart';
 
 /// Main Library View featuring tabs for Tracks, Albums, Artists, Playlists, and Smart Mixes.
 /// Utilizes custom GlassCard widgets without stacking blur layers and full navigation wiring.
@@ -318,17 +318,14 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
           padding: const EdgeInsets.only(bottom: DesignTokens.spacing16),
           child: GlassCard(
             onTap: () {
-              final playlist = Playlist(
-                id: 'mix_$index',
-                name: mix.$1,
-                description: mix.$2,
-                type: PlaylistType.smartMix,
-                createdAtMs: DateTime.now().millisecondsSinceEpoch,
-                updatedAtMs: DateTime.now().millisecondsSinceEpoch,
-                trackIds: const ['t1', 't2', 't3', 't4'],
-              );
               Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => PlaylistDetailScreen(playlist: playlist)),
+                MaterialPageRoute<void>(
+                  builder: (_) => SmartMixDetailScreen(
+                    mixTitle: mix.$1,
+                    mixSubtitle: mix.$2,
+                    moodTag: 'ON-DEVICE AI MIX',
+                  ),
+                ),
               );
             },
             child: Row(

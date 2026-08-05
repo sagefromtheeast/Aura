@@ -6,6 +6,11 @@ import '../../../shared/providers.dart';
 import '../../theme/design_tokens.dart';
 import '../../theme/dynamic_theme_provider.dart';
 import '../../widgets/glass_card.dart';
+import 'queue_sheet.dart';
+import 'lyrics_sheet.dart';
+import 'sleep_timer_sheet.dart';
+import 'audio_dsp_sheet.dart';
+import 'cast_device_sheet.dart';
 
 /// Full-screen Now Playing immersive view.
 /// Implements Liquid Glass design with a SINGLE BackdropFilter layer for peak graphics performance.
@@ -301,8 +306,76 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                       ),
                     ],
                   ),
+                  const SizedBox(height: DesignTokens.spacing24),
 
-                  const Spacer(flex: 3),
+                  // Secondary Action Toolbar (Lyrics, Queue, Sleep Timer, Cast, DSP)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.lyrics_outlined),
+                        tooltip: 'Synced Lyrics',
+                        onPressed: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => const LyricsSheet(),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.queue_music),
+                        tooltip: 'Up Next & Queue',
+                        onPressed: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => const QueueSheet(),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.nightlight_round_outlined),
+                        tooltip: 'Sleep Timer',
+                        onPressed: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => const SleepTimerSheet(),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.cast),
+                        tooltip: 'Audio Output & Cast',
+                        onPressed: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => const CastDeviceSheet(),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.tune),
+                        tooltip: 'Audiophile DSP Parameters',
+                        onPressed: () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => const AudioDspSheet(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+
+                  const Spacer(flex: 2),
                 ],
               ),
             ),
