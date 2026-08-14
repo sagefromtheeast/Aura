@@ -39,6 +39,12 @@ android {
         }
     }
 
+    externalNativeBuild {
+        cmake {
+            path("CMakeLists.txt")
+        }
+    }
+
     packaging {
         resources {
             excludes += "META-INF/*.version"
