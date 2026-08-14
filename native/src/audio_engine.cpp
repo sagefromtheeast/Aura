@@ -1,6 +1,6 @@
 #define MINIAUDIO_IMPLEMENTATION
-#include "miniaudio.h"
-#include "audio_engine.h"
+#include "../include/miniaudio.h"
+#include "../include/audio_engine.h"
 
 #include <string>
 #include <thread>
