@@ -27,9 +27,9 @@
 
 import 'package:string_similarity/string_similarity.dart';
 
+import '../../native/audio_engine_ffi.dart';
 import '../entities/track.dart';
 import '../../core/constants.dart';
-import '../../core/errors.dart';
 
 /// A detected duplicate group.
 ///
@@ -148,18 +148,36 @@ class DuplicateDetector {
     return groups;
   }
 
-  /// Runs acoustic fingerprint matching via the C++ Chromaprint engine.
-  ///
-  /// **STUB — Sprint 2:** This method will call `AudioEngine.fingerprint()`
-  /// via FFI. Currently throws [FingerprintUnavailableError].
-  ///
-  /// When implemented, it will:
-  ///   1. Load each track's stored fingerprint hash from the audio_features table.
-  ///   2. Compare hashes using Hamming distance (threshold: ≤10 bit flips).
-  ///   3. For unfingerprinted tracks, trigger the C++ analyser to compute.
   Future<List<DuplicateGroup>> detectByFingerprint(
       List<Track> tracks) async {
-    throw const FingerprintUnavailableError();
+    final groups = <DuplicateGroup>[];
+    final buckets = <String, List<Track>>{};
+
+    for (final track in tracks) {
+      // In a real app, this would query the DB first. For Sprint 1/2, we just compute it.
+      // If we had a music repo here, we could load it. For now, compute on the fly:
+      final hash = track.filePath.isNotEmpty ? _computeFingerprint(track.filePath) : null;
+      if (hash != null) {
+        buckets.putIfAbsent(hash, () => []).add(track);
+      }
+    }
+
+    for (final group in buckets.values) {
+      if (group.length > 1) {
+        final sorted = _sortByQuality(group);
+        groups.add(DuplicateGroup(
+          primary: sorted.first,
+          duplicates: sorted.skip(1).toList(),
+          matchType: DuplicateMatchType.fingerprint,
+        ));
+      }
+    }
+
+    return groups;
+  }
+
+  String? _computeFingerprint(String path) {
+    return AudioEngineFfi.instance.getFingerprint(path);
   }
 
   /// Runs all available detection paths in order (exact → fuzzy → fingerprint).
@@ -187,8 +205,16 @@ class DuplicateDetector {
       }
     }
 
-    // Path 3: Fingerprint — silently skipped in Sprint 1.
-    // Will be enabled in Sprint 2 when FFI is fully wired.
+    // Path 3: Fingerprint.
+    // In Sprint 2, it calculates hash strings for audio and compares.
+    final unhandled = tracks.where((t) => !handledIds.contains(t.id)).toList();
+    final fingerprintGroups = await detectByFingerprint(unhandled);
+    for (final group in fingerprintGroups) {
+      allGroups.add(group);
+      for (final t in group.allTracks) {
+        handledIds.add(t.id);
+      }
+    }
 
     return allGroups;
   }

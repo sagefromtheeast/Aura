@@ -95,6 +95,12 @@ typedef _AuraGetDurationDart = int Function();
 typedef _AuraDestroyNative = Void Function();
 typedef _AuraDestroyDart = void Function();
 
+typedef _AuraFingerprintNative = Int32 Function(Pointer<Utf8> path, Pointer<Utf8> outHash, Int32 outSize);
+typedef _AuraFingerprintDart = int Function(Pointer<Utf8> path, Pointer<Utf8> outHash, int outSize);
+
+typedef _AuraAnalyzeFeaturesNative = Int32 Function(Pointer<Utf8> path, Pointer<Float> outFeatures, Int32 featureCount);
+typedef _AuraAnalyzeFeaturesDart = int Function(Pointer<Utf8> path, Pointer<Float> outFeatures, int featureCount);
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dart wrapper around the C++ audio engine shared library.
@@ -127,6 +133,8 @@ class AudioEngineFfi {
   _AuraSetCallbackDart? _setCallback;
   _AuraGetDurationDart? _getDuration;
   _AuraDestroyDart? _destroy;
+  _AuraFingerprintDart? _fingerprint;
+  _AuraAnalyzeFeaturesDart? _analyzeFeatures;
 
   /// Callback invoked when the engine emits a position or state event.
   /// Set by [PlaybackOrchestrator] after constructing this instance.
@@ -179,6 +187,43 @@ class AudioEngineFfi {
 
   void setVolume(double volume) => _setVolume?.call(volume);
 
+  // ── Fingerprint & Analysis ───────────────────────────────────────────────
+  
+  String? getFingerprint(String path) {
+    if (!_isAvailable || _fingerprint == null) return null;
+    final pathPtr = path.toNativeUtf8();
+    final outHash = calloc<Int8>(256).cast<Utf8>();
+    final result = _fingerprint!(pathPtr, outHash, 256);
+    String? hash;
+    if (result == 0) {
+      hash = outHash.toDartString();
+    }
+    calloc.free(pathPtr);
+    calloc.free(outHash);
+    return hash;
+  }
+
+  List<double>? analyzeFeatures(String path) {
+    if (!_isAvailable || _analyzeFeatures == null) return null;
+    final pathPtr = path.toNativeUtf8();
+    final outFeatures = calloc<Float>(6);
+    final result = _analyzeFeatures!(pathPtr, outFeatures, 6);
+    List<double>? features;
+    if (result == 0) {
+      features = [
+        outFeatures[0].toDouble(),
+        outFeatures[1].toDouble(),
+        outFeatures[2].toDouble(),
+        outFeatures[3].toDouble(),
+        outFeatures[4].toDouble(),
+        outFeatures[5].toDouble(),
+      ];
+    }
+    calloc.free(pathPtr);
+    calloc.free(outFeatures);
+    return features;
+  }
+
   // ── Private: Library Loading ───────────────────────────────────────────────
 
   void _bindNative() {
@@ -205,6 +250,10 @@ class AudioEngineFfi {
               'aura_get_duration');
       _destroy =
           lib.lookupFunction<_AuraDestroyNative, _AuraDestroyDart>('aura_destroy');
+      _fingerprint = 
+          lib.lookupFunction<_AuraFingerprintNative, _AuraFingerprintDart>('aura_fingerprint');
+      _analyzeFeatures = 
+          lib.lookupFunction<_AuraAnalyzeFeaturesNative, _AuraAnalyzeFeaturesDart>('aura_analyze_features');
 
       _isAvailable = true;
     } catch (_) {

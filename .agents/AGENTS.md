@@ -58,6 +58,9 @@ You MUST proactively record a new rule or engineering pattern into this file whe
 - **Dynamic Color Extraction**: Extract dynamic accent colors from album art using `palette_generator` and apply platform-adaptive theming via `DynamicThemeProvider` (`dynamic_color` for Material You on Android, custom iOS style on iOS).
 - **Custom Widget Semantics**: Ensure all custom widgets (e.g. `GlassCard`, custom sliders, playback controls) have explicit `Semantics` wrappers for screen readers and accessibility tree compliance.
 
+### [Platform Integration & Native Scanners]
+- **iOS MediaLibrary Artwork & Permissions**: When utilizing `MPMediaQuery` for offline audio scanning on iOS, **ALWAYS** declare `NSAppleMusicUsageDescription` in `ios/Runner/Info.plist`. Additionally, because synchronous extraction of `MPMediaItem.artwork` blocks the main thread and can OOM, leave the artwork path `null` during the initial metadata sweep and let Dart load ID3 artwork asynchronously.
+
 ### [Drift, C++ Audio Engine, Security & Architecture]
 - **Local Drift Database Migrations**: All Drift (SQLite) schema migrations in data repositories must remain non-destructive. Always use additive schema modifications (`CREATE TABLE IF NOT EXISTS`, `ALTER TABLE ADD COLUMN`) and verify backward compatibility so existing user playlists, track metadata, and behavior statistics are never lost during app updates.
 - **Privacy-First / Zero-Cloud Enclave**: Never introduce external cloud or internet auth dependencies (no Firebase, no telemetry network endpoints). Aura is strictly offline-only. All local database keys and sensitive preferences must utilize `flutter_secure_storage` encryption at rest.

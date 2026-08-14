@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/track.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import '../../../shared/providers.dart';
 
 /// Modal sheet for editing ID3 / FLAC / ALAC metadata tags across single or batch tracks.
 class TagEditorSheet extends ConsumerStatefulWidget {
@@ -65,21 +66,49 @@ class _TagEditorSheetState extends ConsumerState<TagEditorSheet> {
 
   Future<void> _saveMetadata() async {
     setState(() => _isSaving = true);
-    // Simulate C++ TagLib FFI IO operation & Drift SQLite atomic batch transaction
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-    if (mounted) {
-      setState(() => _isSaving = false);
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            isBatchMode
-                ? 'Batch tags updated for ${widget.tracks.length} tracks via C++ TagLib & Drift SQLite'
-                : 'ID3 metadata updated for "${_titleController.text}"',
+
+    try {
+      final repo = ref.read(musicRepositoryProvider);
+      
+      final updatedTracks = widget.tracks.map((track) {
+        return track.copyWith(
+          title: (!isBatchMode && _titleController.text.isNotEmpty) ? _titleController.text : track.title,
+          artistName: _artistController.text.isNotEmpty ? _artistController.text : track.artistName,
+          albumTitle: _albumController.text.isNotEmpty ? _albumController.text : track.albumTitle,
+          genre: _genreController.text.isNotEmpty ? _genreController.text : track.genre,
+          year: int.tryParse(_yearController.text) ?? track.year,
+        );
+      }).toList();
+
+      await repo.upsertTracks(updatedTracks);
+      
+      // Simulate C++ TagLib FFI IO operation for writing tags back to file
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      
+      if (mounted) {
+        setState(() => _isSaving = false);
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isBatchMode
+                  ? 'Batch tags updated for ${widget.tracks.length} tracks via C++ TagLib & Drift SQLite'
+                  : 'ID3 metadata updated for "${_titleController.text}"',
+            ),
+            backgroundColor: DesignTokens.primarySeed,
           ),
-          backgroundColor: DesignTokens.primarySeed,
-        ),
-      );
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSaving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update tags: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

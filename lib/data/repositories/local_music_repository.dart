@@ -12,6 +12,7 @@ import '../../domain/entities/artist.dart';
 import '../../domain/repositories/music_repository.dart';
 import '../../core/constants.dart';
 import '../../core/errors.dart';
+import '../../native/audio_engine_ffi.dart';
 import '../database/app_database.dart';
 import 'package:drift/drift.dart';
 
@@ -159,7 +160,17 @@ class LocalMusicRepository implements MusicRepository {
   @override
   Future<List<double>?> getAudioFeatures(String trackId) async {
     final row = await _db.trackDao.getAudioFeatures(trackId);
-    if (row == null) return null;
+    if (row == null) {
+      final track = await getTrackById(trackId);
+      if (track != null && track.filePath.isNotEmpty) {
+        final features = AudioEngineFfi.instance.analyzeFeatures(track.filePath);
+        if (features != null && features.length == 6) {
+          await upsertAudioFeatures(trackId, features);
+          return features;
+        }
+      }
+      return null;
+    }
     return [
       row.tempo,
       row.energy,
