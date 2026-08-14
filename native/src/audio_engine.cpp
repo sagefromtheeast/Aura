@@ -2,12 +2,14 @@
 #include "../include/miniaudio.h"
 #include "../include/audio_engine.h"
 
-#include <string>
 #include <thread>
 #include <atomic>
 #include <chrono>
 #include <mutex>
 #include <algorithm>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 // --- Globals ---
 static ma_engine g_engine;
