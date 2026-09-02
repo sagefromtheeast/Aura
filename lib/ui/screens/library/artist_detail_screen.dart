@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/dummy_library_data.dart';
 import '../../theme/design_tokens.dart';
-import '../../widgets/track_tile.dart';
+import '../../widgets/glass_card.dart';
 
 class ArtistDetailScreen extends ConsumerWidget {
   final DummyArtist artist;
@@ -15,9 +15,9 @@ class ArtistDetailScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     
-    // For albums we can just reuse the generic album provider, maybe filter, but dummy is fine
     final albumsAsync = ref.watch(dummyAlbumsProvider);
     final topTracksAsync = ref.watch(dummyArtistTopTracksProvider(artist.id));
+    final relatedArtistsAsync = ref.watch(dummyArtistsProvider);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -41,7 +41,6 @@ class ArtistDetailScreen extends ConsumerWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // Placeholder for artist image
                   Container(
                     color: DesignTokens.primarySeed.withValues(alpha: 0.2),
                     child: Center(
@@ -52,7 +51,6 @@ class ArtistDetailScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // Gradient Overlay
                   DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -67,7 +65,6 @@ class ArtistDetailScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // Artist Name
                   Positioned(
                     bottom: 24,
                     left: 24,
@@ -80,14 +77,16 @@ class ArtistDetailScreen extends ConsumerWidget {
                           style: theme.textTheme.displaySmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             height: 1.1,
+                            color: isDark ? Colors.white : Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '${artist.albumCount} Albums • ${artist.trackCount} Tracks',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: theme.textTheme.titleMedium?.color?.withValues(alpha: 0.7),
-                          ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            _buildGenrePill('Pop', theme),
+                            const SizedBox(width: 8),
+                            _buildGenrePill('Indie', theme),
+                          ],
                         ),
                       ],
                     ),
@@ -97,7 +96,7 @@ class ArtistDetailScreen extends ConsumerWidget {
             ),
           ),
 
-          // Action Buttons
+          // Play and Shuffle Buttons
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
@@ -106,15 +105,33 @@ class ArtistDetailScreen extends ConsumerWidget {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {},
-                      icon: const Icon(Icons.shuffle),
-                      label: const Text('Shuffle All'),
+                      icon: const Icon(Icons.play_arrow),
+                      label: const Text('Play'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: DesignTokens.primarySeed,
-                        foregroundColor: Colors.white,
+                        backgroundColor: isDark ? Colors.white : Colors.black,
+                        foregroundColor: isDark ? Colors.black : Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),
                         ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.shuffle),
+                      label: const Text('Shuffle'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(
+                          color: theme.dividerColor.withValues(alpha: 0.3),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        backgroundColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3), // Glass style
                       ),
                     ),
                   ),
@@ -123,12 +140,12 @@ class ArtistDetailScreen extends ConsumerWidget {
             ),
           ),
 
-          // Top Tracks Section Header
+          // Top Songs Section Header
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
               child: Text(
-                'Top Tracks',
+                'Top Songs',
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -136,35 +153,69 @@ class ArtistDetailScreen extends ConsumerWidget {
             ),
           ),
 
-          // Top Tracks List
-          topTracksAsync.when(
-            data: (tracks) => SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: TrackTile(
-                        track: tracks[index],
-                        index: index,
-                      ),
-                    );
-                  },
-                  childCount: tracks.length,
-                ),
-              ),
-            ),
-            loading: () => const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-            ),
-            error: (err, stack) => SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Center(child: Text('Error: $err')),
+          // Horizontal Top Songs Row
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+              child: topTracksAsync.when(
+                data: (tracks) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: tracks.length,
+                    itemBuilder: (context, index) {
+                      final track = tracks[index];
+                      return Container(
+                        width: 280,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GlassCard(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: DesignTokens.primarySeed.withValues(alpha: 0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(Icons.music_note, color: Colors.white54),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      track.title,
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${1000 - (index * 123)} plays',
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        fontSize: 14,
+                                        color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
               ),
             ),
           ),
@@ -182,29 +233,27 @@ class ArtistDetailScreen extends ConsumerWidget {
             ),
           ),
 
-          // Albums Horizontal List
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 220,
-              child: albumsAsync.when(
-                data: (albums) {
-                  // In a real app, filter albums by this artist.
-                  final artistAlbums = albums.take(5).toList();
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    itemCount: artistAlbums.length,
-                    itemBuilder: (context, index) {
+          // Albums 2-Column Grid
+          albumsAsync.when(
+            data: (albums) {
+              final artistAlbums = albums.take(4).toList();
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.8,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
                       final album = artistAlbums[index];
-                      return Container(
-                        width: 140,
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 140,
-                              width: 140,
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
                               decoration: BoxDecoration(
                                 color: album.coverColor,
                                 borderRadius: BorderRadius.circular(16),
@@ -220,22 +269,82 @@ class ArtistDetailScreen extends ConsumerWidget {
                                 child: Icon(Icons.album, size: 48, color: Colors.white54),
                               ),
                             ),
-                            const SizedBox(height: 12),
-                            Text(
-                              album.title,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            album.title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            album.year.toString(),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    childCount: artistAlbums.length,
+                  ),
+                ),
+              );
+            },
+            loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+            error: (err, stack) => SliverToBoxAdapter(child: Center(child: Text('Error: $err'))),
+          ),
+
+          // Related Artists Section Header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24.0, 32.0, 24.0, 16.0),
+              child: Text(
+                'Related Artists',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          // Related Artists Horizontal List
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+              child: relatedArtistsAsync.when(
+                data: (allArtists) {
+                  final related = allArtists.where((a) => a.id != artist.id).take(5).toList();
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: related.length,
+                    itemBuilder: (context, index) {
+                      final relArtist = related[index];
+                      return Container(
+                        width: 80,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 28, // 56px diameter
+                              backgroundColor: DesignTokens.primarySeed.withValues(alpha: 0.2),
+                              child: Text(
+                                relArtist.name.isNotEmpty ? relArtist.name[0].toUpperCase() : 'A',
+                                style: const TextStyle(color: DesignTokens.primarySeed, fontWeight: FontWeight.bold),
                               ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              relArtist.name,
+                              style: theme.textTheme.bodySmall,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              album.year.toString(),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
-                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -253,6 +362,24 @@ class ArtistDetailScreen extends ConsumerWidget {
             child: SizedBox(height: 100), // Bottom padding
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildGenrePill(String text, ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+        ),
       ),
     );
   }

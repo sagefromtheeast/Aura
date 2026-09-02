@@ -9,6 +9,7 @@ class DummyAlbum {
   final String artistName;
   final Color coverColor;
   final int year;
+  final int trackCount;
 
   const DummyAlbum({
     required this.id,
@@ -16,6 +17,7 @@ class DummyAlbum {
     required this.artistName,
     required this.coverColor,
     required this.year,
+    this.trackCount = 12, // Mock track count
   });
 }
 

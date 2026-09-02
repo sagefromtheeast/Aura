@@ -86,6 +86,10 @@ class AlbumDetailScreen extends ConsumerWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                _buildMetadataPill('${album.trackCount} Tracks', theme),
+                                const SizedBox(width: 8),
+                                _buildMetadataPill('${(album.trackCount * 3.5).round()} min', theme), // Mock duration
+                                const SizedBox(width: 8),
                                 _buildMetadataPill(album.year.toString(), theme),
                                 const SizedBox(width: 8),
                                 _buildMetadataPill('Pop', theme), // Hardcoded genre for dummy

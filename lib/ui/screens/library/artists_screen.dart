@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/dummy_library_data.dart';
 import '../../widgets/glass_card.dart';
-
-
+import 'artist_detail_screen.dart';
 class ArtistsScreen extends ConsumerWidget {
   const ArtistsScreen({super.key});
 
@@ -122,6 +121,11 @@ class _ArtistRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       borderRadius: 16,
       enableBlur: false, // Save performance on lists
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => ArtistDetailScreen(artist: artist)),
+        );
+      },
       child: Row(
         children: [
           // Circular Image

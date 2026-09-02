@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/dummy_library_data.dart';
-
+import 'album_detail_screen.dart';
 
 class AlbumsScreen extends ConsumerWidget {
   const AlbumsScreen({super.key});
@@ -162,50 +162,58 @@ class _AlbumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Album Art
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: album.coverColor,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: album.coverColor.withValues(alpha: 0.4),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: album)),
+        );
+      },
+      borderRadius: BorderRadius.circular(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Album Art
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: album.coverColor,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: album.coverColor.withValues(alpha: 0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Icon(Icons.music_note, size: 40, color: Colors.white54),
+              ),
             ),
-            child: const Center(
-              child: Icon(Icons.music_note, size: 40, color: Colors.white54),
+          ),
+          const SizedBox(height: 12),
+          // Album Info
+          Text(
+            album.title,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        const SizedBox(height: 12),
-        // Album Info
-        Text(
-          album.title,
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+          const SizedBox(height: 4),
+          Text(
+            album.artistName,
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontSize: 14,
+              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          album.artistName,
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontSize: 14,
-            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
