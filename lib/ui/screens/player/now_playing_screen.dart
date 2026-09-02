@@ -24,18 +24,53 @@ class NowPlayingScreen extends ConsumerStatefulWidget {
 }
 
 class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
 
   bool _isFavorite = false;
+  bool _showWaveform = false;
+
+  late AnimationController _playPauseController;
+  late AnimationController _entranceController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _rotateAnimation;
 
   @override
   void initState() {
     super.initState();
+    _playPauseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _entranceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _scaleAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: Curves.elasticOut,
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: Curves.easeIn,
+    );
+    _rotateAnimation = Tween<double>(begin: -0.05, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _entranceController,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    _entranceController.forward();
   }
 
-
-
-  void _toggleFavorite() {
+  @override
+  void dispose() {
+    _playPauseController.dispose();
+    _entranceController.dispose();
+    super.dispose();
+  }  void _toggleFavorite() {
     setState(() {
       _isFavorite = !_isFavorite;
     });
@@ -60,9 +95,33 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     final duration = track?.durationMs ?? 1;
     final position = playback.positionMs.clamp(0, duration);
 
+    // Sync play/pause icon state
+    if (isPlaying && _playPauseController.status != AnimationStatus.completed) {
+      _playPauseController.forward();
+    } else if (!isPlaying && _playPauseController.status != AnimationStatus.dismissed) {
+      _playPauseController.reverse();
+    }
+
     return Scaffold(
-      body: Stack(
-        children: [
+      body: GestureDetector(
+        onVerticalDragEnd: (details) {
+          if (details.primaryVelocity != null) {
+            if (details.primaryVelocity! > 300) {
+              // Swipe down: collapse
+              Navigator.of(context).pop();
+            } else if (details.primaryVelocity! < -300) {
+              // Swipe up: queue
+              showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const QueueSheet(),
+              );
+            }
+          }
+        },
+        child: Stack(
+          children: [
           // ── Layer 1: Background Gradient & Single Liquid Glass Blur ────────
           Container(
             decoration: BoxDecoration(
@@ -98,9 +157,18 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                         onPressed: () => Navigator.of(context).pop(),
                         tooltip: 'Minimize player',
                       ),
-                      Text(
-                        'NOW PLAYING',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(letterSpacing: 1.5),
+                      Expanded(
+                        child: Text(
+                          track?.title ?? 'Now Playing',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white.withValues(alpha: 0.8),
+                            fontSize: 22,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       IconButton(
                         icon: const Icon(Icons.more_vert_rounded),
@@ -124,21 +192,49 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                     tag: 'album_art_${track?.id ?? "empty"}',
                     child: GestureDetector(
                       onTap: () {
-                        // Toggle visualizer view placeholder
+                        setState(() {
+                          _showWaveform = !_showWaveform;
+                        });
                       },
                       child: AspectRatio(
                         aspectRatio: 1.0,
-                        child: GlassCard(
-                          borderRadius: DesignTokens.spacing32,
-                          enableBlur: false, // Do not stack blurs!
-                          padding: EdgeInsets.zero,
-                          surfaceColor: accent.withValues(alpha: 0.15),
-                          borderColor: accent.withValues(alpha: 0.3),
-                          child: Center(
-                            child: Icon(
-                              Icons.music_note_rounded,
-                              size: 120,
-                              color: accent,
+                        child: AnimatedBuilder(
+                          animation: _entranceController,
+                          builder: (context, child) {
+                            return Opacity(
+                              opacity: _fadeAnimation.value,
+                              child: Transform.scale(
+                                scale: _scaleAnimation.value,
+                                child: Transform.rotate(
+                                  angle: _rotateAnimation.value,
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          },
+                          child: GlassCard(
+                            borderRadius: DesignTokens.spacing32,
+                            enableBlur: false, // Do not stack blurs!
+                            padding: EdgeInsets.zero,
+                            surfaceColor: accent.withValues(alpha: 0.15),
+                            borderColor: accent.withValues(alpha: 0.3),
+                            child: Center(
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: _showWaveform
+                                    ? Icon(
+                                        Icons.waves_rounded,
+                                        key: const ValueKey('waveform'),
+                                        size: 120,
+                                        color: accent,
+                                      )
+                                    : Icon(
+                                        Icons.music_note_rounded,
+                                        key: const ValueKey('album_art'),
+                                        size: 120,
+                                        color: accent,
+                                      ),
+                              ),
                             ),
                           ),
                         ),
@@ -264,8 +360,9 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                                 ),
                               ],
                             ),
-                            child: Icon(
-                              isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            child: AnimatedIcon(
+                              icon: AnimatedIcons.play_pause,
+                              progress: _playPauseController,
                               size: 40,
                               color: Colors.black,
                             ),
@@ -356,6 +453,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
             ),
           ),
         ],
+      ),
       ),
     );
   }

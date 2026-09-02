@@ -58,7 +58,7 @@ class _LyricsSheetState extends ConsumerState<LyricsSheet> {
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.82,
+        maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -167,7 +167,7 @@ class _LyricsSheetState extends ConsumerState<LyricsSheet> {
                               ? DesignTokens.primarySeed
                               : colorScheme.onSurface.withValues(alpha: 0.5),
                           fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                          fontSize: isCurrent ? 20 : 16,
+                          fontSize: 18,
                         ),
                         textAlign: TextAlign.center,
                       ),
