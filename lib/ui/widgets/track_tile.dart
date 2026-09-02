@@ -33,27 +33,27 @@ class TrackTile extends StatelessWidget {
     return Dismissible(
       key: Key(track.id),
       background: _buildSwipeBackground(
-        color: DesignTokens.primarySeed,
-        icon: Icons.queue_music,
-        label: 'Queue',
+        color: Colors.pinkAccent,
+        icon: Icons.favorite,
+        label: 'Like',
         alignment: Alignment.centerLeft,
         isDark: isDark,
       ),
       secondaryBackground: _buildSwipeBackground(
-        color: Colors.pinkAccent,
-        icon: Icons.favorite,
-        label: 'Like',
+        color: DesignTokens.primarySeed,
+        icon: Icons.queue_music,
+        label: 'Queue',
         alignment: Alignment.centerRight,
         isDark: isDark,
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Added "${track.title}" to queue')),
+            SnackBar(content: Text('Liked "${track.title}"')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Liked "${track.title}"')),
+            SnackBar(content: Text('Added "${track.title}" to queue')),
           );
         }
         return false; // Don't actually dismiss the tile

@@ -40,7 +40,12 @@ class AlbumDetailScreen extends ConsumerWidget {
             ),
           ),
           
-          CustomScrollView(
+          RefreshIndicator(
+            onRefresh: () async {
+              // Stub pull-to-refresh
+              await Future<void>.delayed(const Duration(seconds: 1));
+            },
+            child: CustomScrollView(
             slivers: [
               SliverAppBar(
                 expandedHeight: 420.0,
@@ -174,6 +179,7 @@ class AlbumDetailScreen extends ConsumerWidget {
                 ),
               ),
             ],
+          ),
           ),
         ],
       ),

@@ -21,8 +21,13 @@ class ArtistDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // Stub pull-to-refresh
+          await Future<void>.delayed(const Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          slivers: [
           // Parallax Header with Gradient Overlay
           SliverAppBar(
             expandedHeight: 320.0,
@@ -362,6 +367,7 @@ class ArtistDetailScreen extends ConsumerWidget {
             child: SizedBox(height: 100), // Bottom padding
           ),
         ],
+      ),
       ),
     );
   }
