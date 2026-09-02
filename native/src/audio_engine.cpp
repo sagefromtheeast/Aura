@@ -6,7 +6,7 @@
 #include <atomic>
 #include <chrono>
 #include <mutex>
-#include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -321,12 +321,12 @@ int32_t aura_analyze_features(const char* path, float* out_features, int32_t fea
     double duration_sec = (double)frames_read / 22050.0;
     
     // Derived features [0.0, 1.0]
-    float tempo = std::min(1.0f, (float)((beat_count / duration_sec) * 60.0f) / 200.0f); // Normalize max 200 BPM
-    float loudness = std::min(1.0f, (float)(rms * 4.0)); // Normalize arbitrary loud factor
-    float energy = std::min(1.0f, (float)(rms * 5.0 + tempo * 0.5f)); 
-    float acousticness = std::max(0.0f, 1.0f - (float)(zcr * 10.0)); // Less zero crossings = more acoustic
-    float danceability = std::min(1.0f, tempo * 0.8f + energy * 0.2f);
-    float valence = std::min(1.0f, energy * 0.6f + (1.0f - acousticness) * 0.4f); // Rough heuristic
+    float tempo = std::fmin(1.0f, (float)((beat_count / duration_sec) * 60.0f) / 200.0f); // Normalize max 200 BPM
+    float loudness = std::fmin(1.0f, (float)(rms * 4.0)); // Normalize arbitrary loud factor
+    float energy = std::fmin(1.0f, (float)(rms * 5.0 + tempo * 0.5f)); 
+    float acousticness = std::fmax(0.0f, 1.0f - (float)(zcr * 10.0)); // Less zero crossings = more acoustic
+    float danceability = std::fmin(1.0f, tempo * 0.8f + energy * 0.2f);
+    float valence = std::fmin(1.0f, energy * 0.6f + (1.0f - acousticness) * 0.4f); // Rough heuristic
 
     out_features[0] = tempo;
     out_features[1] = energy;
