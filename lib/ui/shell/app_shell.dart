@@ -34,7 +34,7 @@ class AppShell extends ConsumerWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
-            color: theme.colorScheme.surface.withOpacity(0.6),
+            color: theme.colorScheme.surface.withValues(alpha: 0.6),
             child: NavigationBarTheme(
               data: NavigationBarThemeData(
                 indicatorColor: theme.colorScheme.primaryContainer,

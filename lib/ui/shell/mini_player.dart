@@ -34,7 +34,7 @@ class MiniPlayer extends ConsumerWidget {
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -45,7 +45,7 @@ class MiniPlayer extends ConsumerWidget {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                 child: Container(
-                  color: theme.colorScheme.surface.withOpacity(0.6),
+                  color: theme.colorScheme.surface.withValues(alpha: 0.7),
                   child: Stack(
                     children: [
                       // Thin progress bar at the top
@@ -112,7 +112,7 @@ class MiniPlayer extends ConsumerWidget {
                                     playbackState.currentTrack?.artist ?? '',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,

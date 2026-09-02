@@ -102,17 +102,16 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
       if (next.hasValue && next.value! >= (60 * 41)) { // The max value from the provider
         // Wait a small moment to ensure animation completes before navigating
         Future.delayed(const Duration(milliseconds: 300), () {
-          if (mounted) {
-            Navigator.of(context).pushReplacement(
-              PageRouteBuilder<void>(
-                pageBuilder: (context, animation, secondaryAnimation) => const CompletionScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                transitionDuration: const Duration(milliseconds: 600),
-              ),
-            );
-          }
+          if (!context.mounted) return;
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder<void>(
+              pageBuilder: (context, animation, secondaryAnimation) => const CompletionScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              transitionDuration: const Duration(milliseconds: 600),
+            ),
+          );
         });
       }
     });
@@ -232,7 +231,7 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
                           decoration: BoxDecoration(
                             color: DesignTokens.primarySeed,
                             borderRadius: BorderRadius.circular(2),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 color: DesignTokens.primarySeed,
                                 blurRadius: 8,
