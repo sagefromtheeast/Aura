@@ -44,6 +44,23 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
       duration: const Duration(seconds: 3), // matching the 3s stub
     )..forward();
 
+    _progressController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder<void>(
+              pageBuilder: (context, animation, secondaryAnimation) => const CompletionScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              transitionDuration: const Duration(milliseconds: 600),
+            ),
+          );
+        });
+      }
+    });
+
     _startTypewriter();
   }
   
@@ -97,24 +114,6 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
   @override
   Widget build(BuildContext context) {
     final scanCount = ref.watch(libraryScanProvider);
-    
-    ref.listen<AsyncValue<int>>(libraryScanProvider, (previous, next) {
-      if (next.hasValue && next.value! >= (60 * 41)) { // The max value from the provider
-        // Wait a small moment to ensure animation completes before navigating
-        Future.delayed(const Duration(milliseconds: 300), () {
-          if (!context.mounted) return;
-          Navigator.of(context).pushReplacement(
-            PageRouteBuilder<void>(
-              pageBuilder: (context, animation, secondaryAnimation) => const CompletionScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
-              transitionDuration: const Duration(milliseconds: 600),
-            ),
-          );
-        });
-      }
-    });
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F0D0A),
