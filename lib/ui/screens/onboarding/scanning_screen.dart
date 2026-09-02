@@ -6,30 +6,19 @@ import '../../theme/design_tokens.dart';
 import 'onboarding_providers.dart';
 import 'completion_screen.dart';
 
-class ScanningScreen extends ConsumerStatefulWidget {
+final _numberFormatRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+
+class ScanningScreen extends StatefulWidget {
   const ScanningScreen({super.key});
 
   @override
-  ConsumerState<ScanningScreen> createState() => _ScanningScreenState();
+  State<ScanningScreen> createState() => _ScanningScreenState();
 }
 
-class _ScanningScreenState extends ConsumerState<ScanningScreen>
+class _ScanningScreenState extends State<ScanningScreen>
     with TickerProviderStateMixin {
   late AnimationController _rippleController;
   late AnimationController _progressController;
-  late Timer _typewriterTimer;
-  int _textIndex = 0;
-  String _currentText = '';
-  int _charIndex = 0;
-  
-  final List<String> _scanMessages = [
-    'Initializing local scanner...',
-    'Found Tame Impala...',
-    'Detecting Jazz...',
-    'Analyzing audio fingerprints...',
-    'Organizing library...',
-    'Almost ready...',
-  ];
 
   @override
   void initState() {
@@ -60,8 +49,6 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
         });
       }
     });
-
-    _startTypewriter();
   }
   
   @override
@@ -73,48 +60,16 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
       _rippleController.repeat();
     }
   }
-  
-  void _startTypewriter() {
-    _typewriterTimer = Timer.periodic(const Duration(milliseconds: 60), (timer) {
-      if (_textIndex >= _scanMessages.length) {
-        timer.cancel();
-        return;
-      }
-      
-      final fullText = _scanMessages[_textIndex];
-      if (_charIndex < fullText.length) {
-        setState(() {
-          _currentText = fullText.substring(0, _charIndex + 1);
-          _charIndex++;
-        });
-      } else {
-        timer.cancel();
-        Future.delayed(const Duration(milliseconds: 600), () {
-          if (mounted) {
-            setState(() {
-              _textIndex++;
-              _charIndex = 0;
-              _currentText = '';
-            });
-            _startTypewriter();
-          }
-        });
-      }
-    });
-  }
 
   @override
   void dispose() {
     _rippleController.dispose();
     _progressController.dispose();
-    _typewriterTimer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final scanCount = ref.watch(libraryScanProvider);
-
     return Scaffold(
       backgroundColor: const Color(0xFF0F0D0A),
       body: SafeArea(
@@ -122,17 +77,22 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
           children: [
             const SizedBox(height: 48),
             // Counter
-            Text(
-              scanCount.when(
-                data: (count) => '${count.toString().replaceAllMapped(RegExp(r'(\\d{1,3})(?=(\\d{3})+(?!\\d))'), (Match m) => '${m[1]},')} songs detected',
-                loading: () => '0 songs detected',
-                error: (_, __) => 'Error detecting songs',
-              ),
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontFamily: DesignTokens.fontMono,
-                fontWeight: FontWeight.w600,
-              ),
+            Consumer(
+              builder: (context, ref, child) {
+                final scanCount = ref.watch(libraryScanProvider);
+                return Text(
+                  scanCount.when(
+                    data: (count) => '${count.toString().replaceAllMapped(_numberFormatRegex, (Match m) => '${m[1]},')} songs detected',
+                    loading: () => '0 songs detected',
+                    error: (_, __) => 'Error detecting songs',
+                  ),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontFamily: DesignTokens.fontMono,
+                    fontWeight: FontWeight.w600,
+                  ),
+                );
+              },
             ),
             
             const Spacer(),
@@ -194,17 +154,7 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
             const Spacer(),
             
             // Typewriter Text
-            Container(
-              height: 24,
-              alignment: Alignment.center,
-              child: Text(
-                _currentText,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  fontFamily: DesignTokens.fontMono,
-                ),
-              ),
-            ),
+            const _TypewriterText(),
             
             const SizedBox(height: 32),
             
@@ -245,6 +195,87 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TypewriterText extends StatefulWidget {
+  const _TypewriterText();
+
+  @override
+  State<_TypewriterText> createState() => _TypewriterTextState();
+}
+
+class _TypewriterTextState extends State<_TypewriterText> {
+  late Timer _typewriterTimer;
+  int _textIndex = 0;
+  String _currentText = '';
+  int _charIndex = 0;
+  
+  final List<String> _scanMessages = [
+    'Initializing local scanner...',
+    'Found Tame Impala...',
+    'Detecting Jazz...',
+    'Analyzing audio fingerprints...',
+    'Organizing library...',
+    'Almost ready...',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _startTypewriter();
+  }
+
+  void _startTypewriter() {
+    _typewriterTimer = Timer.periodic(const Duration(milliseconds: 60), (timer) {
+      if (_textIndex >= _scanMessages.length) {
+        timer.cancel();
+        return;
+      }
+      
+      final fullText = _scanMessages[_textIndex];
+      if (_charIndex < fullText.length) {
+        if (mounted) {
+          setState(() {
+            _currentText = fullText.substring(0, _charIndex + 1);
+            _charIndex++;
+          });
+        }
+      } else {
+        timer.cancel();
+        Future.delayed(const Duration(milliseconds: 600), () {
+          if (mounted) {
+            setState(() {
+              _textIndex++;
+              _charIndex = 0;
+              _currentText = '';
+            });
+            _startTypewriter();
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _typewriterTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 24,
+      alignment: Alignment.center,
+      child: Text(
+        _currentText,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Colors.white.withValues(alpha: 0.7),
+          fontFamily: DesignTokens.fontMono,
         ),
       ),
     );
