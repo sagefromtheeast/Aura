@@ -51,6 +51,7 @@ dependencies:
   string_similarity: ^2.0.0  # Jaro-Winkler / Levenshtein for fuzzy dedup
   equatable: ^2.0.7
   json_annotation: ^4.9.0    # @JsonSerializable for entity JSON codegen
+  go_router: ^17.2.3
 
 dev_dependencies:
   flutter_test:
