@@ -23,12 +23,14 @@ class DummyArtist {
   final String id;
   final String name;
   final int trackCount;
+  final int albumCount;
   final Color imageColor;
 
   const DummyArtist({
     required this.id,
     required this.name,
     required this.trackCount,
+    required this.albumCount,
     required this.imageColor,
   });
 }
@@ -108,6 +110,7 @@ class DummyDataGenerator {
         id: 'artist_$index',
         name: '$letter - Artist Name ${index + 1}',
         trackCount: (index + 1) * 3,
+        albumCount: (index % 5) + 1,
         imageColor: _getColor(index * 2),
       );
     });
@@ -146,6 +149,26 @@ class DummyDataGenerator {
       trackCount: (index + 1) * 10,
     ));
   }
+
+  static List<DummyTrack> generateTracksForAlbum(String albumId) {
+    return List.generate(12, (index) => DummyTrack(
+      id: '${albumId}_track_$index',
+      title: 'Track Title ${index + 1}',
+      artistName: 'Artist Name', // We'll keep it simple for dummy data
+      albumTitle: 'Album Title',
+      duration: Duration(minutes: 3, seconds: 15 + (index * 7) % 60),
+    ));
+  }
+
+  static List<DummyTrack> generateTopTracksForArtist(String artistId) {
+    return List.generate(5, (index) => DummyTrack(
+      id: '${artistId}_top_track_$index',
+      title: 'Top Hit ${index + 1}',
+      artistName: 'Artist Name',
+      albumTitle: 'Album Title',
+      duration: Duration(minutes: 2, seconds: 45 + (index * 12) % 60),
+    ));
+  }
 }
 
 // --- Riverpod Providers ---
@@ -168,4 +191,14 @@ final dummyPlaylistsProvider = FutureProvider<List<DummyPlaylist>>((ref) async {
 final dummyFoldersProvider = FutureProvider<List<DummyFolder>>((ref) async {
   await Future<void>.delayed(const Duration(milliseconds: 500));
   return DummyDataGenerator.generateFolders();
+});
+
+final dummyAlbumTracksProvider = FutureProvider.family<List<DummyTrack>, String>((ref, albumId) async {
+  await Future<void>.delayed(const Duration(milliseconds: 500));
+  return DummyDataGenerator.generateTracksForAlbum(albumId);
+});
+
+final dummyArtistTopTracksProvider = FutureProvider.family<List<DummyTrack>, String>((ref, artistId) async {
+  await Future<void>.delayed(const Duration(milliseconds: 500));
+  return DummyDataGenerator.generateTopTracksForArtist(artistId);
 });
