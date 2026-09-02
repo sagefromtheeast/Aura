@@ -29,22 +29,41 @@ class _PermissionScreenState extends State<PermissionScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _controller.stop();
+    } else if (!_controller.isAnimating) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  bool _isGranted = false;
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
   void _requestPermission() {
+    setState(() {
+      _isGranted = true;
+    });
+    
     // Stub for permission request
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder<void>(
-        pageBuilder: (context, animation, secondaryAnimation) => const VibeSelectionScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        transitionDuration: const Duration(milliseconds: 600),
-      ),
-    );
+    Future.delayed(const Duration(milliseconds: 600), () {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder<void>(
+          pageBuilder: (context, animation, secondaryAnimation) => const VibeSelectionScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 600),
+        ),
+      );
+    });
   }
 
   @override
@@ -104,10 +123,17 @@ class _PermissionScreenState extends State<PermissionScreen>
                                     color: DesignTokens.primarySeed.withValues(alpha: 0.2),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(
-                                    Icons.lock_outline,
-                                    size: 48,
-                                    color: Colors.white,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 400),
+                                    transitionBuilder: (Widget child, Animation<double> animation) {
+                                      return ScaleTransition(scale: animation, child: child);
+                                    },
+                                    child: Icon(
+                                      _isGranted ? Icons.music_note : Icons.lock_outline,
+                                      key: ValueKey<bool>(_isGranted),
+                                      size: 48,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               );

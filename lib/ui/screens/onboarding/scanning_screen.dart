@@ -47,6 +47,16 @@ class _ScanningScreenState extends ConsumerState<ScanningScreen>
     _startTypewriter();
   }
   
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _rippleController.stop();
+    } else if (!_rippleController.isAnimating) {
+      _rippleController.repeat();
+    }
+  }
+  
   void _startTypewriter() {
     _typewriterTimer = Timer.periodic(const Duration(milliseconds: 60), (timer) {
       if (_textIndex >= _scanMessages.length) {

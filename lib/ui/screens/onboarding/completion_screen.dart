@@ -39,6 +39,14 @@ class _CompletionScreenState extends State<CompletionScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _bounceController.value = 1.0;
+    }
+  }
+
+  @override
   void dispose() {
     _bounceController.dispose();
     super.dispose();

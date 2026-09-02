@@ -45,6 +45,16 @@ class _VibeSelectionScreenState extends ConsumerState<VibeSelectionScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _bgController.stop();
+    } else if (!_bgController.isAnimating) {
+      _bgController.repeat(reverse: true);
+    }
+  }
+
+  @override
   void dispose() {
     _bgController.dispose();
     super.dispose();
@@ -224,6 +234,16 @@ class _VibeCardState extends State<_VibeCard> with SingleTickerProviderStateMixi
 
     if (widget.isSelected) {
       _scaleController.forward();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _scaleController.duration = Duration.zero;
+    } else {
+      _scaleController.duration = const Duration(milliseconds: 200);
     }
   }
 
