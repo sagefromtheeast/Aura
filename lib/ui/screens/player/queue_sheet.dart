@@ -94,6 +94,22 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
             ),
           ),
           const SizedBox(height: DesignTokens.spacing12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: DesignTokens.spacing24),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _queueTracks.shuffle();
+                  });
+                },
+                icon: const Icon(Icons.shuffle_rounded),
+                label: const Text('Shuffle Queue'),
+              ),
+            ),
+          ),
+          const SizedBox(height: DesignTokens.spacing12),
 
           // Currently Playing Badge
           if (playbackState.currentTrack != null) ...[
