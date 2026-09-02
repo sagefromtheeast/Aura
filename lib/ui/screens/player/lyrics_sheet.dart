@@ -56,16 +56,18 @@ class _LyricsSheetState extends ConsumerState<LyricsSheet> {
     final playbackState = ref.watch(playbackStateProvider);
     final currentTrack = playbackState.currentTrack;
 
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.6,
-      ),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.6,
+        ),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: DesignTokens.spacing12),
           Container(
@@ -179,6 +181,7 @@ class _LyricsSheetState extends ConsumerState<LyricsSheet> {
           ),
           const SizedBox(height: DesignTokens.spacing24),
         ],
+      ),
       ),
     );
   }

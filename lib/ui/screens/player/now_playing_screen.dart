@@ -123,15 +123,22 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
         child: Stack(
           children: [
           // ── Layer 1: Background Gradient & Single Liquid Glass Blur ────────
-          Container(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0, -0.4),
-                radius: 1.2,
-                colors: [
-                  accent.withValues(alpha: 0.35),
-                  Theme.of(context).scaffoldBackgroundColor,
-                ],
+          Positioned.fill(
+            child: Container(
+              color: accent, // Dummy full-bleed album art
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.1),
+                    Colors.black.withValues(alpha: 0.6),
+                  ],
+                ),
               ),
             ),
           ),
@@ -352,6 +359,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                             decoration: BoxDecoration(
                               color: accent,
                               shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.3),
+                                width: 1.5,
+                              ),
                               boxShadow: [
                                 BoxShadow(
                                   color: accent.withValues(alpha: 0.4),
