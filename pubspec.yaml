@@ -53,6 +53,11 @@ dependencies:
   json_annotation: ^4.9.0    # @JsonSerializable for entity JSON codegen
   go_router: ^17.2.3
 
+  # ── Stats & Wrapped (charts, share, capture) ─────────────────
+  fl_chart: ^0.69.2          # Hero daily-listening line chart / sparkline
+  screenshot: ^3.0.0         # Capture Wrapped story cards as PNG
+  share_plus: ^10.1.4        # Local OS share sheet (no network)
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

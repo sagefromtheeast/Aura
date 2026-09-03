@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/mini_player.dart';
 import '../library/library_screen.dart';
-import '../stats/stats_screen.dart';
+import '../stats/stats_dashboard_screen.dart';
 import '../settings/equalizer_screen.dart';
 import '../settings/settings_screen.dart';
 
@@ -19,7 +19,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   final List<Widget> _pages = const [
     LibraryScreen(),
-    StatsScreen(),
+    StatsDashboardScreen(),
     EqualizerScreen(),
     SettingsScreen(),
   ];
