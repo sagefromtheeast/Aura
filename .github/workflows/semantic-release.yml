@@ -1,0 +1,42 @@
+name: Automated Semantic Release with Artifacts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js (for semantic-release)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Run Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release Success Notification
+        if: steps.semantic.outputs.new_release_published == 'true'
+        run: |
+          echo "✅ Release v${{ steps.semantic.outputs.new_release_version }} published successfully!"
+          echo "📦 Changelog updated"
+          echo "🏷️ Tag created: v${{ steps.semantic.outputs.new_release_version }}"

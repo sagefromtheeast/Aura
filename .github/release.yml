@@ -1,0 +1,46 @@
+changelog:
+  categories:
+    - title: "🚀 New Features"
+      labels:
+        - enhancement
+        - feature
+        - feat
+    - title: "🐛 Bug Fixes"
+      labels:
+        - bug
+        - fix
+        - bugfix
+    - title: "⚡ Performance"
+      labels:
+        - performance
+        - perf
+        - optimization
+    - title: "🎨 UI/UX"
+      labels:
+        - ui
+        - ux
+        - design
+    - title: "🔊 Audio Engine"
+      labels:
+        - audio
+        - c++
+        - dsp
+        - miniaudio
+    - title: "📚 Documentation"
+      labels:
+        - documentation
+        - docs
+    - title: "♿ Accessibility"
+      labels:
+        - accessibility
+        - a11y
+    - title: "🔧 Maintenance"
+      labels:
+        - chore
+        - maintenance
+        - refactor
+  exclude:
+    labels:
+      - skip-changelog
+      - internal
+      - wontfix

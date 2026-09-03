@@ -1,0 +1,29 @@
+{
+  "name": "aura-music-player",
+  "version": "1.15.1",
+  "description": "Aura - Privacy-First Offline Audiophile Music Player (Flutter 3.27+ & C++ Audio Engine)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sagefromtheeast/Aura.git"
+  },
+  "keywords": [
+    "flutter",
+    "music-player",
+    "offline",
+    "privacy",
+    "c++",
+    "audio",
+    "miniaudio"
+  ],
+  "author": "sagefromtheeast",
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^12.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.0.1",
+    "@semantic-release/release-notes-generator": "^13.0.0",
+    "semantic-release": "^24.1.1"
+  },
+  "private": true
+}
