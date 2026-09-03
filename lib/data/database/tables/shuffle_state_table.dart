@@ -9,6 +9,11 @@ class ShuffleStateTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();
 
+  /// Shuffle context this state belongs to, e.g. 'all_songs' or 'playlist_42'.
+  /// One persisted state per context (enforced by a unique index; see
+  /// AppDatabase.migration).
+  TextColumn get contextId => text().withDefault(const Constant('all_songs'))();
+
   /// JSON-encoded ShuffleConfig.
   TextColumn get configJson => text()();
 
@@ -17,4 +22,7 @@ class ShuffleStateTable extends Table {
 
   IntColumn get currentIndex => integer().withDefault(const Constant(0))();
   IntColumn get createdAtMs => integer()();
+
+  /// Epoch ms of the last save.
+  IntColumn get updatedAtMs => integer().withDefault(const Constant(0))();
 }

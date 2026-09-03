@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/services/widget_notification_service.dart';
-import '../data/database/app_database.dart';
+import '../data/database/database_provider.dart';
 import '../data/repositories/local_music_repository.dart';
 import '../data/repositories/local_behavior_repository.dart';
 import '../data/repositories/local_playlist_repository.dart';
@@ -24,14 +24,16 @@ import '../native/audio_engine_ffi.dart';
 
 // ── Database ──────────────────────────────────────────────────────────────────
 
-/// Singleton Drift database.
-/// Disposed automatically when the ProviderContainer is disposed (never in
-/// a normal app lifecycle; intentionally long-lived).
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase();
-  ref.onDispose(db.close);
-  return db;
-});
+// The canonical database + DAO providers live in
+// `data/database/database_provider.dart`. Re-exported here so existing
+// consumers (`ref.watch(appDatabaseProvider)`) keep their import path.
+export '../data/database/database_provider.dart'
+    show
+        appDatabaseProvider,
+        trackDaoProvider,
+        behaviorDaoProvider,
+        playlistDaoProvider,
+        shuffleStateDaoProvider;
 
 // ── Repositories ──────────────────────────────────────────────────────────────
 

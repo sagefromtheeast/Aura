@@ -19,6 +19,48 @@ class BehaviorDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertEvent(PlaybackHistoryTableCompanion event) =>
       into(playbackHistoryTable).insert(event);
 
+  /// Records a completed/partial play event for [trackId].
+  Future<void> recordPlay(
+    String trackId, {
+    required int durationPlayedMs,
+    String contextType = 'library',
+    int? playedAtMs,
+  }) =>
+      insertEvent(PlaybackHistoryTableCompanion.insert(
+        trackId: trackId,
+        playedAtMs: playedAtMs ?? DateTime.now().millisecondsSinceEpoch,
+        durationPlayedMs: durationPlayedMs,
+        skipped: const Value(false),
+        contextType: Value(contextType),
+      ));
+
+  /// Records a skip event for [trackId].
+  Future<void> recordSkip(
+    String trackId, {
+    int durationPlayedMs = 0,
+    String contextType = 'library',
+    int? playedAtMs,
+  }) =>
+      insertEvent(PlaybackHistoryTableCompanion.insert(
+        trackId: trackId,
+        playedAtMs: playedAtMs ?? DateTime.now().millisecondsSinceEpoch,
+        durationPlayedMs: durationPlayedMs,
+        skipped: const Value(true),
+        contextType: Value(contextType),
+      ));
+
+  /// Most recent play/skip events across all tracks, newest first.
+  Future<List<PlaybackHistoryRow>> getRecentPlays({int limit = 50}) =>
+      (select(playbackHistoryTable)
+            ..orderBy([(h) => OrderingTerm.desc(h.playedAtMs)])
+            ..limit(limit))
+          .get();
+
+  /// Alias for [getAggregatedStats] (play/skip/lastPlayed per track).
+  Future<Map<String, ({int plays, int skips, int? lastPlayedMs})>> getStats(
+          List<String> trackIds) =>
+      getAggregatedStats(trackIds);
+
   // ── History Queries ────────────────────────────────────────────────────────
 
   /// Returns history for a specific track, newest first.

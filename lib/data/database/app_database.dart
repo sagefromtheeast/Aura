@@ -18,6 +18,7 @@ import 'tables/audio_features_table.dart';
 import 'daos/track_dao.dart';
 import 'daos/behavior_dao.dart';
 import 'daos/playlist_dao.dart';
+import 'daos/shuffle_state_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -40,6 +41,7 @@ part 'app_database.g.dart';
     TrackDao,
     BehaviorDao,
     PlaylistDao,
+    ShuffleStateDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -49,7 +51,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -70,14 +72,26 @@ class AppDatabase extends _$AppDatabase {
           await customStatement(
             'CREATE INDEX IF NOT EXISTS idx_history_played_at ON playback_history(played_at_ms)',
           );
+          // One persisted shuffle state per context.
+          await customStatement(
+            'CREATE UNIQUE INDEX IF NOT EXISTS idx_shuffle_context '
+            'ON shuffle_states(context_id)',
+          );
         },
         onUpgrade: (m, from, to) async {
           // AGENTS.md: "All Drift migrations must remain non-destructive."
-          // Add new columns/tables here for each version bump.
-          // Example for v2:
-          // if (from < 2) {
-          //   await m.addColumn(tracksTable, tracksTable.someNewColumn);
-          // }
+          // Only add columns/tables here; never drop.
+          if (from < 2) {
+            // v2: per-context shuffle persistence.
+            await m.addColumn(
+                shuffleStateTable, shuffleStateTable.contextId);
+            await m.addColumn(
+                shuffleStateTable, shuffleStateTable.updatedAtMs);
+            await customStatement(
+              'CREATE UNIQUE INDEX IF NOT EXISTS idx_shuffle_context '
+              'ON shuffle_states(context_id)',
+            );
+          }
         },
         beforeOpen: (details) async {
           // Enable WAL mode for better concurrent read performance.

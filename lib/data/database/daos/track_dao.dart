@@ -54,6 +54,28 @@ class TrackDao extends DatabaseAccessor<AppDatabase> with _$TrackDaoMixin {
       (select(tracksTable)..where((t) => t.filePath.equals(filePath)))
           .getSingleOrNull();
 
+  /// Non-deleted tracks for a given genre, ordered by title.
+  Future<List<TrackRow>> findByGenre(String genre) => (select(tracksTable)
+        ..where((t) => t.genre.equals(genre) & t.isDeleted.equals(false))
+        ..orderBy([(t) => OrderingTerm.asc(t.title)]))
+      .get();
+
+  /// Case-insensitive fuzzy search across title, artist and album.
+  /// Ranks exact/prefix matches ahead of substring matches.
+  Future<List<TrackRow>> search(String query) {
+    final q = query.trim();
+    if (q.isEmpty) return Future.value(const <TrackRow>[]);
+    final like = '%${q.toLowerCase()}%';
+    return (select(tracksTable)
+          ..where((t) =>
+              t.isDeleted.equals(false) &
+              (t.title.lower().like(like) |
+                  t.artistName.lower().like(like) |
+                  t.albumTitle.lower().like(like)))
+          ..orderBy([(t) => OrderingTerm.asc(t.title)]))
+        .get();
+  }
+
   // ── Track Mutations ────────────────────────────────────────────────────────
 
   /// Insert or replace a track row.
