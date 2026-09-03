@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import '../notifications/notification_preview_screen.dart';
+import '../notifications/notification_sound_picker.dart';
+import '../notifications/quiet_hours_screen.dart';
 import 'settings_providers.dart';
 
 class NotificationSettingsScreen extends ConsumerWidget {
@@ -101,6 +104,25 @@ class NotificationSettingsScreen extends ConsumerWidget {
                   onStart: c.setQuietStart,
                   onEnd: c.setQuietEnd,
                 ),
+            ]),
+
+            _Section(title: 'More', children: [
+              _NavRow(
+                icon: Icons.nightlight_round,
+                title: 'Quiet Hours',
+                onTap: () => _push(context, const QuietHoursScreen()),
+              ),
+              _NavRow(
+                icon: Icons.music_note_rounded,
+                title: 'Notification Sound',
+                onTap: () => _push(context, const NotificationSoundPicker()),
+              ),
+              _NavRow(
+                icon: Icons.preview_rounded,
+                title: 'See example notification',
+                onTap: () =>
+                    _push(context, const NotificationPreviewScreen()),
+              ),
             ]),
           ],
         ),
@@ -223,6 +245,37 @@ class _Section extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+void _push(BuildContext context, Widget screen) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(builder: (_) => screen),
+  );
+}
+
+class _NavRow extends StatelessWidget {
+  const _NavRow({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      leading: Icon(icon, color: DesignTokens.primarySeed),
+      title: Text(title,
+          style: DesignTokens.bodyLarge
+              .copyWith(fontSize: 16, color: _primary(context))),
+      trailing: Icon(Icons.chevron_right_rounded, color: _secondary(context)),
+      onTap: onTap,
     );
   }
 }
