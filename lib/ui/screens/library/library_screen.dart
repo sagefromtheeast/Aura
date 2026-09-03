@@ -10,7 +10,7 @@ import 'album_detail_screen.dart';
 import 'artist_detail_screen.dart';
 import 'folder_browser_screen.dart';
 import 'playlist_detail_screen.dart';
-import 'search_screen.dart';
+import '../search/search_screen.dart';
 import 'smart_mix_detail_screen.dart';
 import 'tag_editor_sheet.dart';
 
