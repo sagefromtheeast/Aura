@@ -2,7 +2,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/design_tokens.dart';
-import 'onboarding_wizard.dart';
+import 'permission_screen.dart';
 
 /// Animated Splash Screen featuring Liquid Glass aesthetic, ambient depth pulses,
 /// and smooth transition into the Onboarding Wizard or main app experience.
@@ -17,6 +17,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _floatAnimation;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
@@ -29,17 +30,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _floatAnimation = Tween<double>(begin: -8.0, end: 8.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
-
-    _navigateToNextScreen();
+    
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
-  Future<void> _navigateToNextScreen() async {
-    await Future<void>.delayed(const Duration(milliseconds: 2600));
-    if (!mounted) return;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _controller.stop();
+    } else if (!_controller.isAnimating) {
+      _controller.repeat(reverse: true);
+    }
+  }
 
+  void _navigateToNextScreen() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder<void>(
-        pageBuilder: (context, animation, secondaryAnimation) => const OnboardingWizard(),
+        pageBuilder: (context, animation, secondaryAnimation) => const PermissionScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -70,7 +80,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   colors: [
                     Color(0xFFFF8F6D), // Warm apricot primary seed
                     Color(0xFF4A154B), // Deep resonant violet
-                    Color(0xFF0F0D0A), // Dark surface
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -120,10 +129,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   children: [
                     const Spacer(flex: 3),
                     AnimatedBuilder(
-                      animation: _floatAnimation,
+                      animation: _pulseAnimation,
                       builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(0, _floatAnimation.value),
+                        return Transform.scale(
+                          scale: _pulseAnimation.value,
                           child: Container(
                             width: 140,
                             height: 140,
@@ -144,7 +153,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                               ],
                             ),
                             child: const Icon(
-                              Icons.auto_awesome_rounded,
+                              Icons.music_note,
                               size: 68,
                               color: Colors.white,
                             ),
@@ -154,28 +163,37 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     ),
                     const SizedBox(height: DesignTokens.spacing32),
                     Text(
-                      'Aura',
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        fontSize: 44,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1.5,
+                      'Your music, more alive.',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: DesignTokens.spacing8),
-                    Text(
-                      'The Intelligent Offline Music Player',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        letterSpacing: 0.5,
-                      ),
-                    ),
                     const Spacer(flex: 2),
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        DesignTokens.primarySeed.withValues(alpha: 0.8),
+                    ElevatedButton(
+                      onPressed: _navigateToNextScreen,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withValues(alpha: 0.15),
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        elevation: 0,
+                      ).copyWith(
+                        side: WidgetStateProperty.all(
+                          BorderSide(color: Colors.white.withValues(alpha: 0.4), width: 1),
+                        ),
                       ),
-                      strokeWidth: 2.5,
+                      child: const Text(
+                        'Get Started',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                     const Spacer(),
                     Text(

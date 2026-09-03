@@ -71,7 +71,7 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
               children: [
                 Expanded(
                   child: Text(
-                    'Up Next & Queue',
+                    'Playing Next',
                     style: theme.textTheme.headlineMedium?.copyWith(fontSize: 22),
                   ),
                 ),
@@ -94,15 +94,36 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
             ),
           ),
           const SizedBox(height: DesignTokens.spacing12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: DesignTokens.spacing24),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _queueTracks.shuffle();
+                  });
+                },
+                icon: const Icon(Icons.shuffle_rounded),
+                label: const Text('Shuffle Queue'),
+              ),
+            ),
+          ),
+          const SizedBox(height: DesignTokens.spacing12),
 
           // Currently Playing Badge
           if (playbackState.currentTrack != null) ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: DesignTokens.spacing24),
-              child: GlassCard(
-                borderRadius: 12.0,
-                padding: const EdgeInsets.all(DesignTokens.spacing12),
-                child: Row(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: const Border(left: BorderSide(color: DesignTokens.primarySeed, width: 4)),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: GlassCard(
+                  borderRadius: 12.0,
+                  padding: const EdgeInsets.all(DesignTokens.spacing12),
+                  child: Row(
                   children: [
                     Container(
                       width: 36,
@@ -145,6 +166,7 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
                   ],
                 ),
               ),
+              ),
             ),
             const SizedBox(height: DesignTokens.spacing12),
             Divider(color: colorScheme.onSurface.withValues(alpha: 0.1), height: 1),
@@ -163,6 +185,7 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
                   )
                 : ReorderableListView.builder(
                     shrinkWrap: true,
+                    buildDefaultDragHandles: false,
                     padding: const EdgeInsets.symmetric(
                       horizontal: DesignTokens.spacing24,
                       vertical: DesignTokens.spacing12,
@@ -179,62 +202,93 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
                     },
                     itemBuilder: (context, index) {
                       final track = _queueTracks[index];
-                      return Dismissible(
+                      return Padding(
                         key: ValueKey(track.id),
-                        direction: DismissDirection.endToStart,
-                        onDismissed: (_) {
-                          setState(() {
-                            _queueTracks.removeAt(index);
-                          });
-                        },
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: DesignTokens.spacing24),
-                          color: colorScheme.error.withValues(alpha: 0.2),
-                          child: Icon(
-                            Icons.remove_circle_outline,
-                            color: colorScheme.error,
+                        padding: const EdgeInsets.only(bottom: DesignTokens.spacing8),
+                        child: Dismissible(
+                          key: ValueKey('dismiss_${track.id}'),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (_) {
+                            setState(() {
+                              _queueTracks.removeAt(index);
+                            });
+                          },
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: DesignTokens.spacing24),
+                            decoration: BoxDecoration(
+                              color: colorScheme.error.withValues(alpha: 0.2),
+                              borderRadius: DesignTokens.radius12,
+                            ),
+                            child: Icon(
+                              Icons.remove_circle_outline,
+                              color: colorScheme.error,
+                            ),
                           ),
-                        ),
-                        child: Semantics(
-                          label: 'Queue item: ${track.title} by ${track.artistName}',
-                          button: true,
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(
-                              Icons.drag_handle,
-                              color: colorScheme.onSurface.withValues(alpha: 0.4),
-                            ),
-                            title: Text(
-                              track.title,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.w600,
+                          child: Semantics(
+                            label: 'Queue item: ${track.title} by ${track.artistName}',
+                            button: true,
+                            child: GlassCard(
+                              borderRadius: 12.0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: DesignTokens.spacing16,
+                                vertical: DesignTokens.spacing8,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              track.artistName,
-                              style: theme.textTheme.bodySmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                size: 18,
-                                color: colorScheme.onSurface.withValues(alpha: 0.5),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ref.read(playbackOrchestratorProvider).playTrack(track);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            track.title,
+                                            style: theme.textTheme.bodyLarge?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            track.artistName,
+                                            style: theme.textTheme.bodySmall,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      size: 18,
+                                      color: colorScheme.onSurface.withValues(alpha: 0.5),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _queueTracks.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                  ReorderableDragStartListener(
+                                    index: index,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Icon(
+                                        Icons.drag_handle,
+                                        color: colorScheme.onSurface.withValues(alpha: 0.4),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _queueTracks.removeAt(index);
-                                });
-                              },
                             ),
-                            onTap: () {
-                              ref.read(playbackOrchestratorProvider).playTrack(track);
-                              Navigator.pop(context);
-                            },
                           ),
                         ),
                       );

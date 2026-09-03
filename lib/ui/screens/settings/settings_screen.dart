@@ -5,7 +5,7 @@ import '../../theme/dynamic_theme_provider.dart';
 import '../../widgets/glass_card.dart';
 import 'duplicate_wizard_sheet.dart';
 import 'intelli_shuffle_sheet.dart';
-import '../onboarding/onboarding_wizard.dart';
+import '../onboarding/splash_screen.dart';
 
 /// Settings and Enclave Preferences view.
 /// Features platform-adaptive theme switching, duplicate management wizard trigger, and IntelliShuffle customization.
@@ -120,7 +120,7 @@ class SettingsScreen extends ConsumerWidget {
             GlassCard(
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const OnboardingWizard()),
+                  MaterialPageRoute<void>(builder: (_) => const SplashScreen()),
                 );
               },
               child: Row(

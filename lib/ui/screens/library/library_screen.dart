@@ -5,6 +5,7 @@ import '../../../core/services/playlist_io_service.dart';
 import '../../../shared/providers.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import '../../../data/dummy_library_data.dart';
 import 'album_detail_screen.dart';
 import 'artist_detail_screen.dart';
 import 'folder_browser_screen.dart';
@@ -215,8 +216,15 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
             final album = albums[index];
             return GlassCard(
               onTap: () {
+                final dummyAlbum = DummyAlbum(
+                  id: album.id,
+                  title: album.title,
+                  artistName: album.artistName,
+                  coverColor: Colors.grey, // Mock color
+                  year: album.year,
+                );
                 Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: album)),
+                  MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: dummyAlbum)),
                 );
               },
               child: Column(
@@ -261,8 +269,15 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
               padding: const EdgeInsets.only(bottom: DesignTokens.spacing12),
               child: GlassCard(
                 onTap: () {
+                  final dummyArtist = DummyArtist(
+                    id: artist.id,
+                    name: artist.name,
+                    trackCount: artist.trackCount,
+                    albumCount: artist.albumCount,
+                    imageColor: Colors.grey, // Mock color
+                  );
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => ArtistDetailScreen(artist: artist)),
+                    MaterialPageRoute<void>(builder: (_) => ArtistDetailScreen(artist: dummyArtist)),
                   );
                 },
                 child: Row(
