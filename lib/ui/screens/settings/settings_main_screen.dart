@@ -13,6 +13,7 @@ import 'notification_settings_screen.dart';
 import 'settings_providers.dart';
 import 'shuffle_settings_screen.dart';
 import 'theme_picker_screen.dart';
+import '../widgets/widget_gallery_screen.dart';
 
 class SettingsMainScreen extends ConsumerWidget {
   const SettingsMainScreen({super.key});
@@ -97,6 +98,12 @@ class SettingsMainScreen extends ConsumerWidget {
                     icon: Icons.palette_rounded,
                     title: 'Theme Customization',
                     onTap: () => _push(context, const ThemePickerScreen()),
+                  ),
+                  const _RowDivider(),
+                  _SettingsRow(
+                    icon: Icons.widgets_rounded,
+                    title: 'Home Screen Widgets',
+                    onTap: () => _push(context, const WidgetGalleryScreen()),
                   ),
                 ],
               ),
