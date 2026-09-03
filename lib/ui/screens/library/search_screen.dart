@@ -6,6 +6,7 @@ import '../../../domain/entities/track.dart';
 import '../../../shared/providers.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import '../../../data/dummy_library_data.dart';
 import 'album_detail_screen.dart';
 import 'artist_detail_screen.dart';
 
@@ -214,8 +215,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 padding: const EdgeInsets.only(bottom: DesignTokens.spacing8),
                 child: GlassCard(
                   onTap: () {
+                    final dummyAlbum = DummyAlbum(
+                      id: album.id,
+                      title: album.title,
+                      artistName: album.artistName,
+                      coverColor: Colors.grey, // Mock color
+                      year: album.year,
+                    );
                     Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: album)),
+                      MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: dummyAlbum)),
                     );
                   },
                   child: Row(
@@ -254,8 +262,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 padding: const EdgeInsets.only(bottom: DesignTokens.spacing8),
                 child: GlassCard(
                   onTap: () {
+                    final dummyArtist = DummyArtist(
+                      id: artist.id,
+                      name: artist.name,
+                      trackCount: artist.trackCount,
+                      albumCount: artist.albumCount,
+                      imageColor: Colors.grey, // Mock color
+                    );
                     Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => ArtistDetailScreen(artist: artist)),
+                      MaterialPageRoute<void>(builder: (_) => ArtistDetailScreen(artist: dummyArtist)),
                     );
                   },
                   child: Row(

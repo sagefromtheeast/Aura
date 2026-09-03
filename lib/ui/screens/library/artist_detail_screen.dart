@@ -1,286 +1,391 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../domain/entities/artist.dart';
-import '../../../domain/entities/album.dart';
-import '../../../domain/entities/track.dart';
-import '../../../shared/providers.dart';
+import '../../../data/dummy_library_data.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
-import 'album_detail_screen.dart';
 
-final _artistTracksProvider = FutureProvider.family<List<Track>, String>((ref, artistId) {
-  return ref.watch(musicRepositoryProvider).getTracksByArtist(artistId);
-});
-
-final _artistAlbumsProvider = FutureProvider.family<List<Album>, String>((ref, artistName) async {
-  final albums = await ref.watch(musicRepositoryProvider).getAllAlbums();
-  return albums.where((a) => a.artistName.toLowerCase() == artistName.toLowerCase()).toList();
-});
-
-/// Artist Profile Screen presenting discography albums, popular track lists,
-/// and acoustic performance summaries.
 class ArtistDetailScreen extends ConsumerWidget {
-  final Artist artist;
+  final DummyArtist artist;
+
   const ArtistDetailScreen({super.key, required this.artist});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tracksAsync = ref.watch(_artistTracksProvider(artist.id));
-    final albumsAsync = ref.watch(_artistAlbumsProvider(artist.name));
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    final albumsAsync = ref.watch(dummyAlbumsProvider);
+    final topTracksAsync = ref.watch(dummyArtistTopTracksProvider(artist.id));
+    final relatedArtistsAsync = ref.watch(dummyArtistsProvider);
 
-    return Semantics(
-      label: 'Artist Profile Screen for ${artist.name}',
-      child: Scaffold(
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // Stub pull-to-refresh
+          await Future<void>.delayed(const Duration(seconds: 1));
+        },
+        child: CustomScrollView(
           slivers: [
-            // ── Artist Header Sliver ────────────────────────────────────────
-            SliverAppBar(
-              expandedHeight: 280,
-              pinned: true,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: () => Navigator.of(context).pop(),
-                tooltip: 'Back to artists',
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  artist.name,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            DesignTokens.primarySeed.withValues(alpha: 0.35),
-                            const Color(0xFF0F0D0A),
-                          ],
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: DesignTokens.primarySeed.withValues(alpha: 0.2),
-                          border: Border.all(color: DesignTokens.primarySeed, width: 2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            artist.name.isNotEmpty ? artist.name[0].toUpperCase() : 'A',
-                            style: const TextStyle(
-                              fontSize: 56,
-                              fontWeight: FontWeight.bold,
-                              color: DesignTokens.primarySeed,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          // Parallax Header with Gradient Overlay
+          SliverAppBar(
+            expandedHeight: 320.0,
+            pinned: true,
+            stretch: true,
+            backgroundColor: theme.colorScheme.surface,
+            elevation: 0,
+            iconTheme: IconThemeData(
+              color: isDark ? Colors.white : Colors.black87,
             ),
-
-            // ── Artist Info Strip ───────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(DesignTokens.spacing24),
-                child: Row(
-                  children: [
-                    _buildStatChip(context, '${artist.albumCount} Albums'),
-                    const SizedBox(width: 12),
-                    _buildStatChip(context, '${artist.trackCount} Tracks'),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.favorite_border_rounded, color: DesignTokens.primarySeed),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Followed ${artist.name}')),
-                        );
-                      },
-                      tooltip: 'Follow Artist',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // ── Albums Discography Section ──────────────────────────────────
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                child: Text(
-                  'DISCOGRAPHY',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: DesignTokens.primarySeed,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 210,
-                child: albumsAsync.when(
-                  data: (albums) {
-                    if (albums.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'No individual album bundles found',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).disabledColor),
-                        ),
-                      );
-                    }
-                    return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: albums.length,
-                      itemBuilder: (context, index) {
-                        final album = albums[index];
-                        return GestureDetector(
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(builder: (_) => AlbumDetailScreen(album: album)),
-                          ),
-                          child: Container(
-                            width: 160,
-                            margin: const EdgeInsets.only(right: 16, bottom: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: DesignTokens.radius16,
-                                      color: DesignTokens.primarySeed.withValues(alpha: 0.15),
-                                    ),
-                                    child: const Center(
-                                      child: Icon(Icons.album_rounded, size: 56, color: DesignTokens.primarySeed),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  album.title,
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '${album.year > 0 ? album.year : "Album"} · ${album.trackCount} Tracks',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).disabledColor),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, s) => Center(child: Text('Error loading discography: $e')),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: DesignTokens.spacing16)),
-
-            // ── Tracks Section ──────────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                child: Text(
-                  'ALL TRACKS',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: DesignTokens.primarySeed,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                ),
-              ),
-            ),
-            tracksAsync.when(
-              data: (tracks) {
-                if (tracks.isEmpty) {
-                  return SliverToBoxAdapter(
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: const [
+                StretchMode.zoomBackground,
+                StretchMode.blurBackground,
+              ],
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Container(
+                    color: DesignTokens.primarySeed.withValues(alpha: 0.2),
                     child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(32),
-                        child: Text(
-                          'No audio tracks listed for this artist.',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).disabledColor),
+                      child: Icon(
+                        Icons.person,
+                        size: 120,
+                        color: DesignTokens.primarySeed.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          theme.colorScheme.surface.withValues(alpha: 0.8),
+                          theme.colorScheme.surface,
+                        ],
+                        stops: const [0.4, 0.8, 1.0],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 24,
+                    left: 24,
+                    right: 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          artist.name,
+                          style: theme.textTheme.displaySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            height: 1.1,
+                            color: isDark ? Colors.white : Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            _buildGenrePill('Pop', theme),
+                            const SizedBox(width: 8),
+                            _buildGenrePill('Indie', theme),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Play and Shuffle Buttons
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.play_arrow),
+                      label: const Text('Play'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isDark ? Colors.white : Colors.black,
+                        foregroundColor: isDark ? Colors.black : Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
                         ),
                       ),
                     ),
-                  );
-                }
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.shuffle),
+                      label: const Text('Shuffle'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(
+                          color: theme.dividerColor.withValues(alpha: 0.3),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        backgroundColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3), // Glass style
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
 
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+          // Top Songs Section Header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+              child: Text(
+                'Top Songs',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          // Horizontal Top Songs Row
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+              child: topTracksAsync.when(
+                data: (tracks) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: tracks.length,
+                    itemBuilder: (context, index) {
                       final track = tracks[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      return Container(
+                        width: 280,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: GlassCard(
-                          onTap: () => ref.read(playbackOrchestratorProvider).playTrack(track),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
-                              const Icon(Icons.music_note_rounded, color: DesignTokens.primarySeed),
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: DesignTokens.primarySeed.withValues(alpha: 0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(Icons.music_note, color: Colors.white54),
+                              ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(track.title, style: Theme.of(context).textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-                                    Text(track.albumTitle, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).disabledColor), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                    Text(
+                                      track.title,
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${1000 - (index * 123)} plays',
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        fontSize: 14,
+                                        color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.play_arrow_rounded, color: DesignTokens.primarySeed),
                             ],
                           ),
                         ),
                       );
                     },
-                    childCount: tracks.length,
-                  ),
-                );
-              },
-              loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
-              error: (e, s) => SliverToBoxAdapter(child: Center(child: Text('Error: $e'))),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 96)),
-          ],
-        ),
+          ),
+
+          // Albums Section Header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24.0, 32.0, 24.0, 16.0),
+              child: Text(
+                'Albums',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          // Albums 2-Column Grid
+          albumsAsync.when(
+            data: (albums) {
+              final artistAlbums = albums.take(4).toList();
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.8,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final album = artistAlbums[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: album.coverColor,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: album.coverColor.withValues(alpha: 0.3),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                ],
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.album, size: 48, color: Colors.white54),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            album.title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            album.year.toString(),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    childCount: artistAlbums.length,
+                  ),
+                ),
+              );
+            },
+            loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+            error: (err, stack) => SliverToBoxAdapter(child: Center(child: Text('Error: $err'))),
+          ),
+
+          // Related Artists Section Header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24.0, 32.0, 24.0, 16.0),
+              child: Text(
+                'Related Artists',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          // Related Artists Horizontal List
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+              child: relatedArtistsAsync.when(
+                data: (allArtists) {
+                  final related = allArtists.where((a) => a.id != artist.id).take(5).toList();
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: related.length,
+                    itemBuilder: (context, index) {
+                      final relArtist = related[index];
+                      return Container(
+                        width: 80,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 28, // 56px diameter
+                              backgroundColor: DesignTokens.primarySeed.withValues(alpha: 0.2),
+                              child: Text(
+                                relArtist.name.isNotEmpty ? relArtist.name[0].toUpperCase() : 'A',
+                                style: const TextStyle(color: DesignTokens.primarySeed, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              relArtist.name,
+                              style: theme.textTheme.bodySmall,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ),
+            ),
+          ),
+          
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 100), // Bottom padding
+          ),
+        ],
+      ),
       ),
     );
   }
 
-  Widget _buildStatChip(BuildContext context, String text) {
+  Widget _buildGenrePill(String text, ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: DesignTokens.primarySeed.withValues(alpha: 0.15),
-        borderRadius: DesignTokens.radius16,
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: DesignTokens.primarySeed,
-              fontWeight: FontWeight.bold,
-            ),
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+        ),
       ),
     );
   }

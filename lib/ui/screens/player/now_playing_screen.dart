@@ -8,9 +8,10 @@ import '../../theme/dynamic_theme_provider.dart';
 import '../../widgets/glass_card.dart';
 import 'queue_sheet.dart';
 import 'lyrics_sheet.dart';
-import 'sleep_timer_sheet.dart';
+
 import 'audio_dsp_sheet.dart';
 import 'cast_device_sheet.dart';
+import 'track_info_sheet.dart';
 
 /// Full-screen Now Playing immersive view.
 /// Implements Liquid Glass design with a SINGLE BackdropFilter layer for peak graphics performance.
@@ -23,36 +24,56 @@ class NowPlayingScreen extends ConsumerStatefulWidget {
 }
 
 class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _favoriteController;
-  late Animation<double> _favoriteScale;
+    with TickerProviderStateMixin {
+
   bool _isFavorite = false;
+  bool _showWaveform = false;
+
+  late AnimationController _playPauseController;
+  late AnimationController _entranceController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _rotateAnimation;
 
   @override
   void initState() {
     super.initState();
-    _favoriteController = AnimationController(
+    _playPauseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 400),
     );
-    _favoriteScale = CurvedAnimation(
-      parent: _favoriteController,
+
+    _entranceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _scaleAnimation = CurvedAnimation(
+      parent: _entranceController,
       curve: Curves.elasticOut,
     );
-    _favoriteController.value = 1.0;
+    _fadeAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: Curves.easeIn,
+    );
+    _rotateAnimation = Tween<double>(begin: -0.05, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _entranceController,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    _entranceController.forward();
   }
 
   @override
   void dispose() {
-    _favoriteController.dispose();
+    _playPauseController.dispose();
+    _entranceController.dispose();
     super.dispose();
-  }
-
-  void _toggleFavorite() {
+  }  void _toggleFavorite() {
     setState(() {
       _isFavorite = !_isFavorite;
     });
-    _favoriteController.forward(from: 0.3);
   }
 
   String _formatDuration(int ms) {
@@ -74,19 +95,50 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     final duration = track?.durationMs ?? 1;
     final position = playback.positionMs.clamp(0, duration);
 
+    // Sync play/pause icon state
+    if (isPlaying && _playPauseController.status != AnimationStatus.completed) {
+      _playPauseController.forward();
+    } else if (!isPlaying && _playPauseController.status != AnimationStatus.dismissed) {
+      _playPauseController.reverse();
+    }
+
     return Scaffold(
-      body: Stack(
-        children: [
+      body: GestureDetector(
+        onVerticalDragEnd: (details) {
+          if (details.primaryVelocity != null) {
+            if (details.primaryVelocity! > 300) {
+              // Swipe down: collapse
+              Navigator.of(context).pop();
+            } else if (details.primaryVelocity! < -300) {
+              // Swipe up: queue
+              showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const QueueSheet(),
+              );
+            }
+          }
+        },
+        child: Stack(
+          children: [
           // ── Layer 1: Background Gradient & Single Liquid Glass Blur ────────
-          Container(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0, -0.4),
-                radius: 1.2,
-                colors: [
-                  accent.withValues(alpha: 0.35),
-                  Theme.of(context).scaffoldBackgroundColor,
-                ],
+          Positioned.fill(
+            child: Container(
+              color: accent, // Dummy full-bleed album art
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.1),
+                    Colors.black.withValues(alpha: 0.6),
+                  ],
+                ),
               ),
             ),
           ),
@@ -112,16 +164,30 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                         onPressed: () => Navigator.of(context).pop(),
                         tooltip: 'Minimize player',
                       ),
-                      Text(
-                        'NOW PLAYING',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(letterSpacing: 1.5),
+                      Expanded(
+                        child: Text(
+                          track?.title ?? 'Now Playing',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white.withValues(alpha: 0.8),
+                            fontSize: 22,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.queue_music_rounded),
+                        icon: const Icon(Icons.more_vert_rounded),
                         onPressed: () {
-                          // Placeholder for queue sheet
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => const TrackInfoSheet(),
+                          );
                         },
-                        tooltip: 'Play queue',
+                        tooltip: 'Track Info',
                       ),
                     ],
                   ),
@@ -131,19 +197,52 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                   // Hero Album Artwork Glass Card
                   Hero(
                     tag: 'album_art_${track?.id ?? "empty"}',
-                    child: AspectRatio(
-                      aspectRatio: 1.0,
-                      child: GlassCard(
-                        borderRadius: DesignTokens.spacing32,
-                        enableBlur: false, // Do not stack blurs!
-                        padding: EdgeInsets.zero,
-                        surfaceColor: accent.withValues(alpha: 0.15),
-                        borderColor: accent.withValues(alpha: 0.3),
-                        child: Center(
-                          child: Icon(
-                            Icons.music_note_rounded,
-                            size: 120,
-                            color: accent,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showWaveform = !_showWaveform;
+                        });
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: AnimatedBuilder(
+                          animation: _entranceController,
+                          builder: (context, child) {
+                            return Opacity(
+                              opacity: _fadeAnimation.value,
+                              child: Transform.scale(
+                                scale: _scaleAnimation.value,
+                                child: Transform.rotate(
+                                  angle: _rotateAnimation.value,
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          },
+                          child: GlassCard(
+                            borderRadius: DesignTokens.spacing32,
+                            enableBlur: false, // Do not stack blurs!
+                            padding: EdgeInsets.zero,
+                            surfaceColor: accent.withValues(alpha: 0.15),
+                            borderColor: accent.withValues(alpha: 0.3),
+                            child: Center(
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: _showWaveform
+                                    ? Icon(
+                                        Icons.waves_rounded,
+                                        key: const ValueKey('waveform'),
+                                        size: 120,
+                                        color: accent,
+                                      )
+                                    : Icon(
+                                        Icons.music_note_rounded,
+                                        key: const ValueKey('album_art'),
+                                        size: 120,
+                                        color: accent,
+                                      ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -179,19 +278,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                       ),
                       const SizedBox(width: 12),
                       // Favorite button with spring micro-interaction
-                      Semantics(
-                        label: _isFavorite ? 'Remove from favorites' : 'Add to favorites',
-                        child: ScaleTransition(
-                          scale: _favoriteScale,
-                          child: IconButton(
-                            icon: Icon(
-                              _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                              color: _isFavorite ? DesignTokens.primarySeed : null,
-                              size: 28,
-                            ),
-                            onPressed: _toggleFavorite,
-                          ),
-                        ),
+                      SparkleLikeButton(
+                        isFavorite: _isFavorite,
+                        onToggle: _toggleFavorite,
+                        accent: accent,
                       ),
                     ],
                   ),
@@ -269,6 +359,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                             decoration: BoxDecoration(
                               color: accent,
                               shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.3),
+                                width: 1.5,
+                              ),
                               boxShadow: [
                                 BoxShadow(
                                   color: accent.withValues(alpha: 0.4),
@@ -277,8 +371,9 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                                 ),
                               ],
                             ),
-                            child: Icon(
-                              isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            child: AnimatedIcon(
+                              icon: AnimatedIcons.play_pause,
+                              progress: _playPauseController,
                               size: 40,
                               color: Colors.black,
                             ),
@@ -308,22 +403,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                   ),
                   const SizedBox(height: DesignTokens.spacing24),
 
-                  // Secondary Action Toolbar (Lyrics, Queue, Sleep Timer, Cast, DSP)
+                  // Secondary Action Toolbar (Queue, Lyrics, Cast, Visualizer)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.lyrics_outlined),
-                        tooltip: 'Synced Lyrics',
-                        onPressed: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => const LyricsSheet(),
-                          );
-                        },
-                      ),
                       IconButton(
                         icon: const Icon(Icons.queue_music),
                         tooltip: 'Up Next & Queue',
@@ -337,14 +420,14 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                         },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.nightlight_round_outlined),
-                        tooltip: 'Sleep Timer',
+                        icon: const Icon(Icons.lyrics_outlined),
+                        tooltip: 'Synced Lyrics',
                         onPressed: () {
                           showModalBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
-                            builder: (_) => const SleepTimerSheet(),
+                            builder: (_) => const LyricsSheet(),
                           );
                         },
                       ),
@@ -361,8 +444,8 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                         },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.tune),
-                        tooltip: 'Audiophile DSP Parameters',
+                        icon: const Icon(Icons.graphic_eq),
+                        tooltip: 'Waveform View',
                         onPressed: () {
                           showModalBottomSheet<void>(
                             context: context,
@@ -382,6 +465,145 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
           ),
         ],
       ),
+      ),
     );
   }
 }
+
+class SparkleLikeButton extends StatefulWidget {
+  final bool isFavorite;
+  final VoidCallback onToggle;
+  final Color accent;
+
+  const SparkleLikeButton({
+    super.key,
+    required this.isFavorite,
+    required this.onToggle,
+    required this.accent,
+  });
+
+  @override
+  State<SparkleLikeButton> createState() => _SparkleLikeButtonState();
+}
+
+class _SparkleLikeButtonState extends State<SparkleLikeButton> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+  }
+
+  @override
+  void didUpdateWidget(SparkleLikeButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isFavorite != oldWidget.isFavorite) {
+      if (widget.isFavorite) {
+        _controller.forward(from: 0.0);
+      } else {
+        _controller.value = 0.0;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: widget.isFavorite ? 'Remove from favorites' : 'Add to favorites',
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CustomPaint(
+            size: const Size(48, 48),
+            painter: _SparklePainter(
+              animation: _controller,
+              color: widget.accent,
+            ),
+          ),
+          ScaleTransition(
+            scale: Tween<double>(begin: 1.0, end: 1.2).animate(
+              CurvedAnimation(
+                parent: _controller,
+                curve: const Interval(0.0, 0.4, curve: Curves.easeOutCubic),
+                reverseCurve: Curves.easeIn,
+              ),
+            ),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 1.0, end: 1.0 / 1.2).animate(
+                CurvedAnimation(
+                  parent: _controller,
+                  curve: const Interval(0.4, 1.0, curve: Curves.elasticOut),
+                ),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  widget.isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                  color: widget.isFavorite ? widget.accent : null,
+                  size: 28,
+                ),
+                onPressed: widget.onToggle,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SparklePainter extends CustomPainter {
+  final Animation<double> animation;
+  final Color color;
+
+  _SparklePainter({required this.animation, required this.color}) : super(repaint: animation);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (animation.value == 0 || animation.value == 1) return;
+
+    final Paint paint = Paint()..color = color;
+    final center = Offset(size.width / 2, size.height / 2);
+    final progress = animation.value;
+
+    // Expand outward and fade out
+    final radius = progress * size.width;
+    final opacity = (1.0 - progress).clamp(0.0, 1.0);
+    paint.color = color.withValues(alpha: opacity);
+
+    const int numParticles = 12;
+    for (int i = 0; i < numParticles; i++) {
+      final double angle = (i * 2 * 3.14159) / numParticles;
+      final double x = center.dx + radius * 0.8 * _mathCos(angle);
+      final double y = center.dy + radius * 0.8 * _mathSin(angle);
+      
+      // Make every other particle slightly smaller and further
+      final bool isOuter = i % 2 == 0;
+      final double currentX = isOuter ? x + (radius * 0.2 * _mathCos(angle)) : x;
+      final double currentY = isOuter ? y + (radius * 0.2 * _mathSin(angle)) : y;
+      
+      canvas.drawCircle(Offset(currentX, currentY), isOuter ? 2.5 : 1.5, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _SparklePainter oldDelegate) => true;
+
+  double _mathCos(double rad) {
+    return [1.0, 0.866, 0.5, 0.0, -0.5, -0.866, -1.0, -0.866, -0.5, 0.0, 0.5, 0.866][(rad / (3.14159 / 6)).round() % 12];
+  }
+  
+  double _mathSin(double rad) {
+    return [0.0, 0.5, 0.866, 1.0, 0.866, 0.5, 0.0, -0.5, -0.866, -1.0, -0.866, -0.5][(rad / (3.14159 / 6)).round() % 12];
+  }
+}
+
