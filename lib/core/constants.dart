@@ -38,6 +38,33 @@ const String kFileScannerChannel = 'com.aura/file_scanner';
 /// Platform channel method: scan all audio files.
 const String kScanAllAudioMethod = 'scanAllAudio';
 
+/// Audio container formats the scanner will index (lower-case, no dot).
+/// PRD §6.1: "Support all major formats (MP3, AAC, FLAC, ALAC, DSD, WAV…)".
+const Set<String> kSupportedAudioExtensions = {
+  'mp3',
+  'flac',
+  'm4a',
+  'ogg',
+  'opus',
+  'wma',
+  'aac',
+  'alac',
+  'ape',
+  'dsf',
+  'dff',
+  'wav',
+  'aiff',
+};
+
+/// Maximum recursion depth for the folder-scanning fallback.
+const int kMaxScanDepth = 10;
+
+/// Minimum interval between scan progress callbacks (≥10 updates/sec).
+const Duration kScanProgressThrottle = Duration(milliseconds: 100);
+
+/// Directory (under app support) where extracted album art is cached.
+const String kArtCacheDirName = 'art_cache';
+
 /// Platform channel name for fingerprint (C++ bridge until FFI fully wired).
 const String kFingerprintChannel = 'com.aura/fingerprint';
 

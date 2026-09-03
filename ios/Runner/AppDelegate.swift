@@ -9,7 +9,8 @@ import MediaPlayer
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-    let fileScannerChannel = FlutterMethodChannel(name: "com.aura.aura/file_scanner",
+    // Must match kFileScannerChannel in lib/core/constants.dart.
+    let fileScannerChannel = FlutterMethodChannel(name: "com.aura/file_scanner",
                                                   binaryMessenger: controller.binaryMessenger)
     fileScannerChannel.setMethodCallHandler({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
@@ -44,6 +45,9 @@ import MediaPlayer
             track["trackNumber"] = item.albumTrackNumber
             track["discNumber"] = item.discNumber
             track["genre"] = item.genre ?? ""
+            track["albumArtist"] = item.albumArtist ?? ""
+            // Shared per-album key so Dart can group artwork by album.
+            track["albumId"] = String(item.albumPersistentID)
             track["size"] = 0 // Also not readily available in MPMediaItem
             track["dateAdded"] = Int(item.dateAdded.timeIntervalSince1970 * 1000)
             
