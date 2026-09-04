@@ -40,6 +40,14 @@ class PlaybackOrchestrator {
   PlaybackState _state = PlaybackState.initial;
   Track? _currentTrack;
 
+  /// Recently played tracks, oldest first — backs [previous].
+  final List<Track> _history = [];
+  static const int _maxHistory = 50;
+
+  /// Pressing "previous" within this window restarts the current track instead
+  /// of jumping back, matching every other music player.
+  static const int _restartThresholdMs = 3000;
+
   /// Current immutable snapshot.
   PlaybackState get state => _state;
 
@@ -50,6 +58,12 @@ class PlaybackOrchestrator {
 
   /// Loads and plays [track].
   Future<void> playTrack(Track track) async {
+    // Remember what we were playing so previous() can walk back.
+    final outgoing = _currentTrack;
+    if (outgoing != null && outgoing.id != track.id) {
+      _history.add(outgoing);
+      if (_history.length > _maxHistory) _history.removeAt(0);
+    }
     _currentTrack = track;
     _engine.loadTrack(track.filePath);
     _engine.play();
@@ -147,6 +161,45 @@ class PlaybackOrchestrator {
 
   void setRepeatMode(RepeatMode mode) {
     _updateState(_state.copyWith(repeatMode: mode));
+  }
+
+  /// Skips forward. Alias of [skipNext] for the transport-control API.
+  Future<void> next() => skipNext();
+
+  /// Goes back one track, or restarts the current one when playback has been
+  /// running for more than [_restartThresholdMs].
+  Future<void> previous() async {
+    if (_state.positionMs > _restartThresholdMs || _history.isEmpty) {
+      seek(0);
+      return;
+    }
+    final target = _history.removeLast();
+    // playTrack would push the current track onto the history we're unwinding,
+    // so clear it first to avoid ping-ponging between two tracks.
+    final current = _currentTrack;
+    _currentTrack = null;
+    await playTrack(target);
+    if (current != null && _history.isNotEmpty && _history.last.id == current.id) {
+      _history.removeLast();
+    }
+  }
+
+  /// Toggles the current track between "loved" (rating 5) and unrated.
+  /// Returns the new liked state, or false when nothing is playing.
+  Future<bool> toggleLike() async {
+    final track = _currentTrack;
+    if (track == null) return false;
+    final liked = track.rating >= 5;
+    final newRating = liked ? 0 : 5;
+    await _musicRepo.setRating(track.id, newRating);
+    _currentTrack = track.copyWith(rating: newRating);
+    _updateState(_state.copyWith(currentTrack: _currentTrack));
+    return !liked;
+  }
+
+  /// Flips shuffle on/off without disturbing the current track.
+  void toggleShuffle() {
+    _updateState(_state.copyWith(isShuffleEnabled: !_state.isShuffleEnabled));
   }
 
   // ── Position Updates (called from engine callback) ─────────────────────────

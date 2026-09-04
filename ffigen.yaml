@@ -6,7 +6,7 @@
 #   dart run ffigen --config ffigen.yaml
 #
 # This generates lib/native/audio_engine_bindings.dart from the C header.
-# In Sprint 1, this file is committed as a placeholder and not regenerated.
+# Regenerate whenever cpp/audio_engine/audio_engine.h changes.
 
 name: AudioEngineBindings
 description: 'Auto-generated FFI bindings for the Aura C++ audio engine.'
@@ -15,9 +15,9 @@ output: 'lib/native/audio_engine_bindings.dart'
 
 headers:
   entry-points:
-    - 'native/include/audio_engine.h'
+    - 'cpp/audio_engine/audio_engine.h'
   include-directives:
-    - 'native/include/audio_engine.h'
+    - 'cpp/audio_engine/audio_engine.h'
 
 functions:
   include:
@@ -29,8 +29,8 @@ structs:
 
 enums:
   include:
-    - 'AuraEventType'
     - 'AuraPlaybackState'
+    - 'AuraEqPreset'
 
 comments:
   style: any

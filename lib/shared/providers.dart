@@ -19,6 +19,7 @@ import '../domain/use_cases/duplicate_detector.dart';
 import '../domain/use_cases/stats_calculator.dart';
 import '../domain/use_cases/playback_orchestrator.dart';
 import '../domain/entities/playback_state.dart';
+import '../domain/entities/track.dart';
 import '../domain/entities/shuffle_config.dart';
 import '../native/audio_engine_ffi.dart';
 
@@ -131,6 +132,19 @@ class PlaybackStateController extends StateNotifier<PlaybackState> {
   final PlaybackOrchestrator _orchestrator;
   final WidgetNotificationService _widgetService;
   late final StreamSubscription<PlaybackState> _subscription;
+
+  // ── Transport controls (delegate to the orchestrator) ──────────────────────
+
+  Future<void> playTrack(Track track) => _orchestrator.playTrack(track);
+  void pause() => _orchestrator.pause();
+  void resume() => _orchestrator.resume();
+  void seek(Duration position) => _orchestrator.seek(position.inMilliseconds);
+  Future<void> next() => _orchestrator.next();
+  Future<void> previous() => _orchestrator.previous();
+  Future<bool> toggleLike() => _orchestrator.toggleLike();
+  void setRepeatMode(RepeatMode mode) => _orchestrator.setRepeatMode(mode);
+  void toggleShuffle() => _orchestrator.toggleShuffle();
+  void setEqBand(int band, int gainDb) => _orchestrator.setEqBand(band, gainDb);
 
   @override
   void dispose() {
