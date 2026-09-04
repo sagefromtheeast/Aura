@@ -1,7 +1,7 @@
 name: aura
 description: "Aura — Privacy-first, offline-only intelligent music player."
 publish_to: "none"
-version: 1.0.0+1
+version: 1.16.0+11600
 
 environment:
   # Dart 3.8 / Flutter 3.32 is the real floor: workmanager (daily-mix
