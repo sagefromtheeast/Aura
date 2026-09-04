@@ -25,4 +25,8 @@ class ShuffleStateTable extends Table {
 
   /// Epoch ms of the last save.
   IntColumn get updatedAtMs => integer().withDefault(const Constant(0))();
+
+  /// Full engine state blob from IntelliShuffleEngine.serializeState().
+  /// The columns above are denormalised copies kept for debugging/queries.
+  TextColumn get stateJson => text().withDefault(const Constant(''))();
 }

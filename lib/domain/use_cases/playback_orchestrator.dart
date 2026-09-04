@@ -9,7 +9,8 @@ import '../entities/track.dart';
 import '../entities/shuffle_config.dart';
 import '../repositories/behavior_repository.dart';
 import '../repositories/music_repository.dart';
-import 'intelli_shuffle_engine.dart';
+import '../repositories/shuffle_state_repository.dart';
+import '../intelli_shuffle/intelli_shuffle_engine.dart';
 import '../../core/constants.dart';
 import '../../core/errors.dart';
 import '../../native/audio_engine_ffi.dart';
@@ -26,16 +27,24 @@ class PlaybackOrchestrator {
     required IntelliShuffleEngine shuffleEngine,
     required MusicRepository musicRepository,
     required BehaviorRepository behaviorRepository,
+    ShuffleStateRepository? shuffleStateRepository,
   })  : _engine = audioEngine,
         _shuffleEngine = shuffleEngine,
         _musicRepo = musicRepository,
-        _behaviorRepo = behaviorRepository;
+        _behaviorRepo = behaviorRepository,
+        _shuffleStateRepo = shuffleStateRepository;
 
   final AudioEngineFfi _engine;
   final IntelliShuffleEngine _shuffleEngine;
   final MusicRepository _musicRepo;
   final BehaviorRepository _behaviorRepo;
+
+  /// Optional: when supplied, the shuffle queue survives restarts.
+  final ShuffleStateRepository? _shuffleStateRepo;
   final _stateController = StreamController<PlaybackState>.broadcast();
+
+  /// Playback context the shuffle state is stored under.
+  static const String _shuffleContextId = 'all_songs';
 
   PlaybackState _state = PlaybackState.initial;
   Track? _currentTrack;
@@ -107,7 +116,7 @@ class PlaybackOrchestrator {
         skipped: true,
         contextType: 'shuffle',
       ));
-      _shuffleEngine.onSkip();
+      _shuffleEngine.skip(track);
     }
     await _playNextFromShuffle();
   }
@@ -130,7 +139,7 @@ class PlaybackOrchestrator {
       } else {
         await _musicRepo.recordSkip(track.id);
       }
-      _shuffleEngine.onTrackFinished(track.id);
+      _shuffleEngine.onTrackFinished(track);
     }
 
     if (_state.repeatMode == RepeatMode.one && _currentTrack != null) {
@@ -154,9 +163,36 @@ class PlaybackOrchestrator {
   // ── Shuffle & Repeat ───────────────────────────────────────────────────────
 
   Future<void> enableShuffle(List<Track> library, ShuffleConfig config) async {
-    await _shuffleEngine.generate(library);
+    await _shuffleEngine.generateShuffle(library);
     _updateState(_state.copyWith(isShuffleEnabled: true));
+    await _persistShuffleState();
     await _playNextFromShuffle();
+  }
+
+  /// Restores a shuffle queue saved in a previous session.
+  ///
+  /// [library] hydrates the engine so it can hand back Track entities.
+  /// Returns true when a queue was restored.
+  Future<bool> restoreShuffleState(List<Track> library) async {
+    final repo = _shuffleStateRepo;
+    if (repo == null) return false;
+
+    final json = await repo.load(_shuffleContextId);
+    if (json == null || json.isEmpty) return false;
+
+    _shuffleEngine.restoreState(json);
+    _shuffleEngine.hydrate(library);
+    if (!_shuffleEngine.hasQueue) return false;
+
+    _updateState(_state.copyWith(isShuffleEnabled: true));
+    return true;
+  }
+
+  /// Writes the queue to storage. Called once per track change, per PRD §6.3.
+  Future<void> _persistShuffleState() async {
+    final repo = _shuffleStateRepo;
+    if (repo == null || !_shuffleEngine.hasQueue) return;
+    await repo.save(_shuffleContextId, _shuffleEngine.serializeState());
   }
 
   void setRepeatMode(RepeatMode mode) {
@@ -216,10 +252,12 @@ class PlaybackOrchestrator {
 
   Future<void> _playNextFromShuffle() async {
     if (!_shuffleEngine.hasQueue) return;
-    final nextId = _shuffleEngine.nextTrack();
-    final nextTrack = await _musicRepo.getTrackById(nextId);
+    // nextTrack() returns the entity directly, so no repository round-trip.
+    final nextTrack = _shuffleEngine.nextTrack();
     if (nextTrack != null) {
       await playTrack(nextTrack);
+      // Throttled by construction: one write per track change.
+      await _persistShuffleState();
     }
   }
 

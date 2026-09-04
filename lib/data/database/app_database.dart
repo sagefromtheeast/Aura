@@ -51,7 +51,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -91,6 +91,10 @@ class AppDatabase extends _$AppDatabase {
               'CREATE UNIQUE INDEX IF NOT EXISTS idx_shuffle_context '
               'ON shuffle_states(context_id)',
             );
+          }
+          if (from < 3) {
+            // v3: full engine state blob for IntelliShuffle restore.
+            await m.addColumn(shuffleStateTable, shuffleStateTable.stateJson);
           }
         },
         beforeOpen: (details) async {

@@ -21,6 +21,7 @@ class ShuffleSettingsScreen extends ConsumerWidget {
   static const double _defRecency = 0.50;
   static const double _defDiscovery = 0.30;
   static const int _defArtistSpacing = 3;
+  static const int _defAlbumSpacing = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,36 +45,36 @@ class ShuffleSettingsScreen extends ConsumerWidget {
               title: 'Favourite Bias',
               description:
                   'How much do you want your favourites to appear first?',
-              value: config.favoriteBias * 100,
+              value: config.favouriteBias * 100,
               min: 0,
               max: 100,
               divisions: 100,
-              display: '${(config.favoriteBias * 100).round()}',
-              onChanged: (v) => update(config.copyWith(favoriteBias: v / 100)),
+              display: '${(config.favouriteBias * 100).round()}',
+              onChanged: (v) => update(config.copyWith(favouriteBias: v / 100)),
             ),
             _ShuffleSliderCard(
               icon: Icons.history_toggle_off_rounded,
               title: 'Recency Avoidance',
               description: 'Keep recently played tracks away.',
-              value: config.recencyStrength * 100,
+              value: config.recencyAvoidance * 100,
               min: 0,
               max: 100,
               divisions: 100,
-              display: '${(config.recencyStrength * 100).round()}',
+              display: '${(config.recencyAvoidance * 100).round()}',
               onChanged: (v) =>
-                  update(config.copyWith(recencyStrength: v / 100)),
+                  update(config.copyWith(recencyAvoidance: v / 100)),
             ),
             _ShuffleSliderCard(
               icon: Icons.explore_rounded,
               title: 'Discovery',
               description: 'How often should unplayed tracks appear?',
-              value: config.discoveryFraction * 100,
+              value: config.discovery * 100,
               min: 0,
               max: 100,
               divisions: 100,
-              display: '${(config.discoveryFraction * 100).round()}',
+              display: '${(config.discovery * 100).round()}',
               onChanged: (v) =>
-                  update(config.copyWith(discoveryFraction: v / 100)),
+                  update(config.copyWith(discovery: v / 100)),
             ),
             _ShuffleSliderCard(
               icon: Icons.space_bar_rounded,
@@ -88,6 +89,19 @@ class ShuffleSettingsScreen extends ConsumerWidget {
                   update(config.copyWith(artistSpacing: v.round())),
             ),
 
+            _ShuffleSliderCard(
+              icon: Icons.album_rounded,
+              title: 'Album Spacing',
+              description: 'Minimum tracks between songs from the same album.',
+              value: config.albumSpacing.toDouble().clamp(0, 5),
+              min: 0,
+              max: 5,
+              divisions: 5,
+              display: '${config.albumSpacing}',
+              onChanged: (v) =>
+                  update(config.copyWith(albumSpacing: v.round())),
+            ),
+
             const SizedBox(height: DesignTokens.spacing8),
             _LivePreview(config: config),
 
@@ -96,10 +110,11 @@ class ShuffleSettingsScreen extends ConsumerWidget {
               child: TextButton.icon(
                 onPressed: () => update(
                   config.copyWith(
-                    favoriteBias: _defFavourite,
-                    recencyStrength: _defRecency,
-                    discoveryFraction: _defDiscovery,
+                    favouriteBias: _defFavourite,
+                    recencyAvoidance: _defRecency,
+                    discovery: _defDiscovery,
                     artistSpacing: _defArtistSpacing,
+                    albumSpacing: _defAlbumSpacing,
                   ),
                 ),
                 icon: const Icon(Icons.auto_fix_high_rounded, size: 18),
@@ -203,9 +218,9 @@ class _LivePreview extends StatelessWidget {
 
   List<(String, String, String)> _previewQueue() {
     // Seed derived from the slider positions so preview shifts as they move.
-    final seed = (config.favoriteBias * 1000).round() ^
-        (config.recencyStrength * 100).round() * 7 ^
-        (config.discoveryFraction * 100).round() * 13 ^
+    final seed = (config.favouriteBias * 1000).round() ^
+        (config.recencyAvoidance * 100).round() * 7 ^
+        (config.discovery * 100).round() * 13 ^
         (config.artistSpacing * 31);
     final indices = List<int>.generate(_pool.length, (i) => i);
     // Simple LCG shuffle for determinism without dart:math import churn.
@@ -218,7 +233,7 @@ class _LivePreview extends StatelessWidget {
       indices[j] = tmp;
     }
     // Bias toward favourites when favouriteBias is high.
-    if (config.favoriteBias > 0.6) {
+    if (config.favouriteBias > 0.6) {
       indices.sort((a, b) {
         final fa = _pool[a].$3 == '★ Favourite' ? 0 : 1;
         final fb = _pool[b].$3 == '★ Favourite' ? 0 : 1;

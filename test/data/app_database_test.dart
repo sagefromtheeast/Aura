@@ -11,6 +11,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:aura/data/database/app_database.dart';
+import 'package:aura/data/repositories/local_shuffle_state_repository.dart';
 
 void main() {
   late AppDatabase db;
@@ -108,7 +109,7 @@ void main() {
     test('save / load / clear round-trips per context', () async {
       await db.shuffleStateDao.save(
         contextId: 'all_songs',
-        configJson: '{"favoriteBias":0.4}',
+        configJson: '{"favouriteBias":0.4}',
         shuffledIdsJson: '["t1","t2","t3"]',
         currentIndex: 1,
       );
@@ -130,6 +131,48 @@ void main() {
 
       await db.shuffleStateDao.clear('all_songs');
       expect(await db.shuffleStateDao.load('all_songs'), isNull);
+    });
+
+    test('stores the full engine state blob alongside the columns', () async {
+      const blob =
+          '{"version":2,"shuffledIds":["a","b"],"currentIndex":1,"config":{}}';
+      await db.shuffleStateDao.save(
+        contextId: 'playlist_42',
+        configJson: '{}',
+        shuffledIdsJson: '["a","b"]',
+        currentIndex: 1,
+        stateJson: blob,
+      );
+
+      final row = await db.shuffleStateDao.load('playlist_42');
+      expect(row?.stateJson, blob);
+      expect(row?.currentIndex, 1);
+    });
+  });
+
+  group('LocalShuffleStateRepository', () {
+    test('round-trips an engine blob and denormalises its columns', () async {
+      final repo = LocalShuffleStateRepository(database: db);
+      const blob =
+          '{"version":2,"shuffledIds":["t1","t2","t3"],"currentIndex":2,'
+          '"config":{"favouriteBias":0.4}}';
+
+      await repo.save('all_songs', blob);
+      expect(await repo.load('all_songs'), blob);
+
+      // The denormalised columns are populated from the blob.
+      final row = await db.shuffleStateDao.load('all_songs');
+      expect(row?.currentIndex, 2);
+      expect(row?.shuffledIdsJson, contains('t2'));
+
+      await repo.clear('all_songs');
+      expect(await repo.load('all_songs'), isNull);
+    });
+
+    test('a malformed blob is still stored rather than lost', () async {
+      final repo = LocalShuffleStateRepository(database: db);
+      await repo.save('ctx', 'not json at all');
+      expect(await repo.load('ctx'), 'not json at all');
     });
   });
 }

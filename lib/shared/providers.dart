@@ -10,10 +10,12 @@ import '../data/database/database_provider.dart';
 import '../data/repositories/local_music_repository.dart';
 import '../data/repositories/local_behavior_repository.dart';
 import '../data/repositories/local_playlist_repository.dart';
+import '../data/repositories/local_shuffle_state_repository.dart';
 import '../domain/repositories/music_repository.dart';
 import '../domain/repositories/behavior_repository.dart';
 import '../domain/repositories/playlist_repository.dart';
-import '../domain/use_cases/intelli_shuffle_engine.dart';
+import '../domain/repositories/shuffle_state_repository.dart';
+import '../domain/intelli_shuffle/intelli_shuffle_engine.dart';
 import '../domain/use_cases/smart_mix_generator.dart';
 import '../domain/use_cases/duplicate_detector.dart';
 import '../domain/use_cases/stats_calculator.dart';
@@ -50,6 +52,10 @@ final playlistRepositoryProvider = Provider<PlaylistRepository>((ref) {
   return LocalPlaylistRepository(database: ref.watch(appDatabaseProvider));
 });
 
+final shuffleStateRepositoryProvider = Provider<ShuffleStateRepository>((ref) {
+  return LocalShuffleStateRepository(database: ref.watch(appDatabaseProvider));
+});
+
 // ── Native Engine ─────────────────────────────────────────────────────────────
 
 /// The FFI audio engine singleton.
@@ -68,6 +74,7 @@ final shuffleConfigProvider = StateProvider<ShuffleConfig>((ref) {
 final intelliShuffleEngineProvider = Provider<IntelliShuffleEngine>((ref) {
   return IntelliShuffleEngine(
     config: ref.watch(shuffleConfigProvider),
+    trackRepository: ref.watch(musicRepositoryProvider),
     behaviorRepository: ref.watch(behaviorRepositoryProvider),
   );
 });
@@ -102,6 +109,7 @@ final playbackOrchestratorProvider = Provider<PlaybackOrchestrator>((ref) {
     shuffleEngine: shuffleEngine,
     musicRepository: musicRepo,
     behaviorRepository: behaviorRepo,
+    shuffleStateRepository: ref.watch(shuffleStateRepositoryProvider),
   );
 
   // Wire engine callbacks → orchestrator.

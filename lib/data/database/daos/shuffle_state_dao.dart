@@ -23,6 +23,7 @@ class ShuffleStateDao extends DatabaseAccessor<AppDatabase>
     required String configJson,
     required String shuffledIdsJson,
     int currentIndex = 0,
+    String stateJson = '',
   }) async {
     final nowMs = DateTime.now().millisecondsSinceEpoch;
     final existing = await load(contextId);
@@ -35,6 +36,7 @@ class ShuffleStateDao extends DatabaseAccessor<AppDatabase>
           currentIndex: Value(currentIndex),
           createdAtMs: nowMs,
           updatedAtMs: Value(nowMs),
+          stateJson: Value(stateJson),
         ),
       );
     } else {
@@ -46,6 +48,7 @@ class ShuffleStateDao extends DatabaseAccessor<AppDatabase>
           shuffledIdsJson: Value(shuffledIdsJson),
           currentIndex: Value(currentIndex),
           updatedAtMs: Value(nowMs),
+          stateJson: Value(stateJson),
         ),
       );
     }
