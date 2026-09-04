@@ -161,6 +161,28 @@ class TrackDao extends DatabaseAccessor<AppDatabase> with _$TrackDaoMixin {
     );
   }
 
+  /// Restores per-track stats from a backup (rating / play & skip counts /
+  /// last-played). Only the provided fields are written.
+  Future<void> applyStats(
+    String id, {
+    int? rating,
+    int? playCount,
+    int? skipCount,
+    int? lastPlayedMs,
+  }) =>
+      (update(tracksTable)..where((t) => t.id.equals(id))).write(
+        TracksTableCompanion(
+          rating: rating == null ? const Value.absent() : Value(rating),
+          playCount:
+              playCount == null ? const Value.absent() : Value(playCount),
+          skipCount:
+              skipCount == null ? const Value.absent() : Value(skipCount),
+          lastPlayedMs: lastPlayedMs == null
+              ? const Value.absent()
+              : Value(lastPlayedMs),
+        ),
+      );
+
   Future<void> setRating(String id, int rating) => (update(tracksTable)
         ..where((t) => t.id.equals(id)))
       .write(TracksTableCompanion(rating: Value(rating)));

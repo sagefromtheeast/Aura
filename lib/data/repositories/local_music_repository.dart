@@ -157,6 +157,28 @@ class LocalMusicRepository implements MusicRepository {
       _db.trackDao.setRating(trackId, favourite ? kFavouriteRating : 0);
 
   @override
+  Future<Track?> getTrackByPath(String filePath) async {
+    final row = await _db.trackDao.getTrackByPath(filePath);
+    return row == null ? null : _rowToTrack(row);
+  }
+
+  @override
+  Future<void> applyBackupStats(
+    String trackId, {
+    int? rating,
+    int? playCount,
+    int? skipCount,
+    int? lastPlayedMs,
+  }) =>
+      _db.trackDao.applyStats(
+        trackId,
+        rating: rating,
+        playCount: playCount,
+        skipCount: skipCount,
+        lastPlayedMs: lastPlayedMs,
+      );
+
+  @override
   Future<List<double>?> getAudioFeatures(String trackId) async {
     final row = await _db.trackDao.getAudioFeatures(trackId);
     if (row == null) {

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/design_tokens.dart';
 import '../../../services/sleep_timer_service.dart';
 import '../player/sleep_timer_sheet.dart';
+import 'backup_restore_screen.dart';
 import '../../widgets/aura_slider.dart';
 import '../../widgets/glass_card.dart';
 import 'duplicate_management_screen.dart';
@@ -177,6 +178,16 @@ class SettingsMainScreen extends ConsumerWidget {
                     title: 'Privacy Policy',
                     onTap: () =>
                         _snack(context, 'Aura collects nothing. 100% offline.'),
+                  ),
+                  const _RowDivider(),
+                  _SettingsRow(
+                    icon: Icons.backup_rounded,
+                    title: 'Backup & Restore',
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const BackupRestoreScreen(),
+                      ),
+                    ),
                   ),
                   const _RowDivider(),
                   _SettingsRow(

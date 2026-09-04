@@ -27,6 +27,7 @@ import '../domain/entities/playback_state.dart';
 import '../domain/entities/track.dart';
 import '../domain/entities/shuffle_config.dart';
 import '../data/repositories/settings_repository.dart';
+import '../data/backup/backup_service.dart';
 import '../native/audio_engine_ffi.dart';
 
 // ── Database ──────────────────────────────────────────────────────────────────
@@ -339,4 +340,12 @@ final recentlyAddedTracksProvider = FutureProvider<List<Track>>((ref) {
 /// Tracks never played — discovery through exclusion.
 final notPlayedTracksProvider = FutureProvider<List<Track>>((ref) {
   return ref.watch(musicRepositoryProvider).getNeverPlayedTracks();
+});
+
+final backupServiceProvider = Provider<BackupService>((ref) {
+  return BackupService(
+    musicRepository: ref.watch(musicRepositoryProvider),
+    playlistRepository: ref.watch(playlistRepositoryProvider),
+    settingsRepository: ref.watch(settingsRepositoryProvider),
+  );
 });

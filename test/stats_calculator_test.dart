@@ -121,6 +121,11 @@ class FakeTrackRepository implements MusicRepository {
   @override
   Future<void> setFavourite(String trackId, bool favourite) async {}
   @override
+  Future<Track?> getTrackByPath(String filePath) async => null;
+  @override
+  Future<void> applyBackupStats(String trackId,
+      {int? rating, int? playCount, int? skipCount, int? lastPlayedMs}) async {}
+  @override
   Future<List<double>?> getAudioFeatures(String trackId) async => null;
   @override
   Future<void> upsertAudioFeatures(

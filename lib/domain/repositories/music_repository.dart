@@ -48,6 +48,20 @@ abstract interface class MusicRepository {
   /// Sets or clears the favourite flag for [trackId] (writes [Track.rating]).
   Future<void> setFavourite(String trackId, bool favourite);
 
+  /// Returns the track stored at [filePath], or null. Backups key on the file
+  /// path because a track's UUID is regenerated on each rescan, but the path
+  /// is stable for the same file on the same device.
+  Future<Track?> getTrackByPath(String filePath);
+
+  /// Restores per-track stats from a backup. Only the given fields are written.
+  Future<void> applyBackupStats(
+    String trackId, {
+    int? rating,
+    int? playCount,
+    int? skipCount,
+    int? lastPlayedMs,
+  });
+
   /// Returns tracks belonging to the given [albumId].
   Future<List<Track>> getTracksByAlbum(String albumId);
 
