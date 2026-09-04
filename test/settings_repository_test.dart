@@ -187,8 +187,8 @@ void main() {
         dailyMixBalance: 0.8,
       );
 
-      final decoded =
-          AppSettings.fromJson(jsonDecode(jsonEncode(original.toJson())));
+      final decoded = AppSettings.fromJson(
+          jsonDecode(jsonEncode(original.toJson())) as Map<String, dynamic>);
 
       expect(decoded.themeMode, original.themeMode);
       expect(decoded.glassIntensity, original.glassIntensity);

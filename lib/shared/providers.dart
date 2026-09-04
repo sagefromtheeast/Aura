@@ -5,7 +5,8 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/services/widget_notification_service.dart';
+import '../services/notification_service.dart';
+import '../services/widget_service.dart';
 import '../data/database/database_provider.dart';
 import '../data/repositories/local_music_repository.dart';
 import '../data/repositories/local_behavior_repository.dart';
@@ -144,22 +145,65 @@ final playbackOrchestratorProvider = Provider<PlaybackOrchestrator>((ref) {
   return orchestrator;
 });
 
-final widgetNotificationServiceProvider = Provider<WidgetNotificationService>((ref) {
-  final service = WidgetNotificationService();
-  service.init();
-  return service;
+/// Pushes playback state to the home-screen widget and the ongoing
+/// notification. Replaces the old combined WidgetNotificationService, which
+/// did both jobs and could not be tested without a platform channel.
+class PlaybackPresenter {
+  PlaybackPresenter({
+    required WidgetService widgets,
+    required NotificationService notifications,
+  })  : _widgets = widgets,
+        _notifications = notifications;
+
+  final WidgetService _widgets;
+  final NotificationService _notifications;
+
+  Future<void> update(PlaybackState state) async {
+    final track = state.currentTrack;
+    if (track == null) {
+      await _widgets.clearNowPlayingWidget();
+      await _notifications.cancelPlaybackNotification();
+      return;
+    }
+
+    final isPlaying = state.status == EngineStatus.playing;
+    await _widgets.updateNowPlayingWidget(
+      trackTitle: track.title,
+      artistName: track.artistName,
+      albumArtPath: track.coverArtPath ?? '',
+      isPlaying: isPlaying,
+    );
+    await _notifications.showPlaybackNotification(
+      trackTitle: track.title,
+      artistName: track.artistName,
+      albumArtPath: track.coverArtPath ?? '',
+      isPlaying: isPlaying,
+      position: Duration(milliseconds: state.positionMs),
+      duration: Duration(milliseconds: track.durationMs),
+    );
+  }
+}
+
+final playbackPresenterProvider = Provider<PlaybackPresenter>((ref) {
+  final notifications = ref.watch(notificationServiceProvider);
+  unawaited(notifications.init());
+  return PlaybackPresenter(
+    widgets: ref.watch(widgetServiceProvider),
+    notifications: notifications,
+  );
 });
 
 class PlaybackStateController extends StateNotifier<PlaybackState> {
-  PlaybackStateController(this._orchestrator, this._widgetService) : super(_orchestrator.state) {
+  PlaybackStateController(this._orchestrator, this._presenter)
+      : super(_orchestrator.state) {
     _subscription = _orchestrator.stateStream.listen((newState) {
       state = newState;
-      _widgetService.updatePlaybackState(newState);
+      unawaited(_presenter.update(newState));
     });
   }
 
   final PlaybackOrchestrator _orchestrator;
-  final WidgetNotificationService _widgetService;
+  final PlaybackPresenter _presenter;
   late final StreamSubscription<PlaybackState> _subscription;
 
   // ── Transport controls (delegate to the orchestrator) ──────────────────────
@@ -184,8 +228,7 @@ class PlaybackStateController extends StateNotifier<PlaybackState> {
 
 final playbackStateProvider = StateNotifierProvider<PlaybackStateController, PlaybackState>((ref) {
   final orchestrator = ref.watch(playbackOrchestratorProvider);
-  final widgetService = ref.watch(widgetNotificationServiceProvider);
-  return PlaybackStateController(orchestrator, widgetService);
+  return PlaybackStateController(orchestrator, ref.watch(playbackPresenterProvider));
 });
 
 // ── Library Data ──────────────────────────────────────────────────────────────
