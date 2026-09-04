@@ -6,10 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/glass_card.dart';
+import '../../../services/sleep_timer_service.dart';
+import '../../../domain/playback/sleep_timer.dart';
 
 /// Modal bottom sheet allowing selection of duration or end-of-track sleep timers.
 class SleepTimerSheet extends ConsumerStatefulWidget {
   const SleepTimerSheet({super.key});
+
+  static Future<void> show(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const SleepTimerSheet(),
+    );
+  }
 
   @override
   ConsumerState<SleepTimerSheet> createState() => _SleepTimerSheetState();
@@ -19,7 +30,6 @@ class _SleepTimerSheetState extends ConsumerState<SleepTimerSheet> {
   int? _selectedDurationMin;
   bool _fadeAudio = true;
   bool _endOfTrack = false;
-  bool _timerActive = false;
 
   final List<int> _durations = [15, 30, 45, 60, 90, 120];
 
@@ -27,6 +37,7 @@ class _SleepTimerSheetState extends ConsumerState<SleepTimerSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final timerActive = ref.watch(sleepTimerProvider).isActive;
 
     return Container(
       constraints: BoxConstraints(
@@ -61,11 +72,11 @@ class _SleepTimerSheetState extends ConsumerState<SleepTimerSheet> {
                     style: theme.textTheme.headlineMedium?.copyWith(fontSize: 22),
                   ),
                 ),
-                if (_timerActive)
+                if (timerActive)
                   TextButton(
                     onPressed: () {
+                      ref.read(sleepTimerProvider.notifier).cancel();
                       setState(() {
-                        _timerActive = false;
                         _selectedDurationMin = null;
                         _endOfTrack = false;
                       });
@@ -91,7 +102,7 @@ class _SleepTimerSheetState extends ConsumerState<SleepTimerSheet> {
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: DesignTokens.spacing24),
               children: [
-                if (_timerActive) ...[
+                if (timerActive) ...[
                   GlassCard(
                     borderRadius: 16.0,
                     padding: const EdgeInsets.all(DesignTokens.spacing16),
@@ -249,9 +260,14 @@ class _SleepTimerSheetState extends ConsumerState<SleepTimerSheet> {
                   child: ElevatedButton.icon(
                     onPressed: (_selectedDurationMin != null || _endOfTrack)
                         ? () {
-                            setState(() {
-                              _timerActive = true;
-                            });
+                            final controller =
+                                ref.read(sleepTimerProvider.notifier);
+                            if (_endOfTrack) {
+                              controller.startEndOfTrack(fadeOut: _fadeAudio);
+                            } else {
+                              controller.startDuration(_selectedDurationMin!,
+                                  fadeOut: _fadeAudio);
+                            }
                             final msg = _endOfTrack
                                 ? 'Sleep timer set: stop at end of track'
                                 : 'Sleep timer active for $_selectedDurationMin minutes';

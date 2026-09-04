@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../theme/design_tokens.dart';
+import '../../../services/sleep_timer_service.dart';
+import '../player/sleep_timer_sheet.dart';
 import '../../widgets/aura_slider.dart';
 import '../../widgets/glass_card.dart';
 import 'duplicate_management_screen.dart';
@@ -72,6 +74,16 @@ class SettingsMainScreen extends ConsumerWidget {
                     seconds: settings.crossfadeMs / 1000,
                     onChanged: controller.setCrossfade,
                   ),
+                  const _RowDivider(),
+                  Consumer(builder: (context, ref, _) {
+                    final active = ref.watch(sleepTimerProvider).isActive;
+                    return _SettingsRow(
+                      icon: Icons.bedtime_rounded,
+                      title: 'Sleep Timer',
+                      trailingText: active ? 'On' : 'Off',
+                      onTap: () => SleepTimerSheet.show(context),
+                    );
+                  }),
                 ],
               ),
             ),

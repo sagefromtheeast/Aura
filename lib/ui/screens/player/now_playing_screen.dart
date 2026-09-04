@@ -12,6 +12,8 @@ import 'lyrics_sheet.dart';
 import 'audio_dsp_sheet.dart';
 import 'cast_device_sheet.dart';
 import 'track_info_sheet.dart';
+import 'sleep_timer_sheet.dart';
+import '../../../services/sleep_timer_service.dart';
 
 /// Full-screen Now Playing immersive view.
 /// Implements Liquid Glass design with a SINGLE BackdropFilter layer for peak graphics performance.
@@ -455,6 +457,20 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (_) => const AudioDspSheet(),
+                          );
+                        },
+                      ),
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final active =
+                              ref.watch(sleepTimerProvider).isActive;
+                          return IconButton(
+                            icon: Icon(active
+                                ? Icons.bedtime_rounded
+                                : Icons.bedtime_outlined),
+                            color: active ? DesignTokens.primarySeed : null,
+                            tooltip: 'Sleep Timer',
+                            onPressed: () => SleepTimerSheet.show(context),
                           );
                         },
                       ),

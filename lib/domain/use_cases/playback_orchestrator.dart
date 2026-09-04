@@ -49,6 +49,10 @@ class PlaybackOrchestrator {
   PlaybackState _state = PlaybackState.initial;
   Track? _currentTrack;
 
+  /// Optional hook fired after a track finishes naturally. The sleep timer's
+  /// "stop at end of track" mode registers here.
+  void Function()? onTrackFinishedHook;
+
   /// Recently played tracks, oldest first — backs [previous].
   final List<Track> _history = [];
   static const int _maxHistory = 50;
@@ -143,6 +147,7 @@ class PlaybackOrchestrator {
       }
       _shuffleEngine.onTrackFinished(track);
     }
+    onTrackFinishedHook?.call();
 
     if (_state.repeatMode == RepeatMode.one && _currentTrack != null) {
       await playTrack(_currentTrack!);
