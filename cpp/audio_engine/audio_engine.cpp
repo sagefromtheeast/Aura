@@ -23,7 +23,7 @@
 #include <vector>
 
 #include "analyzer/feature_extractor.h"
-#include "analyzer/fingerprint.h"
+#include "analyzer/chromaprint_fingerprint.h"
 #include "decoder/decoder.h"
 #include "dsp/crossfade.h"
 #include "dsp/equalizer.h"
@@ -439,7 +439,14 @@ bool aura_analyze_track(const char* file_path, float* features, int feature_coun
 }
 
 bool aura_get_fingerprint(const char* file_path, uint32_t* fingerprint, int* size) {
-    return aura::Fingerprint::computeFromFile(file_path, fingerprint, size) == 0;
+    return aura::ChromaprintFingerprint::computeFromFile(file_path, fingerprint, size) == 0;
+}
+
+double aura_fingerprint_bit_error_rate(const uint32_t* a, int a_size,
+                                       const uint32_t* b, int b_size) {
+    if (a_size <= 0 || b_size <= 0) return 1.0;
+    return aura::ChromaprintFingerprint::bitErrorRate(
+        a, static_cast<std::size_t>(a_size), b, static_cast<std::size_t>(b_size));
 }
 
 const char* aura_engine_version(void) { return "1.0.0"; }

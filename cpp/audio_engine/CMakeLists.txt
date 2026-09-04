@@ -8,7 +8,7 @@
 #   ninja -C build && ./build/aura_engine_tests
 
 cmake_minimum_required(VERSION 3.16)
-project(aura_engine VERSION 1.0.0 LANGUAGES CXX)
+project(aura_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,14 +31,64 @@ set(AURA_SOURCES
     decoder/decoder.cpp
     decoder/ffmpeg_decoder.cpp
     analyzer/feature_extractor.cpp
-    analyzer/fingerprint.cpp
+    analyzer/chromaprint_fingerprint.cpp
 )
 
-add_library(aura_engine SHARED ${AURA_SOURCES})
+# ── Vendored Chromaprint ──────────────────────────────────────────────────────
+# third_party/chromaprint is upstream's MIT-licensed core plus KissFFT (BSD-3).
+# Deliberately excluded: avresample/ (LGPL FFmpeg), the FFmpeg/FFTW/vDSP FFT
+# backends, and the command-line tools. Because avresample is absent,
+# AudioProcessor cannot resample, so Aura always decodes to 11025 Hz mono
+# before feeding chromaprint (see analyzer/chromaprint_fingerprint.cpp).
+set(CHROMAPRINT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/chromaprint/src)
+set(CHROMAPRINT_SOURCES
+    ${CHROMAPRINT_DIR}/audio_processor.cpp
+    ${CHROMAPRINT_DIR}/chroma.cpp
+    ${CHROMAPRINT_DIR}/chroma_resampler.cpp
+    ${CHROMAPRINT_DIR}/chroma_filter.cpp
+    ${CHROMAPRINT_DIR}/spectrum.cpp
+    ${CHROMAPRINT_DIR}/fft.cpp
+    ${CHROMAPRINT_DIR}/fft_lib_kissfft.cpp
+    ${CHROMAPRINT_DIR}/fingerprinter.cpp
+    ${CHROMAPRINT_DIR}/image_builder.cpp
+    ${CHROMAPRINT_DIR}/simhash.cpp
+    ${CHROMAPRINT_DIR}/silence_remover.cpp
+    ${CHROMAPRINT_DIR}/fingerprint_calculator.cpp
+    ${CHROMAPRINT_DIR}/fingerprint_compressor.cpp
+    ${CHROMAPRINT_DIR}/fingerprint_decompressor.cpp
+    ${CHROMAPRINT_DIR}/fingerprinter_configuration.cpp
+    ${CHROMAPRINT_DIR}/fingerprint_matcher.cpp
+    ${CHROMAPRINT_DIR}/chromaprint.cpp
+    ${CHROMAPRINT_DIR}/utils/base64.cpp
+    ${CHROMAPRINT_DIR}/3rdparty/kissfft/kiss_fft.c
+    ${CHROMAPRINT_DIR}/3rdparty/kissfft/kiss_fftr.c
+)
+
+add_library(aura_chromaprint OBJECT ${CHROMAPRINT_SOURCES})
+target_include_directories(aura_chromaprint PUBLIC
+    ${CHROMAPRINT_DIR}
+    ${CHROMAPRINT_DIR}/include
+    ${CHROMAPRINT_DIR}/3rdparty/kissfft
+)
+target_compile_definitions(aura_chromaprint PUBLIC
+    HAVE_CONFIG_H
+    CHROMAPRINT_NODLL
+    kiss_fft_scalar=float
+)
+# Upstream code, not ours — do not fail Aura's stricter warning settings on it.
+target_compile_options(aura_chromaprint PRIVATE -w)
+
+add_library(aura_engine SHARED ${AURA_SOURCES} $<TARGET_OBJECTS:aura_chromaprint>)
 
 target_include_directories(aura_engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+target_include_directories(aura_engine PRIVATE
+    ${CHROMAPRINT_DIR}
+    ${CHROMAPRINT_DIR}/include
+    ${CHROMAPRINT_DIR}/3rdparty/kissfft
+)
+target_compile_definitions(aura_engine PRIVATE HAVE_CONFIG_H CHROMAPRINT_NODLL)
 
 # ── Optional FFmpeg backend ───────────────────────────────────────────────────
 if(AURA_WITH_FFMPEG)

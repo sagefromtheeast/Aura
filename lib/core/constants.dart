@@ -71,9 +71,23 @@ const String kFingerprintChannel = 'com.aura/fingerprint';
 /// How many seconds of play count as a "complete" listen (for stats).
 const double kListenCompletionRatio = 0.8;
 
-/// Fuzzy duplicate similarity threshold (0.0–1.0).
-/// Tracks scoring above this on Jaro-Winkler are considered duplicates.
-const double kFuzzyDuplicateThreshold = 0.75;
+/// Fuzzy duplicate similarity threshold (0.0–1.0), applied to the combined
+/// title/artist/duration score in [DuplicateDetector].
+const double kFuzzyDuplicateThreshold = 0.85;
+
+/// Title similarity (normalised Levenshtein) required for a fuzzy match.
+const double kFuzzyTitleThreshold = 0.85;
+
+/// Artist similarity (Jaro-Winkler) required for a fuzzy match.
+const double kFuzzyArtistThreshold = 0.90;
+
+/// Duration tolerance for a fuzzy match, in milliseconds.
+const int kFuzzyDurationToleranceMs = 2000;
+
+/// Bit error rate below which two Chromaprint fingerprints are considered the
+/// same recording. Deliberately tolerant: different encodings of one master
+/// score near 0, unrelated recordings near 0.5.
+const double kFingerprintBerThreshold = 0.35;
 
 /// Audio feature vector dimension (tempo, energy, valence, danceability,
 /// loudness, acousticness). Must match DB schema.

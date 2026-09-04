@@ -23,6 +23,8 @@ import 'dart:io' show Platform;
 
 import 'package:ffi/ffi.dart';
 
+import '../domain/duplicate_detector/fingerprint_math.dart';
+
 // ── Engine states (mirrors AuraPlaybackState and domain EngineStatus) ─────────
 
 enum EngineState {
@@ -141,6 +143,11 @@ typedef _FingerprintNative = Bool Function(
 typedef _FingerprintDart = bool Function(
     Pointer<Utf8>, Pointer<Uint32>, Pointer<Int32>);
 
+typedef _BerNative = Double Function(
+    Pointer<Uint32>, Int32, Pointer<Uint32>, Int32);
+typedef _BerDart = double Function(
+    Pointer<Uint32>, int, Pointer<Uint32>, int);
+
 typedef _VersionNative = Pointer<Utf8> Function();
 typedef _VersionDart = Pointer<Utf8> Function();
 
@@ -202,6 +209,7 @@ class AudioEngineFfi {
   _SetErrorCbDart? _setErrorCb;
   _AnalyzeDart? _analyzeFn;
   _FingerprintDart? _fingerprintFn;
+  _BerDart? _berFn;
   _VersionDart? _versionFn;
   _HasFfmpegDart? _hasFfmpegFn;
 
@@ -350,8 +358,13 @@ class AudioEngineFfi {
   /// Async wrapper matching the spec's `analyzeTrack` name.
   Future<List<double>?> analyzeTrack(String path) async => analyzeFeatures(path);
 
-  /// Raw windowed sub-fingerprints for [path], or null on failure.
-  List<int>? getFingerprintValues(String path, {int capacity = 128}) {
+  /// Raw Chromaprint sub-fingerprints for [path], or null on failure.
+  ///
+  /// The engine fingerprints the first 30 seconds at 11025 Hz, emitting one
+  /// 32-bit value per ~0.124 s frame — roughly 220 values. [capacity] is sized
+  /// to hold all of them; a smaller value simply truncates the comparison
+  /// window rather than failing.
+  List<int>? getFingerprintValues(String path, {int capacity = 256}) {
     if (!_isAvailable || _fingerprintFn == null) return null;
     final pathPtr = path.toNativeUtf8();
     final out = calloc<Uint32>(capacity);
@@ -368,8 +381,42 @@ class AudioEngineFfi {
     }
   }
 
-  /// Hex fingerprint string. Kept for [DuplicateDetector], which compares
-  /// fingerprints as strings.
+  /// Bit error rate between two raw fingerprints: the fraction of differing
+  /// bits over their overlapping prefix, in [0, 1].
+  ///
+  /// Identical encodes score near 0; unrelated recordings sit near 0.5, since
+  /// independent bits disagree half the time. [kFingerprintBerThreshold] is the
+  /// cut-off Aura's duplicate detector uses.
+  ///
+  /// Falls back to a pure-Dart computation when the native library is absent,
+  /// so duplicate detection still works in tests and on unsupported platforms.
+  double fingerprintBitErrorRate(List<int> a, List<int> b) {
+    if (a.isEmpty || b.isEmpty) return 1.0;
+
+    if (_isAvailable && _berFn != null) {
+      final aPtr = calloc<Uint32>(a.length);
+      final bPtr = calloc<Uint32>(b.length);
+      try {
+        for (var i = 0; i < a.length; i++) {
+          aPtr[i] = a[i];
+        }
+        for (var i = 0; i < b.length; i++) {
+          bPtr[i] = b[i];
+        }
+        return _berFn!(aPtr, a.length, bPtr, b.length);
+      } finally {
+        calloc.free(aPtr);
+        calloc.free(bPtr);
+      }
+    }
+
+    return fingerprintBitErrorRateDart(a, b);
+  }
+
+  /// Hex fingerprint string. Retained for callers that want an opaque,
+  /// storable form; duplicate detection compares raw values instead, because
+  /// two encodes of one recording differ in a few bits and so can never match
+  /// as strings.
   String? getFingerprint(String path) {
     final values = getFingerprintValues(path);
     if (values == null || values.isEmpty) return null;
@@ -439,6 +486,15 @@ class AudioEngineFfi {
           lib.lookupFunction<_AnalyzeNative, _AnalyzeDart>('aura_analyze_track');
       _fingerprintFn = lib
           .lookupFunction<_FingerprintNative, _FingerprintDart>('aura_get_fingerprint');
+      try {
+        _berFn = lib.lookupFunction<_BerNative, _BerDart>(
+            'aura_fingerprint_bit_error_rate');
+      } catch (_) {
+        // Added alongside Chromaprint; an older engine binary lacks it and
+        // falls back to the Dart implementation rather than failing to bind
+        // the whole library.
+        _berFn = null;
+      }
       _versionFn =
           lib.lookupFunction<_VersionNative, _VersionDart>('aura_engine_version');
       _hasFfmpegFn =

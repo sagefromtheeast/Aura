@@ -172,6 +172,19 @@ bool aura_analyze_track(const char* file_path, float* features, int feature_coun
  */
 bool aura_get_fingerprint(const char* file_path, uint32_t* fingerprint, int* size);
 
+/**
+ * Bit error rate between two raw Chromaprint fingerprints: the fraction of
+ * differing bits over their overlapping prefix, in [0, 1].
+ *
+ * Identical encodes score near 0; unrelated recordings sit near 0.5, because
+ * independent bits disagree half the time. Aura's duplicate detector treats
+ * anything below 0.35 as the same recording.
+ *
+ * Returns 1.0 (maximally different) when either fingerprint is empty.
+ */
+double aura_fingerprint_bit_error_rate(const uint32_t* a, int a_size,
+                                       const uint32_t* b, int b_size);
+
 // ── Build Info ─────────────────────────────────────────────────────────────────
 
 /** Engine version string, e.g. "1.0.0". */

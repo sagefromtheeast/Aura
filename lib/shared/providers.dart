@@ -19,7 +19,7 @@ import '../domain/repositories/audio_feature_repository.dart';
 import '../domain/repositories/shuffle_state_repository.dart';
 import '../domain/intelli_shuffle/intelli_shuffle_engine.dart';
 import '../domain/smart_mix/smart_mix_generator.dart';
-import '../domain/use_cases/duplicate_detector.dart';
+import '../domain/duplicate_detector/duplicate_detector.dart';
 import '../domain/use_cases/stats_calculator.dart';
 import '../domain/use_cases/playback_orchestrator.dart';
 import '../domain/entities/playback_state.dart';
@@ -95,7 +95,16 @@ final smartMixGeneratorProvider = Provider<SmartMixGenerator>((ref) {
 });
 
 final duplicateDetectorProvider = Provider<DuplicateDetector>((ref) {
-  return const DuplicateDetector();
+  return DuplicateDetector(
+    trackRepository: ref.watch(musicRepositoryProvider),
+    // Fingerprinting decodes audio, so it only runs on the background isolate
+    // the scan provider spawns; this instance exists for findDuplicates() calls
+    // that stop at the metadata layers, and for resolveDuplicate().
+    audioFingerprinter: (path) async =>
+        AudioEngineFfi.instance.isAvailable
+            ? AudioEngineFfi.instance.getFingerprintValues(path)
+            : null,
+  );
 });
 
 final statsCalculatorProvider = Provider<StatsCalculator>((ref) {

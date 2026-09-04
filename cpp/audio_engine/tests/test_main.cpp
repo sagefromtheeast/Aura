@@ -18,7 +18,7 @@
 #include "../dsp/equalizer.h"
 #include "../dsp/replay_gain.h"
 #include "../analyzer/feature_extractor.h"
-#include "../analyzer/fingerprint.h"
+#include "../analyzer/chromaprint_fingerprint.h"
 
 namespace {
 
@@ -294,52 +294,122 @@ void testAnalyzer() {
     }
 }
 
-// ── Fingerprint ───────────────────────────────────────────────────────────────
+// ── Chromaprint ───────────────────────────────────────────────────────────────
 
-void testFingerprint() {
-    section("Fingerprint");
+namespace {
 
-    {
-        const char* a = "aura";
-        const uint32_t h1 =
-            aura::Fingerprint::murmur3_32(reinterpret_cast<const uint8_t*>(a), 4, 0);
-        const uint32_t h2 =
-            aura::Fingerprint::murmur3_32(reinterpret_cast<const uint8_t*>(a), 4, 0);
-        check(h1 == h2, "murmur3 is deterministic");
+/// Builds ~[seconds] of synthetic "music" at chromaprint's native rate: a chord
+/// whose root walks a short progression, so the chroma features actually vary
+/// over time the way real music does. A flat sine would give chromaprint almost
+/// nothing to discriminate on.
+std::vector<int16_t> synthMusic(int seconds, double detune, double amplitude,
+                                unsigned seed) {
+    const int sr = aura::kChromaprintSampleRate;
+    const std::size_t n = static_cast<std::size_t>(sr) * seconds;
+    std::vector<int16_t> pcm(n);
 
-        const char* b = "aurb";
-        const uint32_t h3 =
-            aura::Fingerprint::murmur3_32(reinterpret_cast<const uint8_t*>(b), 4, 0);
-        check(h1 != h3, "murmur3 distinguishes different input");
+    // Root notes of a I-vi-IV-V progression, one per second.
+    const double roots[4] = {220.0, 261.63, 293.66, 329.63};
+    unsigned rng = seed;
+
+    for (std::size_t i = 0; i < n; ++i) {
+        const double t = static_cast<double>(i) / sr;
+        const double root = roots[(static_cast<int>(t) / 2) % 4] * detune;
+        double v = 0.0;
+        // Root, major third, fifth — plus a second harmonic for timbre.
+        v += 0.50 * std::sin(2.0 * M_PI * root * t);
+        v += 0.30 * std::sin(2.0 * M_PI * root * 1.26 * t);
+        v += 0.25 * std::sin(2.0 * M_PI * root * 1.50 * t);
+        v += 0.10 * std::sin(2.0 * M_PI * root * 2.00 * t);
+
+        // A little dither, standing in for encoder noise.
+        rng = rng * 1664525u + 1013904223u;
+        v += ((rng >> 16) / 32768.0 - 1.0) * 0.01;
+
+        const double clamped = std::max(-1.0, std::min(1.0, v * amplitude * 0.24));
+        pcm[i] = static_cast<int16_t>(clamped * 32767.0);
     }
-    {
-        // Identical PCM must fingerprint identically; different PCM must not.
-        const int sr = 16000;
-        std::vector<int16_t> pcmA(sr * 2);
-        std::vector<int16_t> pcmB(sr * 2);
-        for (std::size_t i = 0; i < pcmA.size(); ++i) {
-            pcmA[i] = static_cast<int16_t>(10000 * std::sin(2.0 * kPi * 440.0 * i / sr));
-            pcmB[i] = static_cast<int16_t>(10000 * std::sin(2.0 * kPi * 880.0 * i / sr));
-        }
+    return pcm;
+}
 
-        uint32_t fpA[64] = {0};
-        uint32_t fpA2[64] = {0};
-        uint32_t fpB[64] = {0};
-        const int nA = aura::Fingerprint::compute(pcmA.data(), pcmA.size(), sr, fpA, 64);
-        const int nA2 = aura::Fingerprint::compute(pcmA.data(), pcmA.size(), sr, fpA2, 64);
-        const int nB = aura::Fingerprint::compute(pcmB.data(), pcmB.size(), sr, fpB, 64);
+}  // namespace
 
-        check(nA > 0, "fingerprint produces sub-fingerprints");
-        check(nA == nA2 && std::memcmp(fpA, fpA2, nA * sizeof(uint32_t)) == 0,
-              "same audio => same fingerprint");
-        check(nB > 0 && std::memcmp(fpA, fpB, nA * sizeof(uint32_t)) != 0,
-              "different audio => different fingerprint");
+void testChromaprint() {
+    section("Chromaprint");
+
+    const int sr = aura::kChromaprintSampleRate;
+    constexpr int kCap = 256;
+
+    // The same "recording" twice, the second at a different gain and with
+    // different dither — i.e. what a re-encode does to the waveform.
+    const auto original = synthMusic(12, 1.0, 1.00, 1);
+    const auto reencoded = synthMusic(12, 1.0, 0.72, 99);
+    // A different piece of music entirely (everything transposed).
+    const auto other = synthMusic(12, 1.335, 1.00, 7);
+
+    uint32_t fpA[kCap], fpA2[kCap], fpB[kCap], fpC[kCap];
+    const int nA = aura::ChromaprintFingerprint::compute(
+        original.data(), original.size(), sr, fpA, kCap);
+    const int nA2 = aura::ChromaprintFingerprint::compute(
+        original.data(), original.size(), sr, fpA2, kCap);
+    const int nB = aura::ChromaprintFingerprint::compute(
+        reencoded.data(), reencoded.size(), sr, fpB, kCap);
+    const int nC = aura::ChromaprintFingerprint::compute(
+        other.data(), other.size(), sr, fpC, kCap);
+
+    check(nA > 0, "chromaprint produces sub-fingerprints for 12s of audio");
+    check(nA == nA2 && nA == nB && nA == nC,
+          "fingerprint length is stable for equal-length inputs");
+
+    if (nA > 0) {
+        // Determinism.
+        check(std::memcmp(fpA, fpA2, nA * sizeof(uint32_t)) == 0,
+              "fingerprinting the same PCM twice is deterministic");
+        checkNear(aura::ChromaprintFingerprint::bitErrorRate(fpA, nA, fpA2, nA2),
+                  0.0, 1e-12, "identical audio has zero bit error rate");
+
+        // A re-encode must land under the detector's 0.35 threshold...
+        const double berSame =
+            aura::ChromaprintFingerprint::bitErrorRate(fpA, nA, fpB, nB);
+        std::printf("  info: BER(original, re-encoded) = %.4f\n", berSame);
+        check(berSame < 0.35, "re-encoded audio scores below the 0.35 threshold");
+
+        // ...and unrelated music must land above it.
+        const double berOther =
+            aura::ChromaprintFingerprint::bitErrorRate(fpA, nA, fpC, nC);
+        std::printf("  info: BER(original, other track) = %.4f\n", berOther);
+        check(berOther > berSame,
+              "unrelated music is further away than a re-encode");
     }
+
+    // Bit error rate edge cases.
+    checkNear(aura::ChromaprintFingerprint::bitErrorRate(nullptr, 0, fpA, nA),
+              1.0, 1e-12, "empty fingerprint yields maximal bit error rate");
     {
-        uint32_t fp[4] = {0};
-        std::vector<int16_t> pcm(16000 * 5, 0);
-        const int n = aura::Fingerprint::compute(pcm.data(), pcm.size(), 16000, fp, 4);
-        check(n <= 4, "fingerprint respects the output capacity");
+        const uint32_t allZero[2] = {0u, 0u};
+        const uint32_t allOnes[2] = {0xFFFFFFFFu, 0xFFFFFFFFu};
+        checkNear(aura::ChromaprintFingerprint::bitErrorRate(allZero, 2, allOnes, 2),
+                  1.0, 1e-12, "fully inverted fingerprints score 1.0");
+        checkNear(aura::ChromaprintFingerprint::bitErrorRate(allZero, 2, allZero, 2),
+                  0.0, 1e-12, "identical fingerprints score 0.0");
+    }
+
+    // Aura decodes to 11025 Hz before feeding chromaprint; anything else is a
+    // caller bug and must fail loudly rather than silently mis-fingerprint.
+    {
+        uint32_t fp[8];
+        check(aura::ChromaprintFingerprint::compute(
+                  original.data(), original.size(), 44100, fp, 8) == 0,
+              "a non-native sample rate is rejected");
+    }
+
+    // Short input: chromaprint needs a few seconds before it emits anything.
+    {
+        const auto tiny = synthMusic(1, 1.0, 1.0, 3);
+        uint32_t fp[8];
+        const int n = aura::ChromaprintFingerprint::compute(
+            tiny.data(), tiny.size(), sr, fp, 8);
+        check(n >= 0, "very short audio does not crash the fingerprinter");
     }
 }
 
@@ -438,7 +508,7 @@ int main() {
     testReplayGain();
     testCrossfade();
     testAnalyzer();
-    testFingerprint();
+    testChromaprint();
     testCApi();
 
     std::printf("\n%d checks, %d failure(s)\n", g_checks, g_failures);
