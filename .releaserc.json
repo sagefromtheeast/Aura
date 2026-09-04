@@ -16,52 +16,52 @@
           "types": [
             {
               "type": "feat",
-              "section": "🚀 New Features",
+              "section": "\ud83d\ude80 New Features",
               "hidden": false
             },
             {
               "type": "fix",
-              "section": "🐛 Bug Fixes",
+              "section": "\ud83d\udc1b Bug Fixes",
               "hidden": false
             },
             {
               "type": "perf",
-              "section": "⚡ Performance",
+              "section": "\u26a1 Performance",
               "hidden": false
             },
             {
               "type": "docs",
-              "section": "📚 Documentation",
+              "section": "\ud83d\udcda Documentation",
               "hidden": false
             },
             {
               "type": "style",
-              "section": "🎨 UI/UX",
+              "section": "\ud83c\udfa8 UI/UX",
               "hidden": false
             },
             {
               "type": "refactor",
-              "section": "♻️ Refactoring",
+              "section": "\u267b\ufe0f Refactoring",
               "hidden": false
             },
             {
               "type": "test",
-              "section": "✅ Tests",
+              "section": "\u2705 Tests",
               "hidden": false
             },
             {
               "type": "chore",
-              "section": "🔧 Maintenance",
+              "section": "\ud83d\udd27 Maintenance",
               "hidden": false
             },
             {
               "type": "ci",
-              "section": "🤖 CI/CD",
+              "section": "\ud83e\udd16 CI/CD",
               "hidden": false
             },
             {
               "type": "audio",
-              "section": "🔊 Audio Engine",
+              "section": "\ud83d\udd0a Audio Engine",
               "hidden": false
             }
           ]
@@ -69,6 +69,12 @@
       }
     ],
     "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "bash tool/set_pubspec_version.sh ${nextRelease.version}"
+      }
+    ],
     [
       "@semantic-release/git",
       {
