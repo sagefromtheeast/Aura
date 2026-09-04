@@ -40,6 +40,7 @@ dependencies:
   # ── Audio (fallback + session management) ─────────────────────
   just_audio: ^0.10.4
   audio_session: ^0.1.21
+  audio_service: ^0.18.15  # Media session: lock screen, Bluetooth, Android Auto
 
   # ── UI / Theming ──────────────────────────────────────────────
   palette_generator: ^0.3.3+3

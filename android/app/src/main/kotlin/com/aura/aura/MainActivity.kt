@@ -2,11 +2,13 @@ package com.aura.aura
 
 import android.os.Build
 import android.provider.MediaStore
-import io.flutter.embedding.android.FlutterActivity
+import com.ryanheise.audioservice.AudioServiceActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity : FlutterActivity() {
+// AudioServiceActivity (a FlutterActivity subclass) lets the media
+// session receive hardware/Bluetooth media-button events while foregrounded.
+class MainActivity : AudioServiceActivity() {
     private val CHANNEL = "com.aura/file_scanner"
 
     companion object {
