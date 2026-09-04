@@ -119,6 +119,18 @@ class BehaviorDao extends DatabaseAccessor<AppDatabase>
             ..limit(limit))
           .get();
 
+  /// Distinct track ids ordered by their most recent play, newest first.
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit = 200}) async {
+    final rows = await customSelect(
+      'SELECT track_id, MAX(played_at_ms) AS last_ms '
+      'FROM playback_history WHERE skipped = 0 '
+      'GROUP BY track_id ORDER BY last_ms DESC LIMIT ?',
+      variables: [Variable.withInt(limit)],
+      readsFrom: {playbackHistoryTable},
+    ).get();
+    return rows.map((r) => r.read<String>('track_id')).toList();
+  }
+
   /// Returns the top-N most-played track IDs in the last [days] days.
   Future<List<String>> getTopPlayedTrackIds({
     int topN = 20,

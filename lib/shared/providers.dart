@@ -249,3 +249,94 @@ final allArtistsProvider = FutureProvider((ref) {
 final allPlaylistsProvider = FutureProvider((ref) {
   return ref.watch(playlistRepositoryProvider).getAllPlaylists();
 });
+
+final favouriteTracksProvider = FutureProvider((ref) {
+  // Rebuilds when a favourite is toggled (the notifier invalidates it).
+  ref.watch(favouriteIdsProvider);
+  return ref.watch(musicRepositoryProvider).getFavouriteTracks();
+});
+
+final genresProvider = FutureProvider((ref) {
+  return ref.watch(musicRepositoryProvider).getGenres();
+});
+
+/// Tracks belonging to one genre.
+final genreTracksProvider =
+    FutureProvider.family<List<Track>, String>((ref, genre) {
+  return ref.watch(musicRepositoryProvider).findTracksByGenre(genre);
+});
+
+/// The set of favourited track ids, held in memory so hearts across the app
+/// update the instant one is toggled — without a database round trip per read.
+class FavouriteIdsNotifier extends StateNotifier<Set<String>> {
+  FavouriteIdsNotifier(this._ref) : super(const {}) {
+    _load();
+  }
+
+  final Ref _ref;
+
+  Future<void> _load() async {
+    try {
+      final favourites =
+          await _ref.read(musicRepositoryProvider).getFavouriteTracks();
+      if (mounted) state = {for (final t in favourites) t.id};
+    } catch (_) {
+      // A cold library simply has no favourites yet.
+    }
+  }
+
+  bool isFavourite(String trackId) => state.contains(trackId);
+
+  /// Toggles [trackId] and returns the new state. Optimistic: the in-memory
+  /// set updates first so the UI reacts immediately, then the write persists.
+  Future<bool> toggle(String trackId) async {
+    final next = state.contains(trackId);
+    state = next
+        ? (Set<String>.of(state)..remove(trackId))
+        : (Set<String>.of(state)..add(trackId));
+    await _ref
+        .read(musicRepositoryProvider)
+        .setFavourite(trackId, !next);
+    _ref.invalidate(favouriteTracksProvider);
+    _ref.invalidate(allTracksProvider);
+    return !next;
+  }
+
+  Future<void> set(String trackId, bool favourite) async {
+    if (state.contains(trackId) == favourite) return;
+    await toggle(trackId);
+  }
+}
+
+final favouriteIdsProvider =
+    StateNotifierProvider<FavouriteIdsNotifier, Set<String>>(
+  FavouriteIdsNotifier.new,
+);
+
+// ── System playlists (derived, read-only) ─────────────────────────────────────
+
+/// Most recently played distinct tracks.
+final recentlyPlayedTracksProvider = FutureProvider<List<Track>>((ref) async {
+  final ids = await ref
+      .watch(behaviorRepositoryProvider)
+      .getRecentlyPlayedTrackIds(limit: 200);
+  return ref.watch(musicRepositoryProvider).getTracksByIds(ids);
+});
+
+/// Most played distinct tracks (all time).
+final mostPlayedTracksProvider = FutureProvider<List<Track>>((ref) async {
+  final ids = await ref
+      .watch(behaviorRepositoryProvider)
+      .getTopPlayedTrackIds(topN: 200, days: 36500);
+  return ref.watch(musicRepositoryProvider).getTracksByIds(ids);
+});
+
+/// Most recently added tracks.
+final recentlyAddedTracksProvider = FutureProvider<List<Track>>((ref) {
+  return ref.watch(musicRepositoryProvider).getRecentlyAddedTracks(limit: 200);
+});
+
+/// Tracks never played — discovery through exclusion.
+final notPlayedTracksProvider = FutureProvider<List<Track>>((ref) {
+  return ref.watch(musicRepositoryProvider).getNeverPlayedTracks();
+});

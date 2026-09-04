@@ -86,6 +86,10 @@ class LocalBehaviorRepository implements BehaviorRepository {
   Future<int?> getFirstEventMs() => _db.behaviorDao.getFirstEventMs();
 
   @override
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit = 200}) =>
+      _db.behaviorDao.getRecentlyPlayedTrackIds(limit: limit);
+
+  @override
   Future<List<String>> getTopPlayedTrackIds({
     int topN = 20,
     int days = 30,

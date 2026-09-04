@@ -61,6 +61,54 @@ class TrackDao extends DatabaseAccessor<AppDatabase> with _$TrackDaoMixin {
       (select(tracksTable)..where((t) => t.filePath.equals(filePath)))
           .getSingleOrNull();
 
+  /// Non-deleted favourite tracks (rating at or above the favourite
+  /// threshold), most-recently-played first so the list feels alive.
+  Future<List<TrackRow>> getFavourites(int minRating) => (select(tracksTable)
+        ..where((t) =>
+            t.isDeleted.equals(false) &
+            t.rating.isBiggerOrEqualValue(minRating))
+        ..orderBy([
+          (t) => OrderingTerm.desc(t.lastPlayedMs),
+          (t) => OrderingTerm.asc(t.title),
+        ]))
+      .get();
+
+  /// Rows for an explicit set of ids (order unspecified; callers reindex).
+  Future<List<TrackRow>> getByIds(List<String> ids) {
+    if (ids.isEmpty) return Future.value(const <TrackRow>[]);
+    return (select(tracksTable)
+          ..where((t) => t.id.isIn(ids) & t.isDeleted.equals(false)))
+        .get();
+  }
+
+  /// Non-deleted tracks, newest by date-added first.
+  Future<List<TrackRow>> getRecentlyAdded({int limit = 200}) =>
+      (select(tracksTable)
+            ..where((t) => t.isDeleted.equals(false))
+            ..orderBy([(t) => OrderingTerm.desc(t.dateAddedMs)])
+            ..limit(limit))
+          .get();
+
+  /// Non-deleted tracks that have never been played.
+  Future<List<TrackRow>> getNeverPlayed() => (select(tracksTable)
+        ..where((t) => t.isDeleted.equals(false) & t.playCount.equals(0))
+        ..orderBy([(t) => OrderingTerm.asc(t.title)]))
+      .get();
+
+  /// Distinct non-empty genres with how many tracks carry each, name-sorted.
+  Future<List<({String genre, int trackCount})>> getGenreCounts() async {
+    final rows = await customSelect(
+      "SELECT genre, COUNT(*) AS c FROM tracks "
+      "WHERE is_deleted = 0 AND genre <> '' "
+      "GROUP BY genre ORDER BY genre COLLATE NOCASE ASC",
+      readsFrom: {tracksTable},
+    ).get();
+    return [
+      for (final r in rows)
+        (genre: r.read<String>('genre'), trackCount: r.read<int>('c')),
+    ];
+  }
+
   /// Non-deleted tracks for a given genre, ordered by title.
   Future<List<TrackRow>> findByGenre(String genre) => (select(tracksTable)
         ..where((t) => t.genre.equals(genre) & t.isDeleted.equals(false))

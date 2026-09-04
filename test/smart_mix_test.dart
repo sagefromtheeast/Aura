@@ -61,6 +61,20 @@ class _FakeMusicRepo implements MusicRepository {
   @override
   Future<void> setRating(String id, int rating) async {}
   @override
+  Future<List<Track>> getFavouriteTracks() async => const [];
+  @override
+  Future<List<Track>> getTracksByIds(List<String> ids) async => const [];
+  @override
+  Future<List<GenreSummary>> getGenres() async => const [];
+  @override
+  Future<List<Track>> findTracksByGenre(String genre) async => const [];
+  @override
+  Future<List<Track>> getRecentlyAddedTracks({int limit = 200}) async => const [];
+  @override
+  Future<List<Track>> getNeverPlayedTracks() async => const [];
+  @override
+  Future<void> setFavourite(String id, bool favourite) async {}
+  @override
   Future<List<double>?> getAudioFeatures(String id) async => null;
   @override
   Future<void> upsertAudioFeatures(String id, List<double> f) async {}
@@ -92,6 +106,8 @@ class _FakeBehaviorRepo implements BehaviorRepository {
 
   @override
   Future<int?> getFirstEventMs() async => null;
+  @override
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit = 200}) async => const [];
 }
 
 class _FakeFeatureRepo implements AudioFeatureRepository {

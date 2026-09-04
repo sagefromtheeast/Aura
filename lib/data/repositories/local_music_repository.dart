@@ -111,6 +111,52 @@ class LocalMusicRepository implements MusicRepository {
       _db.trackDao.setRating(trackId, rating);
 
   @override
+  Future<List<Track>> getFavouriteTracks() async {
+    final rows = await _db.trackDao.getFavourites(kFavouriteRating);
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<Track>> getTracksByIds(List<String> ids) async {
+    if (ids.isEmpty) return const [];
+    final rows = await _db.trackDao.getByIds(ids);
+    // Preserve the caller's requested order.
+    final byId = {for (final r in rows) r.id: _rowToTrack(r)};
+    return [for (final id in ids) if (byId.containsKey(id)) byId[id]!];
+  }
+
+  @override
+  Future<List<Track>> findTracksByGenre(String genre) async {
+    final rows = await _db.trackDao.findByGenre(genre);
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<Track>> getRecentlyAddedTracks({int limit = 200}) async {
+    final rows = await _db.trackDao.getRecentlyAdded(limit: limit);
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<Track>> getNeverPlayedTracks() async {
+    final rows = await _db.trackDao.getNeverPlayed();
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<GenreSummary>> getGenres() async {
+    final rows = await _db.trackDao.getGenreCounts();
+    return [
+      for (final r in rows)
+        GenreSummary(name: r.genre, trackCount: r.trackCount),
+    ];
+  }
+
+  @override
+  Future<void> setFavourite(String trackId, bool favourite) =>
+      _db.trackDao.setRating(trackId, favourite ? kFavouriteRating : 0);
+
+  @override
   Future<List<double>?> getAudioFeatures(String trackId) async {
     final row = await _db.trackDao.getAudioFeatures(trackId);
     if (row == null) {

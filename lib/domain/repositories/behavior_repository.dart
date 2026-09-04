@@ -89,6 +89,9 @@ abstract interface class BehaviorRepository {
   /// Epoch ms of the earliest recorded event, or null when history is empty.
   Future<int?> getFirstEventMs();
 
+  /// Distinct track ids ordered by their most recent play, newest first.
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit});
+
   /// Returns the top N most-played track IDs over the last [days] days.
   Future<List<String>> getTopPlayedTrackIds({
     int topN = 20,

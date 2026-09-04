@@ -66,6 +66,9 @@ class FakeHistoryRepository implements BehaviorRepository {
       const [];
   @override
   Future<void> pruneHistory(Duration retainDuration) async {}
+  @override
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit = 200}) async =>
+      const [];
 }
 
 class FakeTrackRepository implements MusicRepository {
@@ -103,6 +106,20 @@ class FakeTrackRepository implements MusicRepository {
   Future<void> recordSkip(String trackId) async {}
   @override
   Future<void> setRating(String trackId, int rating) async {}
+  @override
+  Future<List<Track>> getFavouriteTracks() async => const [];
+  @override
+  Future<List<Track>> getTracksByIds(List<String> ids) async => const [];
+  @override
+  Future<List<GenreSummary>> getGenres() async => const [];
+  @override
+  Future<List<Track>> findTracksByGenre(String genre) async => const [];
+  @override
+  Future<List<Track>> getRecentlyAddedTracks({int limit = 200}) async => const [];
+  @override
+  Future<List<Track>> getNeverPlayedTracks() async => const [];
+  @override
+  Future<void> setFavourite(String trackId, bool favourite) async {}
   @override
   Future<List<double>?> getAudioFeatures(String trackId) async => null;
   @override

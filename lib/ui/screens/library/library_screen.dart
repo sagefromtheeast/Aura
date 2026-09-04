@@ -11,6 +11,10 @@ import 'artist_detail_screen.dart';
 import 'folder_browser_screen.dart';
 import 'playlist_detail_screen.dart';
 import '../search/search_screen.dart';
+import '../../sheets/track_actions_sheet.dart';
+import 'favourites_screen.dart';
+import 'genres_screen.dart';
+import 'track_list_screen.dart';
 import 'smart_mix_detail_screen.dart';
 import 'tag_editor_sheet.dart';
 
@@ -159,6 +163,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
                 onTap: () {
                   ref.read(playbackOrchestratorProvider).playTrack(track);
                 },
+                onLongPress: () => TrackActionsSheet.show(context, track),
                 child: Row(
                   children: [
                     const Icon(Icons.music_note_rounded, color: DesignTokens.primarySeed),
@@ -180,9 +185,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
                     ),
                     const SizedBox(width: 4),
                     IconButton(
-                      icon: const Icon(Icons.edit_note_rounded, size: 22, color: DesignTokens.primarySeed),
-                      onPressed: () => TagEditorSheet.show(context, [track]),
-                      tooltip: 'Edit ID3 Tags',
+                      icon: const Icon(Icons.more_vert_rounded, size: 22),
+                      onPressed: () => TrackActionsSheet.show(context, track),
+                      tooltip: 'Track options',
                     ),
                   ],
                 ),
@@ -305,6 +310,103 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     );
   }
 
+
+  // ── System playlists header (Favourites, Recently Played, etc.) ────────────
+  Widget _buildSystemPlaylistsHeader(BuildContext context) {
+    final entries = <(IconData, String, VoidCallback)>[
+      (
+        Icons.favorite_rounded,
+        'Favourites',
+        () => _pushScreen(context, const FavouritesScreen()),
+      ),
+      (
+        Icons.history_rounded,
+        'Recently Played',
+        () => _pushScreen(
+            context,
+            TrackListScreen(
+              title: 'Recently Played',
+              provider: recentlyPlayedTracksProvider,
+              emptyMessage: 'Nothing played yet.',
+            )),
+      ),
+      (
+        Icons.local_fire_department_rounded,
+        'Most Played',
+        () => _pushScreen(
+            context,
+            TrackListScreen(
+              title: 'Most Played',
+              provider: mostPlayedTracksProvider,
+              emptyMessage: 'Play some music to build this list.',
+            )),
+      ),
+      (
+        Icons.fiber_new_rounded,
+        'Recently Added',
+        () => _pushScreen(
+            context,
+            TrackListScreen(
+              title: 'Recently Added',
+              provider: recentlyAddedTracksProvider,
+            )),
+      ),
+      (
+        Icons.do_not_disturb_on_outlined,
+        'Not Played',
+        () => _pushScreen(
+            context,
+            TrackListScreen(
+              title: 'Not Played',
+              provider: notPlayedTracksProvider,
+              emptyMessage: "You've played everything.",
+            )),
+      ),
+      (
+        Icons.category_rounded,
+        'Genres',
+        () => _pushScreen(context, const GenresScreen()),
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final (icon, label, onTap) in entries)
+          Padding(
+            padding: const EdgeInsets.only(bottom: DesignTokens.spacing8),
+            child: GlassCard(
+              onTap: onTap,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: DesignTokens.spacing16, vertical: 14),
+              child: Row(
+                children: [
+                  Icon(icon, color: DesignTokens.primarySeed),
+                  const SizedBox(width: DesignTokens.spacing12),
+                  Expanded(
+                    child: Text(label,
+                        style: Theme.of(context).textTheme.titleMedium),
+                  ),
+                  const Icon(Icons.chevron_right_rounded),
+                ],
+              ),
+            ),
+          ),
+        const SizedBox(height: DesignTokens.spacing8),
+        Text('Your Playlists',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: DesignTokens.primarySeed)),
+        const SizedBox(height: DesignTokens.spacing12),
+      ],
+    );
+  }
+
+  void _pushScreen(BuildContext context, Widget screen) {
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => screen));
+  }
+
   // ── Playlists Tab ──────────────────────────────────────────────────────────
   Widget _buildPlaylistsTab() {
     final playlistsAsync = ref.watch(allPlaylistsProvider);
@@ -314,12 +416,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Center(child: Text('Error loading playlists: $err')),
       data: (playlists) {
-        if (playlists.isEmpty) return const Center(child: Text('No playlists created yet'));
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-          itemCount: playlists.length,
+          itemCount: playlists.length + 1,
           itemBuilder: (context, index) {
-            final p = playlists[index];
+            if (index == 0) return _buildSystemPlaylistsHeader(context);
+            final p = playlists[index - 1];
             return Padding(
               padding: const EdgeInsets.only(bottom: DesignTokens.spacing12),
               child: GlassCard(

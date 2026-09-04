@@ -26,7 +26,6 @@ class NowPlayingScreen extends ConsumerStatefulWidget {
 class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     with TickerProviderStateMixin {
 
-  bool _isFavorite = false;
   bool _showWaveform = false;
 
   late AnimationController _playPauseController;
@@ -70,10 +69,12 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     _playPauseController.dispose();
     _entranceController.dispose();
     super.dispose();
-  }  void _toggleFavorite() {
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
+  }
+
+  Future<void> _toggleFavorite() async {
+    final track = ref.read(playbackStateProvider).currentTrack;
+    if (track == null) return;
+    await ref.read(favouriteIdsProvider.notifier).toggle(track.id);
   }
 
   String _formatDuration(int ms) {
@@ -89,6 +90,8 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     final playback = ref.watch(playbackStateProvider);
     final themeState = ref.watch(dynamicThemeProvider);
     final track = playback.currentTrack;
+    final isFavorite =
+        track != null && ref.watch(favouriteIdsProvider).contains(track.id);
 
     final accent = themeState.accentColor;
     final isPlaying = playback.status == EngineStatus.playing;
@@ -279,7 +282,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                       const SizedBox(width: 12),
                       // Favorite button with spring micro-interaction
                       SparkleLikeButton(
-                        isFavorite: _isFavorite,
+                        isFavorite: isFavorite,
                         onToggle: _toggleFavorite,
                         accent: accent,
                       ),
