@@ -17,6 +17,7 @@ class GlassCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry? margin;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final bool enableBlur;
   final Color? surfaceColor;
   final Color? borderColor;
@@ -31,6 +32,7 @@ class GlassCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(DesignTokens.spacing16),
     this.margin,
     this.onTap,
+    this.onLongPress,
     this.enableBlur = false,
     this.surfaceColor,
     this.borderColor,
@@ -75,9 +77,10 @@ class GlassCard extends StatelessWidget {
       child: content,
     );
 
-    if (onTap != null) {
+    if (onTap != null || onLongPress != null) {
       content = InkWell(
         onTap: onTap,
+        onLongPress: onLongPress,
         borderRadius: BorderRadius.circular(borderRadius),
         child: content,
       );
@@ -94,7 +97,7 @@ class GlassCard extends StatelessWidget {
     return Semantics(
       container: true,
       label: semanticsLabel ?? 'Interactive glass surface',
-      enabled: onTap != null,
+      enabled: onTap != null || onLongPress != null,
       child: content,
     );
   }

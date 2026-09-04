@@ -38,15 +38,56 @@ const String kFileScannerChannel = 'com.aura/file_scanner';
 /// Platform channel method: scan all audio files.
 const String kScanAllAudioMethod = 'scanAllAudio';
 
+/// Audio container formats the scanner will index (lower-case, no dot).
+/// PRD §6.1: "Support all major formats (MP3, AAC, FLAC, ALAC, DSD, WAV…)".
+const Set<String> kSupportedAudioExtensions = {
+  'mp3',
+  'flac',
+  'm4a',
+  'ogg',
+  'opus',
+  'wma',
+  'aac',
+  'alac',
+  'ape',
+  'dsf',
+  'dff',
+  'wav',
+  'aiff',
+};
+
+/// Maximum recursion depth for the folder-scanning fallback.
+const int kMaxScanDepth = 10;
+
+/// Minimum interval between scan progress callbacks (≥10 updates/sec).
+const Duration kScanProgressThrottle = Duration(milliseconds: 100);
+
+/// Directory (under app support) where extracted album art is cached.
+const String kArtCacheDirName = 'art_cache';
+
 /// Platform channel name for fingerprint (C++ bridge until FFI fully wired).
 const String kFingerprintChannel = 'com.aura/fingerprint';
 
 /// How many seconds of play count as a "complete" listen (for stats).
 const double kListenCompletionRatio = 0.8;
 
-/// Fuzzy duplicate similarity threshold (0.0–1.0).
-/// Tracks scoring above this on Jaro-Winkler are considered duplicates.
-const double kFuzzyDuplicateThreshold = 0.75;
+/// Fuzzy duplicate similarity threshold (0.0–1.0), applied to the combined
+/// title/artist/duration score in [DuplicateDetector].
+const double kFuzzyDuplicateThreshold = 0.85;
+
+/// Title similarity (normalised Levenshtein) required for a fuzzy match.
+const double kFuzzyTitleThreshold = 0.85;
+
+/// Artist similarity (Jaro-Winkler) required for a fuzzy match.
+const double kFuzzyArtistThreshold = 0.90;
+
+/// Duration tolerance for a fuzzy match, in milliseconds.
+const int kFuzzyDurationToleranceMs = 2000;
+
+/// Bit error rate below which two Chromaprint fingerprints are considered the
+/// same recording. Deliberately tolerant: different encodings of one master
+/// score near 0, unrelated recordings near 0.5.
+const double kFingerprintBerThreshold = 0.35;
 
 /// Audio feature vector dimension (tempo, energy, valence, danceability,
 /// loudness, acousticness). Must match DB schema.

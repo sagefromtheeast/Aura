@@ -7,31 +7,32 @@ part of 'track.dart';
 // **************************************************************************
 
 _$TrackImpl _$$TrackImplFromJson(Map<String, dynamic> json) => _$TrackImpl(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      artistName: json['artistName'] as String,
-      albumTitle: json['albumTitle'] as String,
-      artistId: json['artistId'] as String,
-      albumId: json['albumId'] as String,
-      durationMs: (json['durationMs'] as num).toInt(),
-      filePath: json['filePath'] as String,
-      fileSizeBytes: (json['fileSizeBytes'] as num).toInt(),
-      format: $enumDecodeNullable(_$AudioFormatEnumMap, json['format']) ??
-          AudioFormat.unknown,
-      bitRateKbps: (json['bitRateKbps'] as num?)?.toInt() ?? 0,
-      sampleRateHz: (json['sampleRateHz'] as num?)?.toInt() ?? 44100,
-      playCount: (json['playCount'] as num?)?.toInt() ?? 0,
-      skipCount: (json['skipCount'] as num?)?.toInt() ?? 0,
-      rating: (json['rating'] as num?)?.toInt() ?? 0,
-      dateAddedMs: (json['dateAddedMs'] as num).toInt(),
-      lastPlayedMs: (json['lastPlayedMs'] as num?)?.toInt(),
-      isDeleted: json['isDeleted'] as bool? ?? false,
-      coverArtPath: json['coverArtPath'] as String?,
-      trackNumber: (json['trackNumber'] as num?)?.toInt() ?? 0,
-      discNumber: (json['discNumber'] as num?)?.toInt() ?? 1,
-      genre: json['genre'] as String? ?? '',
-      year: (json['year'] as num?)?.toInt() ?? 0,
-    );
+  id: json['id'] as String,
+  title: json['title'] as String,
+  artistName: json['artistName'] as String,
+  albumTitle: json['albumTitle'] as String,
+  artistId: json['artistId'] as String,
+  albumId: json['albumId'] as String,
+  durationMs: (json['durationMs'] as num).toInt(),
+  filePath: json['filePath'] as String,
+  fileSizeBytes: (json['fileSizeBytes'] as num).toInt(),
+  format:
+      $enumDecodeNullable(_$AudioFormatEnumMap, json['format']) ??
+      AudioFormat.unknown,
+  bitRateKbps: (json['bitRateKbps'] as num?)?.toInt() ?? 0,
+  sampleRateHz: (json['sampleRateHz'] as num?)?.toInt() ?? 44100,
+  playCount: (json['playCount'] as num?)?.toInt() ?? 0,
+  skipCount: (json['skipCount'] as num?)?.toInt() ?? 0,
+  rating: (json['rating'] as num?)?.toInt() ?? 0,
+  dateAddedMs: (json['dateAddedMs'] as num).toInt(),
+  lastPlayedMs: (json['lastPlayedMs'] as num?)?.toInt(),
+  isDeleted: json['isDeleted'] as bool? ?? false,
+  coverArtPath: json['coverArtPath'] as String?,
+  trackNumber: (json['trackNumber'] as num?)?.toInt() ?? 0,
+  discNumber: (json['discNumber'] as num?)?.toInt() ?? 1,
+  genre: json['genre'] as String? ?? '',
+  year: (json['year'] as num?)?.toInt() ?? 0,
+);
 
 Map<String, dynamic> _$$TrackImplToJson(_$TrackImpl instance) =>
     <String, dynamic>{

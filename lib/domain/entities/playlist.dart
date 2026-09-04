@@ -52,6 +52,9 @@ class Playlist with _$Playlist {
     /// Optional cover art path (overrides default album-art mosaic in UI).
     String? coverArtPath,
 
+    /// Up to 4 album-art paths composited by the UI into a 2x2 mix cover.
+    @Default([]) List<String> coverArtPaths,
+
     /// Whether this playlist is pinned to the top of the library.
     @Default(false) bool isPinned,
   }) = _Playlist;

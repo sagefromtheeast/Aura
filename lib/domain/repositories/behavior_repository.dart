@@ -9,6 +9,7 @@ class PlayEvent {
     required this.playedAtMs,
     required this.durationPlayedMs,
     required this.skipped,
+    this.completed = false,
     this.contextType = 'library',
   });
 
@@ -22,6 +23,13 @@ class PlayEvent {
 
   /// True if the user skipped before 80% completion.
   final bool skipped;
+
+  /// True if the track played past the completion ratio.
+  ///
+  /// Not the inverse of [skipped]: a play that simply stopped partway — the
+  /// app closed, the queue ended — is neither skipped nor completed. Listening
+  /// totals count only completed plays, so the statistics engine needs both.
+  final bool completed;
 
   /// Origin context: 'library', 'playlist', 'shuffle', 'mix'.
   final String contextType;
@@ -67,6 +75,22 @@ abstract interface class BehaviorRepository {
     String trackId, {
     int limit = 100,
   });
+
+  /// Returns every event in `[startMs, endMs)`, oldest first.
+  ///
+  /// The statistics engine scans a period once and groups in memory, rather
+  /// than issuing a separate query per breakdown.
+  Future<List<PlayEvent>> getEventsInRange(int startMs, int endMs);
+
+  /// Epoch ms of each track's first ever play, keyed by track id. Backs the
+  /// "new discoveries" count.
+  Future<Map<String, int>> getFirstPlayMsPerTrack();
+
+  /// Epoch ms of the earliest recorded event, or null when history is empty.
+  Future<int?> getFirstEventMs();
+
+  /// Distinct track ids ordered by their most recent play, newest first.
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit});
 
   /// Returns the top N most-played track IDs over the last [days] days.
   Future<List<String>> getTopPlayedTrackIds({

@@ -4,7 +4,11 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  # Dart 3.8 / Flutter 3.32 is the real floor: workmanager (daily-mix
+  # regeneration) refuses to resolve below it, so the older 3.27 figure the
+  # README quoted could never have produced a working `pub get`.
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   flutter:
@@ -21,9 +25,12 @@ dependencies:
   # ── Immutable Data Classes ────────────────────────────────────
   freezed_annotation: ^2.4.4
 
+  # ── Settings & Storage ────────────────────────────────────────
+  shared_preferences: ^2.3.3  # Scalar settings, readable before the DB opens
+
   # ── File System & Permissions ─────────────────────────────────
   path_provider: ^2.1.5
-  path: ^1.9.1
+  path: ^1.9.0
   permission_handler: ^11.3.1
 
   # ── Native / FFI ─────────────────────────────────────────────
@@ -33,6 +40,7 @@ dependencies:
   # ── Audio (fallback + session management) ─────────────────────
   just_audio: ^0.10.4
   audio_session: ^0.1.21
+  audio_service: ^0.18.15  # Media session: lock screen, Bluetooth, Android Auto
 
   # ── UI / Theming ──────────────────────────────────────────────
   palette_generator: ^0.3.3+3
@@ -41,21 +49,41 @@ dependencies:
   # ── Notifications & Widgets ───────────────────────────────────
   flutter_local_notifications: ^18.0.1
   home_widget: ^0.7.0
+  timezone: ^0.10.0         # zonedSchedule needs a real tz database
+  flutter_timezone: ^5.0.0  # ...and the device's actual zone name
 
   # ── Background Tasks ─────────────────────────────────────────
   workmanager: ^0.9.2
 
   # ── Utilities ─────────────────────────────────────────────────
-  collection: ^1.19.1        # binarySearch, etc.
+  collection: ^1.19.0        # binarySearch, etc.
   uuid: ^4.5.1
-  string_similarity: ^2.0.0  # Jaro-Winkler / Levenshtein for fuzzy dedup
+  string_similarity: ^2.0.0  # Dice coefficient, used by the search ranker
+  crypto: ^3.0.6             # SHA-256 composite keys for exact dedup
   equatable: ^2.0.7
   json_annotation: ^4.9.0    # @JsonSerializable for entity JSON codegen
   go_router: ^17.2.3
 
+  # ── Library Scanning ─────────────────────────────────────────
+  flutter_media_metadata: ^1.0.0   # Embedded ID3/Vorbis/MP4 tags + album art
+
+  # ── Stats & Wrapped (charts, share, capture) ─────────────────
+  fl_chart: ^0.69.2          # Hero daily-listening line chart / sparkline
+  screenshot: ^3.0.0         # Capture Wrapped story cards as PNG
+  share_plus: ^10.1.4        # Local OS share sheet (no network)
+
+# ── Overrides ──────────────────────────────────────────────────
+# workmanager pins workmanager_apple 0.9.4, whose registerOneOffTask /
+# registerPeriodicTask signatures do not match the 0.9.4 platform interface it
+# resolves against — an upstream packaging break that fails compilation before
+# any test runs. 0.9.6 is the first release whose signatures line up again.
+dependency_overrides:
+  workmanager_apple: ^0.9.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  fake_async: ^1.3.1         # Drives the widget-update scheduler's timers
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.1
 

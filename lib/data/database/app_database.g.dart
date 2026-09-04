@@ -12,197 +12,296 @@ class $TracksTableTable extends TracksTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _artistNameMeta =
-      const VerificationMeta('artistName');
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _artistNameMeta = const VerificationMeta(
+    'artistName',
+  );
   @override
   late final GeneratedColumn<String> artistName = GeneratedColumn<String>(
-      'artist_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _albumTitleMeta =
-      const VerificationMeta('albumTitle');
+    'artist_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _albumTitleMeta = const VerificationMeta(
+    'albumTitle',
+  );
   @override
   late final GeneratedColumn<String> albumTitle = GeneratedColumn<String>(
-      'album_title', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _artistIdMeta =
-      const VerificationMeta('artistId');
+    'album_title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _artistIdMeta = const VerificationMeta(
+    'artistId',
+  );
   @override
   late final GeneratedColumn<String> artistId = GeneratedColumn<String>(
-      'artist_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _albumIdMeta =
-      const VerificationMeta('albumId');
+    'artist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _albumIdMeta = const VerificationMeta(
+    'albumId',
+  );
   @override
   late final GeneratedColumn<String> albumId = GeneratedColumn<String>(
-      'album_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _durationMsMeta =
-      const VerificationMeta('durationMs');
+    'album_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationMsMeta = const VerificationMeta(
+    'durationMs',
+  );
   @override
   late final GeneratedColumn<int> durationMs = GeneratedColumn<int>(
-      'duration_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _filePathMeta =
-      const VerificationMeta('filePath');
+    'duration_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _filePathMeta = const VerificationMeta(
+    'filePath',
+  );
   @override
   late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
-      'file_path', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  static const VerificationMeta _fileSizeBytesMeta =
-      const VerificationMeta('fileSizeBytes');
+    'file_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _fileSizeBytesMeta = const VerificationMeta(
+    'fileSizeBytes',
+  );
   @override
   late final GeneratedColumn<int> fileSizeBytes = GeneratedColumn<int>(
-      'file_size_bytes', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
+    'file_size_bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _formatMeta = const VerificationMeta('format');
   @override
   late final GeneratedColumn<String> format = GeneratedColumn<String>(
-      'format', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('unknown'));
-  static const VerificationMeta _bitRateKbpsMeta =
-      const VerificationMeta('bitRateKbps');
+    'format',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('unknown'),
+  );
+  static const VerificationMeta _bitRateKbpsMeta = const VerificationMeta(
+    'bitRateKbps',
+  );
   @override
   late final GeneratedColumn<int> bitRateKbps = GeneratedColumn<int>(
-      'bit_rate_kbps', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _sampleRateHzMeta =
-      const VerificationMeta('sampleRateHz');
+    'bit_rate_kbps',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _sampleRateHzMeta = const VerificationMeta(
+    'sampleRateHz',
+  );
   @override
   late final GeneratedColumn<int> sampleRateHz = GeneratedColumn<int>(
-      'sample_rate_hz', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(44100));
-  static const VerificationMeta _playCountMeta =
-      const VerificationMeta('playCount');
+    'sample_rate_hz',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(44100),
+  );
+  static const VerificationMeta _playCountMeta = const VerificationMeta(
+    'playCount',
+  );
   @override
   late final GeneratedColumn<int> playCount = GeneratedColumn<int>(
-      'play_count', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _skipCountMeta =
-      const VerificationMeta('skipCount');
+    'play_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _skipCountMeta = const VerificationMeta(
+    'skipCount',
+  );
   @override
   late final GeneratedColumn<int> skipCount = GeneratedColumn<int>(
-      'skip_count', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
+    'skip_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
   @override
   late final GeneratedColumn<int> rating = GeneratedColumn<int>(
-      'rating', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _dateAddedMsMeta =
-      const VerificationMeta('dateAddedMs');
+    'rating',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _dateAddedMsMeta = const VerificationMeta(
+    'dateAddedMs',
+  );
   @override
   late final GeneratedColumn<int> dateAddedMs = GeneratedColumn<int>(
-      'date_added_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _lastPlayedMsMeta =
-      const VerificationMeta('lastPlayedMs');
+    'date_added_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastPlayedMsMeta = const VerificationMeta(
+    'lastPlayedMs',
+  );
   @override
   late final GeneratedColumn<int> lastPlayedMs = GeneratedColumn<int>(
-      'last_played_ms', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _isDeletedMeta =
-      const VerificationMeta('isDeleted');
+    'last_played_ms',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
   @override
   late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
-      'is_deleted', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _coverArtPathMeta =
-      const VerificationMeta('coverArtPath');
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _coverArtPathMeta = const VerificationMeta(
+    'coverArtPath',
+  );
   @override
   late final GeneratedColumn<String> coverArtPath = GeneratedColumn<String>(
-      'cover_art_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _trackNumberMeta =
-      const VerificationMeta('trackNumber');
+    'cover_art_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _trackNumberMeta = const VerificationMeta(
+    'trackNumber',
+  );
   @override
   late final GeneratedColumn<int> trackNumber = GeneratedColumn<int>(
-      'track_number', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _discNumberMeta =
-      const VerificationMeta('discNumber');
+    'track_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _discNumberMeta = const VerificationMeta(
+    'discNumber',
+  );
   @override
   late final GeneratedColumn<int> discNumber = GeneratedColumn<int>(
-      'disc_number', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(1));
+    'disc_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
   static const VerificationMeta _genreMeta = const VerificationMeta('genre');
   @override
   late final GeneratedColumn<String> genre = GeneratedColumn<String>(
-      'genre', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(''));
+    'genre',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _yearMeta = const VerificationMeta('year');
   @override
   late final GeneratedColumn<int> year = GeneratedColumn<int>(
-      'year', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
+    'year',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        title,
-        artistName,
-        albumTitle,
-        artistId,
-        albumId,
-        durationMs,
-        filePath,
-        fileSizeBytes,
-        format,
-        bitRateKbps,
-        sampleRateHz,
-        playCount,
-        skipCount,
-        rating,
-        dateAddedMs,
-        lastPlayedMs,
-        isDeleted,
-        coverArtPath,
-        trackNumber,
-        discNumber,
-        genre,
-        year
-      ];
+    id,
+    title,
+    artistName,
+    albumTitle,
+    artistId,
+    albumId,
+    durationMs,
+    filePath,
+    fileSizeBytes,
+    format,
+    bitRateKbps,
+    sampleRateHz,
+    playCount,
+    skipCount,
+    rating,
+    dateAddedMs,
+    lastPlayedMs,
+    isDeleted,
+    coverArtPath,
+    trackNumber,
+    discNumber,
+    genre,
+    year,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'tracks';
   @override
-  VerificationContext validateIntegrity(Insertable<TrackRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<TrackRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -212,129 +311,172 @@ class $TracksTableTable extends TracksTable
     }
     if (data.containsKey('title')) {
       context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
     if (data.containsKey('artist_name')) {
       context.handle(
-          _artistNameMeta,
-          artistName.isAcceptableOrUnknown(
-              data['artist_name']!, _artistNameMeta));
+        _artistNameMeta,
+        artistName.isAcceptableOrUnknown(data['artist_name']!, _artistNameMeta),
+      );
     } else if (isInserting) {
       context.missing(_artistNameMeta);
     }
     if (data.containsKey('album_title')) {
       context.handle(
-          _albumTitleMeta,
-          albumTitle.isAcceptableOrUnknown(
-              data['album_title']!, _albumTitleMeta));
+        _albumTitleMeta,
+        albumTitle.isAcceptableOrUnknown(data['album_title']!, _albumTitleMeta),
+      );
     } else if (isInserting) {
       context.missing(_albumTitleMeta);
     }
     if (data.containsKey('artist_id')) {
-      context.handle(_artistIdMeta,
-          artistId.isAcceptableOrUnknown(data['artist_id']!, _artistIdMeta));
+      context.handle(
+        _artistIdMeta,
+        artistId.isAcceptableOrUnknown(data['artist_id']!, _artistIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_artistIdMeta);
     }
     if (data.containsKey('album_id')) {
-      context.handle(_albumIdMeta,
-          albumId.isAcceptableOrUnknown(data['album_id']!, _albumIdMeta));
+      context.handle(
+        _albumIdMeta,
+        albumId.isAcceptableOrUnknown(data['album_id']!, _albumIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_albumIdMeta);
     }
     if (data.containsKey('duration_ms')) {
       context.handle(
-          _durationMsMeta,
-          durationMs.isAcceptableOrUnknown(
-              data['duration_ms']!, _durationMsMeta));
+        _durationMsMeta,
+        durationMs.isAcceptableOrUnknown(data['duration_ms']!, _durationMsMeta),
+      );
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
     if (data.containsKey('file_path')) {
-      context.handle(_filePathMeta,
-          filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta));
+      context.handle(
+        _filePathMeta,
+        filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta),
+      );
     } else if (isInserting) {
       context.missing(_filePathMeta);
     }
     if (data.containsKey('file_size_bytes')) {
       context.handle(
+        _fileSizeBytesMeta,
+        fileSizeBytes.isAcceptableOrUnknown(
+          data['file_size_bytes']!,
           _fileSizeBytesMeta,
-          fileSizeBytes.isAcceptableOrUnknown(
-              data['file_size_bytes']!, _fileSizeBytesMeta));
+        ),
+      );
     }
     if (data.containsKey('format')) {
-      context.handle(_formatMeta,
-          format.isAcceptableOrUnknown(data['format']!, _formatMeta));
+      context.handle(
+        _formatMeta,
+        format.isAcceptableOrUnknown(data['format']!, _formatMeta),
+      );
     }
     if (data.containsKey('bit_rate_kbps')) {
       context.handle(
+        _bitRateKbpsMeta,
+        bitRateKbps.isAcceptableOrUnknown(
+          data['bit_rate_kbps']!,
           _bitRateKbpsMeta,
-          bitRateKbps.isAcceptableOrUnknown(
-              data['bit_rate_kbps']!, _bitRateKbpsMeta));
+        ),
+      );
     }
     if (data.containsKey('sample_rate_hz')) {
       context.handle(
+        _sampleRateHzMeta,
+        sampleRateHz.isAcceptableOrUnknown(
+          data['sample_rate_hz']!,
           _sampleRateHzMeta,
-          sampleRateHz.isAcceptableOrUnknown(
-              data['sample_rate_hz']!, _sampleRateHzMeta));
+        ),
+      );
     }
     if (data.containsKey('play_count')) {
-      context.handle(_playCountMeta,
-          playCount.isAcceptableOrUnknown(data['play_count']!, _playCountMeta));
+      context.handle(
+        _playCountMeta,
+        playCount.isAcceptableOrUnknown(data['play_count']!, _playCountMeta),
+      );
     }
     if (data.containsKey('skip_count')) {
-      context.handle(_skipCountMeta,
-          skipCount.isAcceptableOrUnknown(data['skip_count']!, _skipCountMeta));
+      context.handle(
+        _skipCountMeta,
+        skipCount.isAcceptableOrUnknown(data['skip_count']!, _skipCountMeta),
+      );
     }
     if (data.containsKey('rating')) {
-      context.handle(_ratingMeta,
-          rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta));
+      context.handle(
+        _ratingMeta,
+        rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
+      );
     }
     if (data.containsKey('date_added_ms')) {
       context.handle(
+        _dateAddedMsMeta,
+        dateAddedMs.isAcceptableOrUnknown(
+          data['date_added_ms']!,
           _dateAddedMsMeta,
-          dateAddedMs.isAcceptableOrUnknown(
-              data['date_added_ms']!, _dateAddedMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_dateAddedMsMeta);
     }
     if (data.containsKey('last_played_ms')) {
       context.handle(
+        _lastPlayedMsMeta,
+        lastPlayedMs.isAcceptableOrUnknown(
+          data['last_played_ms']!,
           _lastPlayedMsMeta,
-          lastPlayedMs.isAcceptableOrUnknown(
-              data['last_played_ms']!, _lastPlayedMsMeta));
+        ),
+      );
     }
     if (data.containsKey('is_deleted')) {
-      context.handle(_isDeletedMeta,
-          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
     }
     if (data.containsKey('cover_art_path')) {
       context.handle(
+        _coverArtPathMeta,
+        coverArtPath.isAcceptableOrUnknown(
+          data['cover_art_path']!,
           _coverArtPathMeta,
-          coverArtPath.isAcceptableOrUnknown(
-              data['cover_art_path']!, _coverArtPathMeta));
+        ),
+      );
     }
     if (data.containsKey('track_number')) {
       context.handle(
+        _trackNumberMeta,
+        trackNumber.isAcceptableOrUnknown(
+          data['track_number']!,
           _trackNumberMeta,
-          trackNumber.isAcceptableOrUnknown(
-              data['track_number']!, _trackNumberMeta));
+        ),
+      );
     }
     if (data.containsKey('disc_number')) {
       context.handle(
-          _discNumberMeta,
-          discNumber.isAcceptableOrUnknown(
-              data['disc_number']!, _discNumberMeta));
+        _discNumberMeta,
+        discNumber.isAcceptableOrUnknown(data['disc_number']!, _discNumberMeta),
+      );
     }
     if (data.containsKey('genre')) {
       context.handle(
-          _genreMeta, genre.isAcceptableOrUnknown(data['genre']!, _genreMeta));
+        _genreMeta,
+        genre.isAcceptableOrUnknown(data['genre']!, _genreMeta),
+      );
     }
     if (data.containsKey('year')) {
       context.handle(
-          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+        _yearMeta,
+        year.isAcceptableOrUnknown(data['year']!, _yearMeta),
+      );
     }
     return context;
   }
@@ -345,52 +487,98 @@ class $TracksTableTable extends TracksTable
   TrackRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TrackRow(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      artistName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}artist_name'])!,
-      albumTitle: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}album_title'])!,
-      artistId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}artist_id'])!,
-      albumId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}album_id'])!,
-      durationMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}duration_ms'])!,
-      filePath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}file_path'])!,
-      fileSizeBytes: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file_size_bytes'])!,
-      format: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}format'])!,
-      bitRateKbps: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}bit_rate_kbps'])!,
-      sampleRateHz: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sample_rate_hz'])!,
-      playCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}play_count'])!,
-      skipCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}skip_count'])!,
-      rating: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rating'])!,
-      dateAddedMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}date_added_ms'])!,
-      lastPlayedMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}last_played_ms']),
-      isDeleted: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
-      coverArtPath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cover_art_path']),
-      trackNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}track_number'])!,
-      discNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}disc_number'])!,
-      genre: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}genre'])!,
-      year: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}year'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      artistName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}artist_name'],
+      )!,
+      albumTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}album_title'],
+      )!,
+      artistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}artist_id'],
+      )!,
+      albumId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}album_id'],
+      )!,
+      durationMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_ms'],
+      )!,
+      filePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_path'],
+      )!,
+      fileSizeBytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file_size_bytes'],
+      )!,
+      format: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}format'],
+      )!,
+      bitRateKbps: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}bit_rate_kbps'],
+      )!,
+      sampleRateHz: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sample_rate_hz'],
+      )!,
+      playCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}play_count'],
+      )!,
+      skipCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}skip_count'],
+      )!,
+      rating: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rating'],
+      )!,
+      dateAddedMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}date_added_ms'],
+      )!,
+      lastPlayedMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}last_played_ms'],
+      ),
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      coverArtPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_art_path'],
+      ),
+      trackNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}track_number'],
+      )!,
+      discNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}disc_number'],
+      )!,
+      genre: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}genre'],
+      )!,
+      year: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}year'],
+      )!,
     );
   }
 
@@ -425,30 +613,31 @@ class TrackRow extends DataClass implements Insertable<TrackRow> {
   final int discNumber;
   final String genre;
   final int year;
-  const TrackRow(
-      {required this.id,
-      required this.title,
-      required this.artistName,
-      required this.albumTitle,
-      required this.artistId,
-      required this.albumId,
-      required this.durationMs,
-      required this.filePath,
-      required this.fileSizeBytes,
-      required this.format,
-      required this.bitRateKbps,
-      required this.sampleRateHz,
-      required this.playCount,
-      required this.skipCount,
-      required this.rating,
-      required this.dateAddedMs,
-      this.lastPlayedMs,
-      required this.isDeleted,
-      this.coverArtPath,
-      required this.trackNumber,
-      required this.discNumber,
-      required this.genre,
-      required this.year});
+  const TrackRow({
+    required this.id,
+    required this.title,
+    required this.artistName,
+    required this.albumTitle,
+    required this.artistId,
+    required this.albumId,
+    required this.durationMs,
+    required this.filePath,
+    required this.fileSizeBytes,
+    required this.format,
+    required this.bitRateKbps,
+    required this.sampleRateHz,
+    required this.playCount,
+    required this.skipCount,
+    required this.rating,
+    required this.dateAddedMs,
+    this.lastPlayedMs,
+    required this.isDeleted,
+    this.coverArtPath,
+    required this.trackNumber,
+    required this.discNumber,
+    required this.genre,
+    required this.year,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -514,8 +703,10 @@ class TrackRow extends DataClass implements Insertable<TrackRow> {
     );
   }
 
-  factory TrackRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory TrackRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TrackRow(
       id: serializer.fromJson<String>(json['id']),
@@ -573,84 +764,87 @@ class TrackRow extends DataClass implements Insertable<TrackRow> {
     };
   }
 
-  TrackRow copyWith(
-          {String? id,
-          String? title,
-          String? artistName,
-          String? albumTitle,
-          String? artistId,
-          String? albumId,
-          int? durationMs,
-          String? filePath,
-          int? fileSizeBytes,
-          String? format,
-          int? bitRateKbps,
-          int? sampleRateHz,
-          int? playCount,
-          int? skipCount,
-          int? rating,
-          int? dateAddedMs,
-          Value<int?> lastPlayedMs = const Value.absent(),
-          bool? isDeleted,
-          Value<String?> coverArtPath = const Value.absent(),
-          int? trackNumber,
-          int? discNumber,
-          String? genre,
-          int? year}) =>
-      TrackRow(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        artistName: artistName ?? this.artistName,
-        albumTitle: albumTitle ?? this.albumTitle,
-        artistId: artistId ?? this.artistId,
-        albumId: albumId ?? this.albumId,
-        durationMs: durationMs ?? this.durationMs,
-        filePath: filePath ?? this.filePath,
-        fileSizeBytes: fileSizeBytes ?? this.fileSizeBytes,
-        format: format ?? this.format,
-        bitRateKbps: bitRateKbps ?? this.bitRateKbps,
-        sampleRateHz: sampleRateHz ?? this.sampleRateHz,
-        playCount: playCount ?? this.playCount,
-        skipCount: skipCount ?? this.skipCount,
-        rating: rating ?? this.rating,
-        dateAddedMs: dateAddedMs ?? this.dateAddedMs,
-        lastPlayedMs:
-            lastPlayedMs.present ? lastPlayedMs.value : this.lastPlayedMs,
-        isDeleted: isDeleted ?? this.isDeleted,
-        coverArtPath:
-            coverArtPath.present ? coverArtPath.value : this.coverArtPath,
-        trackNumber: trackNumber ?? this.trackNumber,
-        discNumber: discNumber ?? this.discNumber,
-        genre: genre ?? this.genre,
-        year: year ?? this.year,
-      );
+  TrackRow copyWith({
+    String? id,
+    String? title,
+    String? artistName,
+    String? albumTitle,
+    String? artistId,
+    String? albumId,
+    int? durationMs,
+    String? filePath,
+    int? fileSizeBytes,
+    String? format,
+    int? bitRateKbps,
+    int? sampleRateHz,
+    int? playCount,
+    int? skipCount,
+    int? rating,
+    int? dateAddedMs,
+    Value<int?> lastPlayedMs = const Value.absent(),
+    bool? isDeleted,
+    Value<String?> coverArtPath = const Value.absent(),
+    int? trackNumber,
+    int? discNumber,
+    String? genre,
+    int? year,
+  }) => TrackRow(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    artistName: artistName ?? this.artistName,
+    albumTitle: albumTitle ?? this.albumTitle,
+    artistId: artistId ?? this.artistId,
+    albumId: albumId ?? this.albumId,
+    durationMs: durationMs ?? this.durationMs,
+    filePath: filePath ?? this.filePath,
+    fileSizeBytes: fileSizeBytes ?? this.fileSizeBytes,
+    format: format ?? this.format,
+    bitRateKbps: bitRateKbps ?? this.bitRateKbps,
+    sampleRateHz: sampleRateHz ?? this.sampleRateHz,
+    playCount: playCount ?? this.playCount,
+    skipCount: skipCount ?? this.skipCount,
+    rating: rating ?? this.rating,
+    dateAddedMs: dateAddedMs ?? this.dateAddedMs,
+    lastPlayedMs: lastPlayedMs.present ? lastPlayedMs.value : this.lastPlayedMs,
+    isDeleted: isDeleted ?? this.isDeleted,
+    coverArtPath: coverArtPath.present ? coverArtPath.value : this.coverArtPath,
+    trackNumber: trackNumber ?? this.trackNumber,
+    discNumber: discNumber ?? this.discNumber,
+    genre: genre ?? this.genre,
+    year: year ?? this.year,
+  );
   TrackRow copyWithCompanion(TracksTableCompanion data) {
     return TrackRow(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
-      artistName:
-          data.artistName.present ? data.artistName.value : this.artistName,
-      albumTitle:
-          data.albumTitle.present ? data.albumTitle.value : this.albumTitle,
+      artistName: data.artistName.present
+          ? data.artistName.value
+          : this.artistName,
+      albumTitle: data.albumTitle.present
+          ? data.albumTitle.value
+          : this.albumTitle,
       artistId: data.artistId.present ? data.artistId.value : this.artistId,
       albumId: data.albumId.present ? data.albumId.value : this.albumId,
-      durationMs:
-          data.durationMs.present ? data.durationMs.value : this.durationMs,
+      durationMs: data.durationMs.present
+          ? data.durationMs.value
+          : this.durationMs,
       filePath: data.filePath.present ? data.filePath.value : this.filePath,
       fileSizeBytes: data.fileSizeBytes.present
           ? data.fileSizeBytes.value
           : this.fileSizeBytes,
       format: data.format.present ? data.format.value : this.format,
-      bitRateKbps:
-          data.bitRateKbps.present ? data.bitRateKbps.value : this.bitRateKbps,
+      bitRateKbps: data.bitRateKbps.present
+          ? data.bitRateKbps.value
+          : this.bitRateKbps,
       sampleRateHz: data.sampleRateHz.present
           ? data.sampleRateHz.value
           : this.sampleRateHz,
       playCount: data.playCount.present ? data.playCount.value : this.playCount,
       skipCount: data.skipCount.present ? data.skipCount.value : this.skipCount,
       rating: data.rating.present ? data.rating.value : this.rating,
-      dateAddedMs:
-          data.dateAddedMs.present ? data.dateAddedMs.value : this.dateAddedMs,
+      dateAddedMs: data.dateAddedMs.present
+          ? data.dateAddedMs.value
+          : this.dateAddedMs,
       lastPlayedMs: data.lastPlayedMs.present
           ? data.lastPlayedMs.value
           : this.lastPlayedMs,
@@ -658,10 +852,12 @@ class TrackRow extends DataClass implements Insertable<TrackRow> {
       coverArtPath: data.coverArtPath.present
           ? data.coverArtPath.value
           : this.coverArtPath,
-      trackNumber:
-          data.trackNumber.present ? data.trackNumber.value : this.trackNumber,
-      discNumber:
-          data.discNumber.present ? data.discNumber.value : this.discNumber,
+      trackNumber: data.trackNumber.present
+          ? data.trackNumber.value
+          : this.trackNumber,
+      discNumber: data.discNumber.present
+          ? data.discNumber.value
+          : this.discNumber,
       genre: data.genre.present ? data.genre.value : this.genre,
       year: data.year.present ? data.year.value : this.year,
     );
@@ -699,30 +895,30 @@ class TrackRow extends DataClass implements Insertable<TrackRow> {
 
   @override
   int get hashCode => Object.hashAll([
-        id,
-        title,
-        artistName,
-        albumTitle,
-        artistId,
-        albumId,
-        durationMs,
-        filePath,
-        fileSizeBytes,
-        format,
-        bitRateKbps,
-        sampleRateHz,
-        playCount,
-        skipCount,
-        rating,
-        dateAddedMs,
-        lastPlayedMs,
-        isDeleted,
-        coverArtPath,
-        trackNumber,
-        discNumber,
-        genre,
-        year
-      ]);
+    id,
+    title,
+    artistName,
+    albumTitle,
+    artistId,
+    albumId,
+    durationMs,
+    filePath,
+    fileSizeBytes,
+    format,
+    bitRateKbps,
+    sampleRateHz,
+    playCount,
+    skipCount,
+    rating,
+    dateAddedMs,
+    lastPlayedMs,
+    isDeleted,
+    coverArtPath,
+    trackNumber,
+    discNumber,
+    genre,
+    year,
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -828,15 +1024,15 @@ class TracksTableCompanion extends UpdateCompanion<TrackRow> {
     this.genre = const Value.absent(),
     this.year = const Value.absent(),
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        title = Value(title),
-        artistName = Value(artistName),
-        albumTitle = Value(albumTitle),
-        artistId = Value(artistId),
-        albumId = Value(albumId),
-        durationMs = Value(durationMs),
-        filePath = Value(filePath),
-        dateAddedMs = Value(dateAddedMs);
+  }) : id = Value(id),
+       title = Value(title),
+       artistName = Value(artistName),
+       albumTitle = Value(albumTitle),
+       artistId = Value(artistId),
+       albumId = Value(albumId),
+       durationMs = Value(durationMs),
+       filePath = Value(filePath),
+       dateAddedMs = Value(dateAddedMs);
   static Insertable<TrackRow> custom({
     Expression<String>? id,
     Expression<String>? title,
@@ -891,31 +1087,32 @@ class TracksTableCompanion extends UpdateCompanion<TrackRow> {
     });
   }
 
-  TracksTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? title,
-      Value<String>? artistName,
-      Value<String>? albumTitle,
-      Value<String>? artistId,
-      Value<String>? albumId,
-      Value<int>? durationMs,
-      Value<String>? filePath,
-      Value<int>? fileSizeBytes,
-      Value<String>? format,
-      Value<int>? bitRateKbps,
-      Value<int>? sampleRateHz,
-      Value<int>? playCount,
-      Value<int>? skipCount,
-      Value<int>? rating,
-      Value<int>? dateAddedMs,
-      Value<int?>? lastPlayedMs,
-      Value<bool>? isDeleted,
-      Value<String?>? coverArtPath,
-      Value<int>? trackNumber,
-      Value<int>? discNumber,
-      Value<String>? genre,
-      Value<int>? year,
-      Value<int>? rowid}) {
+  TracksTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? title,
+    Value<String>? artistName,
+    Value<String>? albumTitle,
+    Value<String>? artistId,
+    Value<String>? albumId,
+    Value<int>? durationMs,
+    Value<String>? filePath,
+    Value<int>? fileSizeBytes,
+    Value<String>? format,
+    Value<int>? bitRateKbps,
+    Value<int>? sampleRateHz,
+    Value<int>? playCount,
+    Value<int>? skipCount,
+    Value<int>? rating,
+    Value<int>? dateAddedMs,
+    Value<int?>? lastPlayedMs,
+    Value<bool>? isDeleted,
+    Value<String?>? coverArtPath,
+    Value<int>? trackNumber,
+    Value<int>? discNumber,
+    Value<String>? genre,
+    Value<int>? year,
+    Value<int>? rowid,
+  }) {
     return TracksTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -1063,88 +1260,132 @@ class $AlbumsTableTable extends AlbumsTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _artistIdMeta =
-      const VerificationMeta('artistId');
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _artistIdMeta = const VerificationMeta(
+    'artistId',
+  );
   @override
   late final GeneratedColumn<String> artistId = GeneratedColumn<String>(
-      'artist_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _artistNameMeta =
-      const VerificationMeta('artistName');
+    'artist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _artistNameMeta = const VerificationMeta(
+    'artistName',
+  );
   @override
   late final GeneratedColumn<String> artistName = GeneratedColumn<String>(
-      'artist_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'artist_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _yearMeta = const VerificationMeta('year');
   @override
   late final GeneratedColumn<int> year = GeneratedColumn<int>(
-      'year', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _coverArtPathMeta =
-      const VerificationMeta('coverArtPath');
+    'year',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _coverArtPathMeta = const VerificationMeta(
+    'coverArtPath',
+  );
   @override
   late final GeneratedColumn<String> coverArtPath = GeneratedColumn<String>(
-      'cover_art_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _trackCountMeta =
-      const VerificationMeta('trackCount');
+    'cover_art_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _trackCountMeta = const VerificationMeta(
+    'trackCount',
+  );
   @override
   late final GeneratedColumn<int> trackCount = GeneratedColumn<int>(
-      'track_count', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _totalDurationMsMeta =
-      const VerificationMeta('totalDurationMs');
+    'track_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _totalDurationMsMeta = const VerificationMeta(
+    'totalDurationMs',
+  );
   @override
   late final GeneratedColumn<int> totalDurationMs = GeneratedColumn<int>(
-      'total_duration_ms', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
+    'total_duration_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _genreMeta = const VerificationMeta('genre');
   @override
   late final GeneratedColumn<String> genre = GeneratedColumn<String>(
-      'genre', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(''));
-  static const VerificationMeta _dateAddedMsMeta =
-      const VerificationMeta('dateAddedMs');
+    'genre',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _dateAddedMsMeta = const VerificationMeta(
+    'dateAddedMs',
+  );
   @override
   late final GeneratedColumn<int> dateAddedMs = GeneratedColumn<int>(
-      'date_added_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'date_added_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        title,
-        artistId,
-        artistName,
-        year,
-        coverArtPath,
-        trackCount,
-        totalDurationMs,
-        genre,
-        dateAddedMs
-      ];
+    id,
+    title,
+    artistId,
+    artistName,
+    year,
+    coverArtPath,
+    trackCount,
+    totalDurationMs,
+    genre,
+    dateAddedMs,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'albums';
   @override
-  VerificationContext validateIntegrity(Insertable<AlbumRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<AlbumRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1154,55 +1395,72 @@ class $AlbumsTableTable extends AlbumsTable
     }
     if (data.containsKey('title')) {
       context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
     if (data.containsKey('artist_id')) {
-      context.handle(_artistIdMeta,
-          artistId.isAcceptableOrUnknown(data['artist_id']!, _artistIdMeta));
+      context.handle(
+        _artistIdMeta,
+        artistId.isAcceptableOrUnknown(data['artist_id']!, _artistIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_artistIdMeta);
     }
     if (data.containsKey('artist_name')) {
       context.handle(
-          _artistNameMeta,
-          artistName.isAcceptableOrUnknown(
-              data['artist_name']!, _artistNameMeta));
+        _artistNameMeta,
+        artistName.isAcceptableOrUnknown(data['artist_name']!, _artistNameMeta),
+      );
     } else if (isInserting) {
       context.missing(_artistNameMeta);
     }
     if (data.containsKey('year')) {
       context.handle(
-          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+        _yearMeta,
+        year.isAcceptableOrUnknown(data['year']!, _yearMeta),
+      );
     }
     if (data.containsKey('cover_art_path')) {
       context.handle(
+        _coverArtPathMeta,
+        coverArtPath.isAcceptableOrUnknown(
+          data['cover_art_path']!,
           _coverArtPathMeta,
-          coverArtPath.isAcceptableOrUnknown(
-              data['cover_art_path']!, _coverArtPathMeta));
+        ),
+      );
     }
     if (data.containsKey('track_count')) {
       context.handle(
-          _trackCountMeta,
-          trackCount.isAcceptableOrUnknown(
-              data['track_count']!, _trackCountMeta));
+        _trackCountMeta,
+        trackCount.isAcceptableOrUnknown(data['track_count']!, _trackCountMeta),
+      );
     }
     if (data.containsKey('total_duration_ms')) {
       context.handle(
+        _totalDurationMsMeta,
+        totalDurationMs.isAcceptableOrUnknown(
+          data['total_duration_ms']!,
           _totalDurationMsMeta,
-          totalDurationMs.isAcceptableOrUnknown(
-              data['total_duration_ms']!, _totalDurationMsMeta));
+        ),
+      );
     }
     if (data.containsKey('genre')) {
       context.handle(
-          _genreMeta, genre.isAcceptableOrUnknown(data['genre']!, _genreMeta));
+        _genreMeta,
+        genre.isAcceptableOrUnknown(data['genre']!, _genreMeta),
+      );
     }
     if (data.containsKey('date_added_ms')) {
       context.handle(
+        _dateAddedMsMeta,
+        dateAddedMs.isAcceptableOrUnknown(
+          data['date_added_ms']!,
           _dateAddedMsMeta,
-          dateAddedMs.isAcceptableOrUnknown(
-              data['date_added_ms']!, _dateAddedMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_dateAddedMsMeta);
     }
@@ -1215,26 +1473,46 @@ class $AlbumsTableTable extends AlbumsTable
   AlbumRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AlbumRow(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      artistId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}artist_id'])!,
-      artistName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}artist_name'])!,
-      year: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}year'])!,
-      coverArtPath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cover_art_path']),
-      trackCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}track_count'])!,
-      totalDurationMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}total_duration_ms'])!,
-      genre: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}genre'])!,
-      dateAddedMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}date_added_ms'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      artistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}artist_id'],
+      )!,
+      artistName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}artist_name'],
+      )!,
+      year: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}year'],
+      )!,
+      coverArtPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_art_path'],
+      ),
+      trackCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}track_count'],
+      )!,
+      totalDurationMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_duration_ms'],
+      )!,
+      genre: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}genre'],
+      )!,
+      dateAddedMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}date_added_ms'],
+      )!,
     );
   }
 
@@ -1255,17 +1533,18 @@ class AlbumRow extends DataClass implements Insertable<AlbumRow> {
   final int totalDurationMs;
   final String genre;
   final int dateAddedMs;
-  const AlbumRow(
-      {required this.id,
-      required this.title,
-      required this.artistId,
-      required this.artistName,
-      required this.year,
-      this.coverArtPath,
-      required this.trackCount,
-      required this.totalDurationMs,
-      required this.genre,
-      required this.dateAddedMs});
+  const AlbumRow({
+    required this.id,
+    required this.title,
+    required this.artistId,
+    required this.artistName,
+    required this.year,
+    this.coverArtPath,
+    required this.trackCount,
+    required this.totalDurationMs,
+    required this.genre,
+    required this.dateAddedMs,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1301,8 +1580,10 @@ class AlbumRow extends DataClass implements Insertable<AlbumRow> {
     );
   }
 
-  factory AlbumRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory AlbumRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AlbumRow(
       id: serializer.fromJson<String>(json['id']),
@@ -1334,49 +1615,51 @@ class AlbumRow extends DataClass implements Insertable<AlbumRow> {
     };
   }
 
-  AlbumRow copyWith(
-          {String? id,
-          String? title,
-          String? artistId,
-          String? artistName,
-          int? year,
-          Value<String?> coverArtPath = const Value.absent(),
-          int? trackCount,
-          int? totalDurationMs,
-          String? genre,
-          int? dateAddedMs}) =>
-      AlbumRow(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        artistId: artistId ?? this.artistId,
-        artistName: artistName ?? this.artistName,
-        year: year ?? this.year,
-        coverArtPath:
-            coverArtPath.present ? coverArtPath.value : this.coverArtPath,
-        trackCount: trackCount ?? this.trackCount,
-        totalDurationMs: totalDurationMs ?? this.totalDurationMs,
-        genre: genre ?? this.genre,
-        dateAddedMs: dateAddedMs ?? this.dateAddedMs,
-      );
+  AlbumRow copyWith({
+    String? id,
+    String? title,
+    String? artistId,
+    String? artistName,
+    int? year,
+    Value<String?> coverArtPath = const Value.absent(),
+    int? trackCount,
+    int? totalDurationMs,
+    String? genre,
+    int? dateAddedMs,
+  }) => AlbumRow(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    artistId: artistId ?? this.artistId,
+    artistName: artistName ?? this.artistName,
+    year: year ?? this.year,
+    coverArtPath: coverArtPath.present ? coverArtPath.value : this.coverArtPath,
+    trackCount: trackCount ?? this.trackCount,
+    totalDurationMs: totalDurationMs ?? this.totalDurationMs,
+    genre: genre ?? this.genre,
+    dateAddedMs: dateAddedMs ?? this.dateAddedMs,
+  );
   AlbumRow copyWithCompanion(AlbumsTableCompanion data) {
     return AlbumRow(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
       artistId: data.artistId.present ? data.artistId.value : this.artistId,
-      artistName:
-          data.artistName.present ? data.artistName.value : this.artistName,
+      artistName: data.artistName.present
+          ? data.artistName.value
+          : this.artistName,
       year: data.year.present ? data.year.value : this.year,
       coverArtPath: data.coverArtPath.present
           ? data.coverArtPath.value
           : this.coverArtPath,
-      trackCount:
-          data.trackCount.present ? data.trackCount.value : this.trackCount,
+      trackCount: data.trackCount.present
+          ? data.trackCount.value
+          : this.trackCount,
       totalDurationMs: data.totalDurationMs.present
           ? data.totalDurationMs.value
           : this.totalDurationMs,
       genre: data.genre.present ? data.genre.value : this.genre,
-      dateAddedMs:
-          data.dateAddedMs.present ? data.dateAddedMs.value : this.dateAddedMs,
+      dateAddedMs: data.dateAddedMs.present
+          ? data.dateAddedMs.value
+          : this.dateAddedMs,
     );
   }
 
@@ -1398,8 +1681,18 @@ class AlbumRow extends DataClass implements Insertable<AlbumRow> {
   }
 
   @override
-  int get hashCode => Object.hash(id, title, artistId, artistName, year,
-      coverArtPath, trackCount, totalDurationMs, genre, dateAddedMs);
+  int get hashCode => Object.hash(
+    id,
+    title,
+    artistId,
+    artistName,
+    year,
+    coverArtPath,
+    trackCount,
+    totalDurationMs,
+    genre,
+    dateAddedMs,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1453,11 +1746,11 @@ class AlbumsTableCompanion extends UpdateCompanion<AlbumRow> {
     this.genre = const Value.absent(),
     required int dateAddedMs,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        title = Value(title),
-        artistId = Value(artistId),
-        artistName = Value(artistName),
-        dateAddedMs = Value(dateAddedMs);
+  }) : id = Value(id),
+       title = Value(title),
+       artistId = Value(artistId),
+       artistName = Value(artistName),
+       dateAddedMs = Value(dateAddedMs);
   static Insertable<AlbumRow> custom({
     Expression<String>? id,
     Expression<String>? title,
@@ -1486,18 +1779,19 @@ class AlbumsTableCompanion extends UpdateCompanion<AlbumRow> {
     });
   }
 
-  AlbumsTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? title,
-      Value<String>? artistId,
-      Value<String>? artistName,
-      Value<int>? year,
-      Value<String?>? coverArtPath,
-      Value<int>? trackCount,
-      Value<int>? totalDurationMs,
-      Value<String>? genre,
-      Value<int>? dateAddedMs,
-      Value<int>? rowid}) {
+  AlbumsTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? title,
+    Value<String>? artistId,
+    Value<String>? artistName,
+    Value<int>? year,
+    Value<String?>? coverArtPath,
+    Value<int>? trackCount,
+    Value<int>? totalDurationMs,
+    Value<String>? genre,
+    Value<int>? dateAddedMs,
+    Value<int>? rowid,
+  }) {
     return AlbumsTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -1580,48 +1874,75 @@ class $ArtistsTableTable extends ArtistsTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  static const VerificationMeta _trackCountMeta =
-      const VerificationMeta('trackCount');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _trackCountMeta = const VerificationMeta(
+    'trackCount',
+  );
   @override
   late final GeneratedColumn<int> trackCount = GeneratedColumn<int>(
-      'track_count', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _albumCountMeta =
-      const VerificationMeta('albumCount');
+    'track_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _albumCountMeta = const VerificationMeta(
+    'albumCount',
+  );
   @override
   late final GeneratedColumn<int> albumCount = GeneratedColumn<int>(
-      'album_count', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _imagePathMeta =
-      const VerificationMeta('imagePath');
+    'album_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _imagePathMeta = const VerificationMeta(
+    'imagePath',
+  );
   @override
   late final GeneratedColumn<String> imagePath = GeneratedColumn<String>(
-      'image_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'image_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, trackCount, albumCount, imagePath];
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    trackCount,
+    albumCount,
+    imagePath,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'artists';
   @override
-  VerificationContext validateIntegrity(Insertable<ArtistRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<ArtistRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1631,25 +1952,29 @@ class $ArtistsTableTable extends ArtistsTable
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('track_count')) {
       context.handle(
-          _trackCountMeta,
-          trackCount.isAcceptableOrUnknown(
-              data['track_count']!, _trackCountMeta));
+        _trackCountMeta,
+        trackCount.isAcceptableOrUnknown(data['track_count']!, _trackCountMeta),
+      );
     }
     if (data.containsKey('album_count')) {
       context.handle(
-          _albumCountMeta,
-          albumCount.isAcceptableOrUnknown(
-              data['album_count']!, _albumCountMeta));
+        _albumCountMeta,
+        albumCount.isAcceptableOrUnknown(data['album_count']!, _albumCountMeta),
+      );
     }
     if (data.containsKey('image_path')) {
-      context.handle(_imagePathMeta,
-          imagePath.isAcceptableOrUnknown(data['image_path']!, _imagePathMeta));
+      context.handle(
+        _imagePathMeta,
+        imagePath.isAcceptableOrUnknown(data['image_path']!, _imagePathMeta),
+      );
     }
     return context;
   }
@@ -1660,16 +1985,26 @@ class $ArtistsTableTable extends ArtistsTable
   ArtistRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ArtistRow(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      trackCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}track_count'])!,
-      albumCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}album_count'])!,
-      imagePath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}image_path']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      trackCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}track_count'],
+      )!,
+      albumCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}album_count'],
+      )!,
+      imagePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_path'],
+      ),
     );
   }
 
@@ -1685,12 +2020,13 @@ class ArtistRow extends DataClass implements Insertable<ArtistRow> {
   final int trackCount;
   final int albumCount;
   final String? imagePath;
-  const ArtistRow(
-      {required this.id,
-      required this.name,
-      required this.trackCount,
-      required this.albumCount,
-      this.imagePath});
+  const ArtistRow({
+    required this.id,
+    required this.name,
+    required this.trackCount,
+    required this.albumCount,
+    this.imagePath,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1716,8 +2052,10 @@ class ArtistRow extends DataClass implements Insertable<ArtistRow> {
     );
   }
 
-  factory ArtistRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory ArtistRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ArtistRow(
       id: serializer.fromJson<String>(json['id']),
@@ -1739,27 +2077,29 @@ class ArtistRow extends DataClass implements Insertable<ArtistRow> {
     };
   }
 
-  ArtistRow copyWith(
-          {String? id,
-          String? name,
-          int? trackCount,
-          int? albumCount,
-          Value<String?> imagePath = const Value.absent()}) =>
-      ArtistRow(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        trackCount: trackCount ?? this.trackCount,
-        albumCount: albumCount ?? this.albumCount,
-        imagePath: imagePath.present ? imagePath.value : this.imagePath,
-      );
+  ArtistRow copyWith({
+    String? id,
+    String? name,
+    int? trackCount,
+    int? albumCount,
+    Value<String?> imagePath = const Value.absent(),
+  }) => ArtistRow(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    trackCount: trackCount ?? this.trackCount,
+    albumCount: albumCount ?? this.albumCount,
+    imagePath: imagePath.present ? imagePath.value : this.imagePath,
+  );
   ArtistRow copyWithCompanion(ArtistsTableCompanion data) {
     return ArtistRow(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      trackCount:
-          data.trackCount.present ? data.trackCount.value : this.trackCount,
-      albumCount:
-          data.albumCount.present ? data.albumCount.value : this.albumCount,
+      trackCount: data.trackCount.present
+          ? data.trackCount.value
+          : this.trackCount,
+      albumCount: data.albumCount.present
+          ? data.albumCount.value
+          : this.albumCount,
       imagePath: data.imagePath.present ? data.imagePath.value : this.imagePath,
     );
   }
@@ -1811,8 +2151,8 @@ class ArtistsTableCompanion extends UpdateCompanion<ArtistRow> {
     this.albumCount = const Value.absent(),
     this.imagePath = const Value.absent(),
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        name = Value(name);
+  }) : id = Value(id),
+       name = Value(name);
   static Insertable<ArtistRow> custom({
     Expression<String>? id,
     Expression<String>? name,
@@ -1831,13 +2171,14 @@ class ArtistsTableCompanion extends UpdateCompanion<ArtistRow> {
     });
   }
 
-  ArtistsTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? name,
-      Value<int>? trackCount,
-      Value<int>? albumCount,
-      Value<String?>? imagePath,
-      Value<int>? rowid}) {
+  ArtistsTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<int>? trackCount,
+    Value<int>? albumCount,
+    Value<String?>? imagePath,
+    Value<int>? rowid,
+  }) {
     return ArtistsTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -1895,81 +2236,136 @@ class $PlaylistsTableTable extends PlaylistsTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(''));
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('userCreated'));
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('userCreated'),
+  );
   static const VerificationMeta _moodMeta = const VerificationMeta('mood');
   @override
   late final GeneratedColumn<String> mood = GeneratedColumn<String>(
-      'mood', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMsMeta =
-      const VerificationMeta('createdAtMs');
+    'mood',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMsMeta = const VerificationMeta(
+    'createdAtMs',
+  );
   @override
   late final GeneratedColumn<int> createdAtMs = GeneratedColumn<int>(
-      'created_at_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMsMeta =
-      const VerificationMeta('updatedAtMs');
+    'created_at_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMsMeta = const VerificationMeta(
+    'updatedAtMs',
+  );
   @override
   late final GeneratedColumn<int> updatedAtMs = GeneratedColumn<int>(
-      'updated_at_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _coverArtPathMeta =
-      const VerificationMeta('coverArtPath');
+    'updated_at_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _coverArtPathMeta = const VerificationMeta(
+    'coverArtPath',
+  );
   @override
   late final GeneratedColumn<String> coverArtPath = GeneratedColumn<String>(
-      'cover_art_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _isPinnedMeta =
-      const VerificationMeta('isPinned');
+    'cover_art_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _coverArtPathsJsonMeta = const VerificationMeta(
+    'coverArtPathsJson',
+  );
+  @override
+  late final GeneratedColumn<String> coverArtPathsJson =
+      GeneratedColumn<String>(
+        'cover_art_paths_json',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      );
+  static const VerificationMeta _isPinnedMeta = const VerificationMeta(
+    'isPinned',
+  );
   @override
   late final GeneratedColumn<bool> isPinned = GeneratedColumn<bool>(
-      'is_pinned', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_pinned" IN (0, 1))'),
-      defaultValue: const Constant(false));
+    'is_pinned',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_pinned" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        name,
-        description,
-        type,
-        mood,
-        createdAtMs,
-        updatedAtMs,
-        coverArtPath,
-        isPinned
-      ];
+    id,
+    name,
+    description,
+    type,
+    mood,
+    createdAtMs,
+    updatedAtMs,
+    coverArtPath,
+    coverArtPathsJson,
+    isPinned,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'playlists';
   @override
-  VerificationContext validateIntegrity(Insertable<PlaylistRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<PlaylistRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1979,49 +2375,78 @@ class $PlaylistsTableTable extends PlaylistsTable
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
           _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
+        ),
+      );
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
     }
     if (data.containsKey('mood')) {
       context.handle(
-          _moodMeta, mood.isAcceptableOrUnknown(data['mood']!, _moodMeta));
+        _moodMeta,
+        mood.isAcceptableOrUnknown(data['mood']!, _moodMeta),
+      );
     }
     if (data.containsKey('created_at_ms')) {
       context.handle(
+        _createdAtMsMeta,
+        createdAtMs.isAcceptableOrUnknown(
+          data['created_at_ms']!,
           _createdAtMsMeta,
-          createdAtMs.isAcceptableOrUnknown(
-              data['created_at_ms']!, _createdAtMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMsMeta);
     }
     if (data.containsKey('updated_at_ms')) {
       context.handle(
+        _updatedAtMsMeta,
+        updatedAtMs.isAcceptableOrUnknown(
+          data['updated_at_ms']!,
           _updatedAtMsMeta,
-          updatedAtMs.isAcceptableOrUnknown(
-              data['updated_at_ms']!, _updatedAtMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_updatedAtMsMeta);
     }
     if (data.containsKey('cover_art_path')) {
       context.handle(
+        _coverArtPathMeta,
+        coverArtPath.isAcceptableOrUnknown(
+          data['cover_art_path']!,
           _coverArtPathMeta,
-          coverArtPath.isAcceptableOrUnknown(
-              data['cover_art_path']!, _coverArtPathMeta));
+        ),
+      );
+    }
+    if (data.containsKey('cover_art_paths_json')) {
+      context.handle(
+        _coverArtPathsJsonMeta,
+        coverArtPathsJson.isAcceptableOrUnknown(
+          data['cover_art_paths_json']!,
+          _coverArtPathsJsonMeta,
+        ),
+      );
     }
     if (data.containsKey('is_pinned')) {
-      context.handle(_isPinnedMeta,
-          isPinned.isAcceptableOrUnknown(data['is_pinned']!, _isPinnedMeta));
+      context.handle(
+        _isPinnedMeta,
+        isPinned.isAcceptableOrUnknown(data['is_pinned']!, _isPinnedMeta),
+      );
     }
     return context;
   }
@@ -2032,24 +2457,46 @@ class $PlaylistsTableTable extends PlaylistsTable
   PlaylistRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlaylistRow(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
-      mood: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}mood']),
-      createdAtMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}created_at_ms'])!,
-      updatedAtMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}updated_at_ms'])!,
-      coverArtPath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cover_art_path']),
-      isPinned: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_pinned'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      mood: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mood'],
+      ),
+      createdAtMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at_ms'],
+      )!,
+      updatedAtMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at_ms'],
+      )!,
+      coverArtPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_art_path'],
+      ),
+      coverArtPathsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_art_paths_json'],
+      )!,
+      isPinned: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_pinned'],
+      )!,
     );
   }
 
@@ -2068,17 +2515,22 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
   final int createdAtMs;
   final int updatedAtMs;
   final String? coverArtPath;
+
+  /// JSON array of up to 4 album-art paths; the UI draws them as a 2x2 mosaic.
+  final String coverArtPathsJson;
   final bool isPinned;
-  const PlaylistRow(
-      {required this.id,
-      required this.name,
-      required this.description,
-      required this.type,
-      this.mood,
-      required this.createdAtMs,
-      required this.updatedAtMs,
-      this.coverArtPath,
-      required this.isPinned});
+  const PlaylistRow({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.type,
+    this.mood,
+    required this.createdAtMs,
+    required this.updatedAtMs,
+    this.coverArtPath,
+    required this.coverArtPathsJson,
+    required this.isPinned,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2094,6 +2546,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
     if (!nullToAbsent || coverArtPath != null) {
       map['cover_art_path'] = Variable<String>(coverArtPath);
     }
+    map['cover_art_paths_json'] = Variable<String>(coverArtPathsJson);
     map['is_pinned'] = Variable<bool>(isPinned);
     return map;
   }
@@ -2110,12 +2563,15 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       coverArtPath: coverArtPath == null && nullToAbsent
           ? const Value.absent()
           : Value(coverArtPath),
+      coverArtPathsJson: Value(coverArtPathsJson),
       isPinned: Value(isPinned),
     );
   }
 
-  factory PlaylistRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlaylistRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlaylistRow(
       id: serializer.fromJson<String>(json['id']),
@@ -2126,6 +2582,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       createdAtMs: serializer.fromJson<int>(json['createdAtMs']),
       updatedAtMs: serializer.fromJson<int>(json['updatedAtMs']),
       coverArtPath: serializer.fromJson<String?>(json['coverArtPath']),
+      coverArtPathsJson: serializer.fromJson<String>(json['coverArtPathsJson']),
       isPinned: serializer.fromJson<bool>(json['isPinned']),
     );
   }
@@ -2141,47 +2598,55 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       'createdAtMs': serializer.toJson<int>(createdAtMs),
       'updatedAtMs': serializer.toJson<int>(updatedAtMs),
       'coverArtPath': serializer.toJson<String?>(coverArtPath),
+      'coverArtPathsJson': serializer.toJson<String>(coverArtPathsJson),
       'isPinned': serializer.toJson<bool>(isPinned),
     };
   }
 
-  PlaylistRow copyWith(
-          {String? id,
-          String? name,
-          String? description,
-          String? type,
-          Value<String?> mood = const Value.absent(),
-          int? createdAtMs,
-          int? updatedAtMs,
-          Value<String?> coverArtPath = const Value.absent(),
-          bool? isPinned}) =>
-      PlaylistRow(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        description: description ?? this.description,
-        type: type ?? this.type,
-        mood: mood.present ? mood.value : this.mood,
-        createdAtMs: createdAtMs ?? this.createdAtMs,
-        updatedAtMs: updatedAtMs ?? this.updatedAtMs,
-        coverArtPath:
-            coverArtPath.present ? coverArtPath.value : this.coverArtPath,
-        isPinned: isPinned ?? this.isPinned,
-      );
+  PlaylistRow copyWith({
+    String? id,
+    String? name,
+    String? description,
+    String? type,
+    Value<String?> mood = const Value.absent(),
+    int? createdAtMs,
+    int? updatedAtMs,
+    Value<String?> coverArtPath = const Value.absent(),
+    String? coverArtPathsJson,
+    bool? isPinned,
+  }) => PlaylistRow(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    description: description ?? this.description,
+    type: type ?? this.type,
+    mood: mood.present ? mood.value : this.mood,
+    createdAtMs: createdAtMs ?? this.createdAtMs,
+    updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+    coverArtPath: coverArtPath.present ? coverArtPath.value : this.coverArtPath,
+    coverArtPathsJson: coverArtPathsJson ?? this.coverArtPathsJson,
+    isPinned: isPinned ?? this.isPinned,
+  );
   PlaylistRow copyWithCompanion(PlaylistsTableCompanion data) {
     return PlaylistRow(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      description:
-          data.description.present ? data.description.value : this.description,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       type: data.type.present ? data.type.value : this.type,
       mood: data.mood.present ? data.mood.value : this.mood,
-      createdAtMs:
-          data.createdAtMs.present ? data.createdAtMs.value : this.createdAtMs,
-      updatedAtMs:
-          data.updatedAtMs.present ? data.updatedAtMs.value : this.updatedAtMs,
+      createdAtMs: data.createdAtMs.present
+          ? data.createdAtMs.value
+          : this.createdAtMs,
+      updatedAtMs: data.updatedAtMs.present
+          ? data.updatedAtMs.value
+          : this.updatedAtMs,
       coverArtPath: data.coverArtPath.present
           ? data.coverArtPath.value
           : this.coverArtPath,
+      coverArtPathsJson: data.coverArtPathsJson.present
+          ? data.coverArtPathsJson.value
+          : this.coverArtPathsJson,
       isPinned: data.isPinned.present ? data.isPinned.value : this.isPinned,
     );
   }
@@ -2197,14 +2662,25 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
           ..write('createdAtMs: $createdAtMs, ')
           ..write('updatedAtMs: $updatedAtMs, ')
           ..write('coverArtPath: $coverArtPath, ')
+          ..write('coverArtPathsJson: $coverArtPathsJson, ')
           ..write('isPinned: $isPinned')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, type, mood,
-      createdAtMs, updatedAtMs, coverArtPath, isPinned);
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    type,
+    mood,
+    createdAtMs,
+    updatedAtMs,
+    coverArtPath,
+    coverArtPathsJson,
+    isPinned,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2217,6 +2693,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
           other.createdAtMs == this.createdAtMs &&
           other.updatedAtMs == this.updatedAtMs &&
           other.coverArtPath == this.coverArtPath &&
+          other.coverArtPathsJson == this.coverArtPathsJson &&
           other.isPinned == this.isPinned);
 }
 
@@ -2229,6 +2706,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
   final Value<int> createdAtMs;
   final Value<int> updatedAtMs;
   final Value<String?> coverArtPath;
+  final Value<String> coverArtPathsJson;
   final Value<bool> isPinned;
   final Value<int> rowid;
   const PlaylistsTableCompanion({
@@ -2240,6 +2718,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     this.createdAtMs = const Value.absent(),
     this.updatedAtMs = const Value.absent(),
     this.coverArtPath = const Value.absent(),
+    this.coverArtPathsJson = const Value.absent(),
     this.isPinned = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -2252,12 +2731,13 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     required int createdAtMs,
     required int updatedAtMs,
     this.coverArtPath = const Value.absent(),
+    this.coverArtPathsJson = const Value.absent(),
     this.isPinned = const Value.absent(),
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        name = Value(name),
-        createdAtMs = Value(createdAtMs),
-        updatedAtMs = Value(updatedAtMs);
+  }) : id = Value(id),
+       name = Value(name),
+       createdAtMs = Value(createdAtMs),
+       updatedAtMs = Value(updatedAtMs);
   static Insertable<PlaylistRow> custom({
     Expression<String>? id,
     Expression<String>? name,
@@ -2267,6 +2747,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     Expression<int>? createdAtMs,
     Expression<int>? updatedAtMs,
     Expression<String>? coverArtPath,
+    Expression<String>? coverArtPathsJson,
     Expression<bool>? isPinned,
     Expression<int>? rowid,
   }) {
@@ -2279,22 +2760,25 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
       if (createdAtMs != null) 'created_at_ms': createdAtMs,
       if (updatedAtMs != null) 'updated_at_ms': updatedAtMs,
       if (coverArtPath != null) 'cover_art_path': coverArtPath,
+      if (coverArtPathsJson != null) 'cover_art_paths_json': coverArtPathsJson,
       if (isPinned != null) 'is_pinned': isPinned,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  PlaylistsTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? name,
-      Value<String>? description,
-      Value<String>? type,
-      Value<String?>? mood,
-      Value<int>? createdAtMs,
-      Value<int>? updatedAtMs,
-      Value<String?>? coverArtPath,
-      Value<bool>? isPinned,
-      Value<int>? rowid}) {
+  PlaylistsTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? description,
+    Value<String>? type,
+    Value<String?>? mood,
+    Value<int>? createdAtMs,
+    Value<int>? updatedAtMs,
+    Value<String?>? coverArtPath,
+    Value<String>? coverArtPathsJson,
+    Value<bool>? isPinned,
+    Value<int>? rowid,
+  }) {
     return PlaylistsTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -2304,6 +2788,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
       createdAtMs: createdAtMs ?? this.createdAtMs,
       updatedAtMs: updatedAtMs ?? this.updatedAtMs,
       coverArtPath: coverArtPath ?? this.coverArtPath,
+      coverArtPathsJson: coverArtPathsJson ?? this.coverArtPathsJson,
       isPinned: isPinned ?? this.isPinned,
       rowid: rowid ?? this.rowid,
     );
@@ -2336,6 +2821,9 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     if (coverArtPath.present) {
       map['cover_art_path'] = Variable<String>(coverArtPath.value);
     }
+    if (coverArtPathsJson.present) {
+      map['cover_art_paths_json'] = Variable<String>(coverArtPathsJson.value);
+    }
     if (isPinned.present) {
       map['is_pinned'] = Variable<bool>(isPinned.value);
     }
@@ -2356,6 +2844,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
           ..write('createdAtMs: $createdAtMs, ')
           ..write('updatedAtMs: $updatedAtMs, ')
           ..write('coverArtPath: $coverArtPath, ')
+          ..write('coverArtPathsJson: $coverArtPathsJson, ')
           ..write('isPinned: $isPinned, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -2369,27 +2858,42 @@ class $PlaylistTracksTableTable extends PlaylistTracksTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $PlaylistTracksTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _playlistIdMeta =
-      const VerificationMeta('playlistId');
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
   @override
   late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
-      'playlist_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES playlists (id) ON DELETE CASCADE'));
-  static const VerificationMeta _trackIdMeta =
-      const VerificationMeta('trackId');
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES playlists (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _trackIdMeta = const VerificationMeta(
+    'trackId',
+  );
   @override
   late final GeneratedColumn<String> trackId = GeneratedColumn<String>(
-      'track_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _positionMeta =
-      const VerificationMeta('position');
+    'track_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
   @override
   late final GeneratedColumn<int> position = GeneratedColumn<int>(
-      'position', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [playlistId, trackId, position];
   @override
@@ -2398,27 +2902,33 @@ class $PlaylistTracksTableTable extends PlaylistTracksTable
   String get actualTableName => $name;
   static const String $name = 'playlist_tracks';
   @override
-  VerificationContext validateIntegrity(Insertable<PlaylistTrackRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<PlaylistTrackRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('playlist_id')) {
       context.handle(
-          _playlistIdMeta,
-          playlistId.isAcceptableOrUnknown(
-              data['playlist_id']!, _playlistIdMeta));
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_playlistIdMeta);
     }
     if (data.containsKey('track_id')) {
-      context.handle(_trackIdMeta,
-          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+      context.handle(
+        _trackIdMeta,
+        trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_trackIdMeta);
     }
     if (data.containsKey('position')) {
-      context.handle(_positionMeta,
-          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
     } else if (isInserting) {
       context.missing(_positionMeta);
     }
@@ -2431,12 +2941,18 @@ class $PlaylistTracksTableTable extends PlaylistTracksTable
   PlaylistTrackRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlaylistTrackRow(
-      playlistId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}playlist_id'])!,
-      trackId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}track_id'])!,
-      position: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}position'])!,
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+      trackId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}track_id'],
+      )!,
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      )!,
     );
   }
 
@@ -2453,10 +2969,11 @@ class PlaylistTrackRow extends DataClass
 
   /// 0-based position within the playlist.
   final int position;
-  const PlaylistTrackRow(
-      {required this.playlistId,
-      required this.trackId,
-      required this.position});
+  const PlaylistTrackRow({
+    required this.playlistId,
+    required this.trackId,
+    required this.position,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2474,8 +2991,10 @@ class PlaylistTrackRow extends DataClass
     );
   }
 
-  factory PlaylistTrackRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlaylistTrackRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlaylistTrackRow(
       playlistId: serializer.fromJson<String>(json['playlistId']),
@@ -2493,17 +3012,20 @@ class PlaylistTrackRow extends DataClass
     };
   }
 
-  PlaylistTrackRow copyWith(
-          {String? playlistId, String? trackId, int? position}) =>
-      PlaylistTrackRow(
-        playlistId: playlistId ?? this.playlistId,
-        trackId: trackId ?? this.trackId,
-        position: position ?? this.position,
-      );
+  PlaylistTrackRow copyWith({
+    String? playlistId,
+    String? trackId,
+    int? position,
+  }) => PlaylistTrackRow(
+    playlistId: playlistId ?? this.playlistId,
+    trackId: trackId ?? this.trackId,
+    position: position ?? this.position,
+  );
   PlaylistTrackRow copyWithCompanion(PlaylistTracksTableCompanion data) {
     return PlaylistTrackRow(
-      playlistId:
-          data.playlistId.present ? data.playlistId.value : this.playlistId,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
       trackId: data.trackId.present ? data.trackId.value : this.trackId,
       position: data.position.present ? data.position.value : this.position,
     );
@@ -2546,9 +3068,9 @@ class PlaylistTracksTableCompanion extends UpdateCompanion<PlaylistTrackRow> {
     required String trackId,
     required int position,
     this.rowid = const Value.absent(),
-  })  : playlistId = Value(playlistId),
-        trackId = Value(trackId),
-        position = Value(position);
+  }) : playlistId = Value(playlistId),
+       trackId = Value(trackId),
+       position = Value(position);
   static Insertable<PlaylistTrackRow> custom({
     Expression<String>? playlistId,
     Expression<String>? trackId,
@@ -2563,11 +3085,12 @@ class PlaylistTracksTableCompanion extends UpdateCompanion<PlaylistTrackRow> {
     });
   }
 
-  PlaylistTracksTableCompanion copyWith(
-      {Value<String>? playlistId,
-      Value<String>? trackId,
-      Value<int>? position,
-      Value<int>? rowid}) {
+  PlaylistTracksTableCompanion copyWith({
+    Value<String>? playlistId,
+    Value<String>? trackId,
+    Value<int>? position,
+    Value<int>? rowid,
+  }) {
     return PlaylistTracksTableCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
@@ -2615,95 +3138,166 @@ class $PlaybackHistoryTableTable extends PlaybackHistoryTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _trackIdMeta =
-      const VerificationMeta('trackId');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _trackIdMeta = const VerificationMeta(
+    'trackId',
+  );
   @override
   late final GeneratedColumn<String> trackId = GeneratedColumn<String>(
-      'track_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _playedAtMsMeta =
-      const VerificationMeta('playedAtMs');
+    'track_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _playedAtMsMeta = const VerificationMeta(
+    'playedAtMs',
+  );
   @override
   late final GeneratedColumn<int> playedAtMs = GeneratedColumn<int>(
-      'played_at_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _durationPlayedMsMeta =
-      const VerificationMeta('durationPlayedMs');
+    'played_at_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationPlayedMsMeta = const VerificationMeta(
+    'durationPlayedMs',
+  );
   @override
   late final GeneratedColumn<int> durationPlayedMs = GeneratedColumn<int>(
-      'duration_played_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _skippedMeta =
-      const VerificationMeta('skipped');
+    'duration_played_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _skippedMeta = const VerificationMeta(
+    'skipped',
+  );
   @override
   late final GeneratedColumn<bool> skipped = GeneratedColumn<bool>(
-      'skipped', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("skipped" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _contextTypeMeta =
-      const VerificationMeta('contextType');
+    'skipped',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("skipped" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _completedMeta = const VerificationMeta(
+    'completed',
+  );
+  @override
+  late final GeneratedColumn<bool> completed = GeneratedColumn<bool>(
+    'completed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("completed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _contextTypeMeta = const VerificationMeta(
+    'contextType',
+  );
   @override
   late final GeneratedColumn<String> contextType = GeneratedColumn<String>(
-      'context_type', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('library'));
+    'context_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('library'),
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, trackId, playedAtMs, durationPlayedMs, skipped, contextType];
+  List<GeneratedColumn> get $columns => [
+    id,
+    trackId,
+    playedAtMs,
+    durationPlayedMs,
+    skipped,
+    completed,
+    contextType,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'playback_history';
   @override
-  VerificationContext validateIntegrity(Insertable<PlaybackHistoryRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<PlaybackHistoryRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('track_id')) {
-      context.handle(_trackIdMeta,
-          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+      context.handle(
+        _trackIdMeta,
+        trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_trackIdMeta);
     }
     if (data.containsKey('played_at_ms')) {
       context.handle(
+        _playedAtMsMeta,
+        playedAtMs.isAcceptableOrUnknown(
+          data['played_at_ms']!,
           _playedAtMsMeta,
-          playedAtMs.isAcceptableOrUnknown(
-              data['played_at_ms']!, _playedAtMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_playedAtMsMeta);
     }
     if (data.containsKey('duration_played_ms')) {
       context.handle(
+        _durationPlayedMsMeta,
+        durationPlayedMs.isAcceptableOrUnknown(
+          data['duration_played_ms']!,
           _durationPlayedMsMeta,
-          durationPlayedMs.isAcceptableOrUnknown(
-              data['duration_played_ms']!, _durationPlayedMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_durationPlayedMsMeta);
     }
     if (data.containsKey('skipped')) {
-      context.handle(_skippedMeta,
-          skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta));
+      context.handle(
+        _skippedMeta,
+        skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta),
+      );
+    }
+    if (data.containsKey('completed')) {
+      context.handle(
+        _completedMeta,
+        completed.isAcceptableOrUnknown(data['completed']!, _completedMeta),
+      );
     }
     if (data.containsKey('context_type')) {
       context.handle(
+        _contextTypeMeta,
+        contextType.isAcceptableOrUnknown(
+          data['context_type']!,
           _contextTypeMeta,
-          contextType.isAcceptableOrUnknown(
-              data['context_type']!, _contextTypeMeta));
+        ),
+      );
     }
     return context;
   }
@@ -2714,18 +3308,34 @@ class $PlaybackHistoryTableTable extends PlaybackHistoryTable
   PlaybackHistoryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlaybackHistoryRow(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      trackId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}track_id'])!,
-      playedAtMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}played_at_ms'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      trackId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}track_id'],
+      )!,
+      playedAtMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}played_at_ms'],
+      )!,
       durationPlayedMs: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}duration_played_ms'])!,
-      skipped: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}skipped'])!,
-      contextType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}context_type'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_played_ms'],
+      )!,
+      skipped: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}skipped'],
+      )!,
+      completed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}completed'],
+      )!,
+      contextType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}context_type'],
+      )!,
     );
   }
 
@@ -2745,17 +3355,29 @@ class PlaybackHistoryRow extends DataClass
 
   /// How many ms were actually played.
   final int durationPlayedMs;
+
+  /// True when the user abandoned the track before [kListenCompletionRatio].
   final bool skipped;
+
+  /// True when the track was listened to past [kListenCompletionRatio].
+  ///
+  /// Not simply `!skipped`: a track can be neither, when playback stopped
+  /// partway without the user skipping (the app was closed, the queue ended,
+  /// a call came in). Only completed rows count toward listening totals, so
+  /// the statistics engine needs the distinction the skip flag cannot make.
+  final bool completed;
 
   /// 'library', 'playlist', 'shuffle', 'mix'
   final String contextType;
-  const PlaybackHistoryRow(
-      {required this.id,
-      required this.trackId,
-      required this.playedAtMs,
-      required this.durationPlayedMs,
-      required this.skipped,
-      required this.contextType});
+  const PlaybackHistoryRow({
+    required this.id,
+    required this.trackId,
+    required this.playedAtMs,
+    required this.durationPlayedMs,
+    required this.skipped,
+    required this.completed,
+    required this.contextType,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2764,6 +3386,7 @@ class PlaybackHistoryRow extends DataClass
     map['played_at_ms'] = Variable<int>(playedAtMs);
     map['duration_played_ms'] = Variable<int>(durationPlayedMs);
     map['skipped'] = Variable<bool>(skipped);
+    map['completed'] = Variable<bool>(completed);
     map['context_type'] = Variable<String>(contextType);
     return map;
   }
@@ -2775,12 +3398,15 @@ class PlaybackHistoryRow extends DataClass
       playedAtMs: Value(playedAtMs),
       durationPlayedMs: Value(durationPlayedMs),
       skipped: Value(skipped),
+      completed: Value(completed),
       contextType: Value(contextType),
     );
   }
 
-  factory PlaybackHistoryRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlaybackHistoryRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlaybackHistoryRow(
       id: serializer.fromJson<int>(json['id']),
@@ -2788,6 +3414,7 @@ class PlaybackHistoryRow extends DataClass
       playedAtMs: serializer.fromJson<int>(json['playedAtMs']),
       durationPlayedMs: serializer.fromJson<int>(json['durationPlayedMs']),
       skipped: serializer.fromJson<bool>(json['skipped']),
+      completed: serializer.fromJson<bool>(json['completed']),
       contextType: serializer.fromJson<String>(json['contextType']),
     );
   }
@@ -2800,37 +3427,43 @@ class PlaybackHistoryRow extends DataClass
       'playedAtMs': serializer.toJson<int>(playedAtMs),
       'durationPlayedMs': serializer.toJson<int>(durationPlayedMs),
       'skipped': serializer.toJson<bool>(skipped),
+      'completed': serializer.toJson<bool>(completed),
       'contextType': serializer.toJson<String>(contextType),
     };
   }
 
-  PlaybackHistoryRow copyWith(
-          {int? id,
-          String? trackId,
-          int? playedAtMs,
-          int? durationPlayedMs,
-          bool? skipped,
-          String? contextType}) =>
-      PlaybackHistoryRow(
-        id: id ?? this.id,
-        trackId: trackId ?? this.trackId,
-        playedAtMs: playedAtMs ?? this.playedAtMs,
-        durationPlayedMs: durationPlayedMs ?? this.durationPlayedMs,
-        skipped: skipped ?? this.skipped,
-        contextType: contextType ?? this.contextType,
-      );
+  PlaybackHistoryRow copyWith({
+    int? id,
+    String? trackId,
+    int? playedAtMs,
+    int? durationPlayedMs,
+    bool? skipped,
+    bool? completed,
+    String? contextType,
+  }) => PlaybackHistoryRow(
+    id: id ?? this.id,
+    trackId: trackId ?? this.trackId,
+    playedAtMs: playedAtMs ?? this.playedAtMs,
+    durationPlayedMs: durationPlayedMs ?? this.durationPlayedMs,
+    skipped: skipped ?? this.skipped,
+    completed: completed ?? this.completed,
+    contextType: contextType ?? this.contextType,
+  );
   PlaybackHistoryRow copyWithCompanion(PlaybackHistoryTableCompanion data) {
     return PlaybackHistoryRow(
       id: data.id.present ? data.id.value : this.id,
       trackId: data.trackId.present ? data.trackId.value : this.trackId,
-      playedAtMs:
-          data.playedAtMs.present ? data.playedAtMs.value : this.playedAtMs,
+      playedAtMs: data.playedAtMs.present
+          ? data.playedAtMs.value
+          : this.playedAtMs,
       durationPlayedMs: data.durationPlayedMs.present
           ? data.durationPlayedMs.value
           : this.durationPlayedMs,
       skipped: data.skipped.present ? data.skipped.value : this.skipped,
-      contextType:
-          data.contextType.present ? data.contextType.value : this.contextType,
+      completed: data.completed.present ? data.completed.value : this.completed,
+      contextType: data.contextType.present
+          ? data.contextType.value
+          : this.contextType,
     );
   }
 
@@ -2842,6 +3475,7 @@ class PlaybackHistoryRow extends DataClass
           ..write('playedAtMs: $playedAtMs, ')
           ..write('durationPlayedMs: $durationPlayedMs, ')
           ..write('skipped: $skipped, ')
+          ..write('completed: $completed, ')
           ..write('contextType: $contextType')
           ..write(')'))
         .toString();
@@ -2849,7 +3483,14 @@ class PlaybackHistoryRow extends DataClass
 
   @override
   int get hashCode => Object.hash(
-      id, trackId, playedAtMs, durationPlayedMs, skipped, contextType);
+    id,
+    trackId,
+    playedAtMs,
+    durationPlayedMs,
+    skipped,
+    completed,
+    contextType,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2859,6 +3500,7 @@ class PlaybackHistoryRow extends DataClass
           other.playedAtMs == this.playedAtMs &&
           other.durationPlayedMs == this.durationPlayedMs &&
           other.skipped == this.skipped &&
+          other.completed == this.completed &&
           other.contextType == this.contextType);
 }
 
@@ -2869,6 +3511,7 @@ class PlaybackHistoryTableCompanion
   final Value<int> playedAtMs;
   final Value<int> durationPlayedMs;
   final Value<bool> skipped;
+  final Value<bool> completed;
   final Value<String> contextType;
   const PlaybackHistoryTableCompanion({
     this.id = const Value.absent(),
@@ -2876,6 +3519,7 @@ class PlaybackHistoryTableCompanion
     this.playedAtMs = const Value.absent(),
     this.durationPlayedMs = const Value.absent(),
     this.skipped = const Value.absent(),
+    this.completed = const Value.absent(),
     this.contextType = const Value.absent(),
   });
   PlaybackHistoryTableCompanion.insert({
@@ -2884,16 +3528,18 @@ class PlaybackHistoryTableCompanion
     required int playedAtMs,
     required int durationPlayedMs,
     this.skipped = const Value.absent(),
+    this.completed = const Value.absent(),
     this.contextType = const Value.absent(),
-  })  : trackId = Value(trackId),
-        playedAtMs = Value(playedAtMs),
-        durationPlayedMs = Value(durationPlayedMs);
+  }) : trackId = Value(trackId),
+       playedAtMs = Value(playedAtMs),
+       durationPlayedMs = Value(durationPlayedMs);
   static Insertable<PlaybackHistoryRow> custom({
     Expression<int>? id,
     Expression<String>? trackId,
     Expression<int>? playedAtMs,
     Expression<int>? durationPlayedMs,
     Expression<bool>? skipped,
+    Expression<bool>? completed,
     Expression<String>? contextType,
   }) {
     return RawValuesInsertable({
@@ -2902,23 +3548,27 @@ class PlaybackHistoryTableCompanion
       if (playedAtMs != null) 'played_at_ms': playedAtMs,
       if (durationPlayedMs != null) 'duration_played_ms': durationPlayedMs,
       if (skipped != null) 'skipped': skipped,
+      if (completed != null) 'completed': completed,
       if (contextType != null) 'context_type': contextType,
     });
   }
 
-  PlaybackHistoryTableCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? trackId,
-      Value<int>? playedAtMs,
-      Value<int>? durationPlayedMs,
-      Value<bool>? skipped,
-      Value<String>? contextType}) {
+  PlaybackHistoryTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? trackId,
+    Value<int>? playedAtMs,
+    Value<int>? durationPlayedMs,
+    Value<bool>? skipped,
+    Value<bool>? completed,
+    Value<String>? contextType,
+  }) {
     return PlaybackHistoryTableCompanion(
       id: id ?? this.id,
       trackId: trackId ?? this.trackId,
       playedAtMs: playedAtMs ?? this.playedAtMs,
       durationPlayedMs: durationPlayedMs ?? this.durationPlayedMs,
       skipped: skipped ?? this.skipped,
+      completed: completed ?? this.completed,
       contextType: contextType ?? this.contextType,
     );
   }
@@ -2941,6 +3591,9 @@ class PlaybackHistoryTableCompanion
     if (skipped.present) {
       map['skipped'] = Variable<bool>(skipped.value);
     }
+    if (completed.present) {
+      map['completed'] = Variable<bool>(completed.value);
+    }
     if (contextType.present) {
       map['context_type'] = Variable<String>(contextType.value);
     }
@@ -2955,6 +3608,7 @@ class PlaybackHistoryTableCompanion
           ..write('playedAtMs: $playedAtMs, ')
           ..write('durationPlayedMs: $durationPlayedMs, ')
           ..write('skipped: $skipped, ')
+          ..write('completed: $completed, ')
           ..write('contextType: $contextType')
           ..write(')'))
         .toString();
@@ -2970,83 +3624,182 @@ class $ShuffleStateTableTable extends ShuffleStateTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _configJsonMeta =
-      const VerificationMeta('configJson');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _contextIdMeta = const VerificationMeta(
+    'contextId',
+  );
+  @override
+  late final GeneratedColumn<String> contextId = GeneratedColumn<String>(
+    'context_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('all_songs'),
+  );
+  static const VerificationMeta _configJsonMeta = const VerificationMeta(
+    'configJson',
+  );
   @override
   late final GeneratedColumn<String> configJson = GeneratedColumn<String>(
-      'config_json', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _shuffledIdsJsonMeta =
-      const VerificationMeta('shuffledIdsJson');
+    'config_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _shuffledIdsJsonMeta = const VerificationMeta(
+    'shuffledIdsJson',
+  );
   @override
   late final GeneratedColumn<String> shuffledIdsJson = GeneratedColumn<String>(
-      'shuffled_ids_json', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _currentIndexMeta =
-      const VerificationMeta('currentIndex');
+    'shuffled_ids_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _currentIndexMeta = const VerificationMeta(
+    'currentIndex',
+  );
   @override
   late final GeneratedColumn<int> currentIndex = GeneratedColumn<int>(
-      'current_index', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _createdAtMsMeta =
-      const VerificationMeta('createdAtMs');
+    'current_index',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _createdAtMsMeta = const VerificationMeta(
+    'createdAtMs',
+  );
   @override
   late final GeneratedColumn<int> createdAtMs = GeneratedColumn<int>(
-      'created_at_ms', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'created_at_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMsMeta = const VerificationMeta(
+    'updatedAtMs',
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, configJson, shuffledIdsJson, currentIndex, createdAtMs];
+  late final GeneratedColumn<int> updatedAtMs = GeneratedColumn<int>(
+    'updated_at_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _stateJsonMeta = const VerificationMeta(
+    'stateJson',
+  );
+  @override
+  late final GeneratedColumn<String> stateJson = GeneratedColumn<String>(
+    'state_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    contextId,
+    configJson,
+    shuffledIdsJson,
+    currentIndex,
+    createdAtMs,
+    updatedAtMs,
+    stateJson,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'shuffle_states';
   @override
-  VerificationContext validateIntegrity(Insertable<ShuffleStateRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<ShuffleStateRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    if (data.containsKey('context_id')) {
+      context.handle(
+        _contextIdMeta,
+        contextId.isAcceptableOrUnknown(data['context_id']!, _contextIdMeta),
+      );
+    }
     if (data.containsKey('config_json')) {
       context.handle(
-          _configJsonMeta,
-          configJson.isAcceptableOrUnknown(
-              data['config_json']!, _configJsonMeta));
+        _configJsonMeta,
+        configJson.isAcceptableOrUnknown(data['config_json']!, _configJsonMeta),
+      );
     } else if (isInserting) {
       context.missing(_configJsonMeta);
     }
     if (data.containsKey('shuffled_ids_json')) {
       context.handle(
+        _shuffledIdsJsonMeta,
+        shuffledIdsJson.isAcceptableOrUnknown(
+          data['shuffled_ids_json']!,
           _shuffledIdsJsonMeta,
-          shuffledIdsJson.isAcceptableOrUnknown(
-              data['shuffled_ids_json']!, _shuffledIdsJsonMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_shuffledIdsJsonMeta);
     }
     if (data.containsKey('current_index')) {
       context.handle(
+        _currentIndexMeta,
+        currentIndex.isAcceptableOrUnknown(
+          data['current_index']!,
           _currentIndexMeta,
-          currentIndex.isAcceptableOrUnknown(
-              data['current_index']!, _currentIndexMeta));
+        ),
+      );
     }
     if (data.containsKey('created_at_ms')) {
       context.handle(
+        _createdAtMsMeta,
+        createdAtMs.isAcceptableOrUnknown(
+          data['created_at_ms']!,
           _createdAtMsMeta,
-          createdAtMs.isAcceptableOrUnknown(
-              data['created_at_ms']!, _createdAtMsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_createdAtMsMeta);
+    }
+    if (data.containsKey('updated_at_ms')) {
+      context.handle(
+        _updatedAtMsMeta,
+        updatedAtMs.isAcceptableOrUnknown(
+          data['updated_at_ms']!,
+          _updatedAtMsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('state_json')) {
+      context.handle(
+        _stateJsonMeta,
+        stateJson.isAcceptableOrUnknown(data['state_json']!, _stateJsonMeta),
+      );
     }
     return context;
   }
@@ -3057,16 +3810,38 @@ class $ShuffleStateTableTable extends ShuffleStateTable
   ShuffleStateRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ShuffleStateRow(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      configJson: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}config_json'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      contextId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}context_id'],
+      )!,
+      configJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}config_json'],
+      )!,
       shuffledIdsJson: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}shuffled_ids_json'])!,
-      currentIndex: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}current_index'])!,
-      createdAtMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}created_at_ms'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}shuffled_ids_json'],
+      )!,
+      currentIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}current_index'],
+      )!,
+      createdAtMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at_ms'],
+      )!,
+      updatedAtMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at_ms'],
+      )!,
+      stateJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state_json'],
+      )!,
     );
   }
 
@@ -3079,6 +3854,11 @@ class $ShuffleStateTableTable extends ShuffleStateTable
 class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
   final int id;
 
+  /// Shuffle context this state belongs to, e.g. 'all_songs' or 'playlist_42'.
+  /// One persisted state per context (enforced by a unique index; see
+  /// AppDatabase.migration).
+  final String contextId;
+
   /// JSON-encoded ShuffleConfig.
   final String configJson;
 
@@ -3086,42 +3866,64 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
   final String shuffledIdsJson;
   final int currentIndex;
   final int createdAtMs;
-  const ShuffleStateRow(
-      {required this.id,
-      required this.configJson,
-      required this.shuffledIdsJson,
-      required this.currentIndex,
-      required this.createdAtMs});
+
+  /// Epoch ms of the last save.
+  final int updatedAtMs;
+
+  /// Full engine state blob from IntelliShuffleEngine.serializeState().
+  /// The columns above are denormalised copies kept for debugging/queries.
+  final String stateJson;
+  const ShuffleStateRow({
+    required this.id,
+    required this.contextId,
+    required this.configJson,
+    required this.shuffledIdsJson,
+    required this.currentIndex,
+    required this.createdAtMs,
+    required this.updatedAtMs,
+    required this.stateJson,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['context_id'] = Variable<String>(contextId);
     map['config_json'] = Variable<String>(configJson);
     map['shuffled_ids_json'] = Variable<String>(shuffledIdsJson);
     map['current_index'] = Variable<int>(currentIndex);
     map['created_at_ms'] = Variable<int>(createdAtMs);
+    map['updated_at_ms'] = Variable<int>(updatedAtMs);
+    map['state_json'] = Variable<String>(stateJson);
     return map;
   }
 
   ShuffleStateTableCompanion toCompanion(bool nullToAbsent) {
     return ShuffleStateTableCompanion(
       id: Value(id),
+      contextId: Value(contextId),
       configJson: Value(configJson),
       shuffledIdsJson: Value(shuffledIdsJson),
       currentIndex: Value(currentIndex),
       createdAtMs: Value(createdAtMs),
+      updatedAtMs: Value(updatedAtMs),
+      stateJson: Value(stateJson),
     );
   }
 
-  factory ShuffleStateRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory ShuffleStateRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ShuffleStateRow(
       id: serializer.fromJson<int>(json['id']),
+      contextId: serializer.fromJson<String>(json['contextId']),
       configJson: serializer.fromJson<String>(json['configJson']),
       shuffledIdsJson: serializer.fromJson<String>(json['shuffledIdsJson']),
       currentIndex: serializer.fromJson<int>(json['currentIndex']),
       createdAtMs: serializer.fromJson<int>(json['createdAtMs']),
+      updatedAtMs: serializer.fromJson<int>(json['updatedAtMs']),
+      stateJson: serializer.fromJson<String>(json['stateJson']),
     );
   }
   @override
@@ -3129,39 +3931,55 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'contextId': serializer.toJson<String>(contextId),
       'configJson': serializer.toJson<String>(configJson),
       'shuffledIdsJson': serializer.toJson<String>(shuffledIdsJson),
       'currentIndex': serializer.toJson<int>(currentIndex),
       'createdAtMs': serializer.toJson<int>(createdAtMs),
+      'updatedAtMs': serializer.toJson<int>(updatedAtMs),
+      'stateJson': serializer.toJson<String>(stateJson),
     };
   }
 
-  ShuffleStateRow copyWith(
-          {int? id,
-          String? configJson,
-          String? shuffledIdsJson,
-          int? currentIndex,
-          int? createdAtMs}) =>
-      ShuffleStateRow(
-        id: id ?? this.id,
-        configJson: configJson ?? this.configJson,
-        shuffledIdsJson: shuffledIdsJson ?? this.shuffledIdsJson,
-        currentIndex: currentIndex ?? this.currentIndex,
-        createdAtMs: createdAtMs ?? this.createdAtMs,
-      );
+  ShuffleStateRow copyWith({
+    int? id,
+    String? contextId,
+    String? configJson,
+    String? shuffledIdsJson,
+    int? currentIndex,
+    int? createdAtMs,
+    int? updatedAtMs,
+    String? stateJson,
+  }) => ShuffleStateRow(
+    id: id ?? this.id,
+    contextId: contextId ?? this.contextId,
+    configJson: configJson ?? this.configJson,
+    shuffledIdsJson: shuffledIdsJson ?? this.shuffledIdsJson,
+    currentIndex: currentIndex ?? this.currentIndex,
+    createdAtMs: createdAtMs ?? this.createdAtMs,
+    updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+    stateJson: stateJson ?? this.stateJson,
+  );
   ShuffleStateRow copyWithCompanion(ShuffleStateTableCompanion data) {
     return ShuffleStateRow(
       id: data.id.present ? data.id.value : this.id,
-      configJson:
-          data.configJson.present ? data.configJson.value : this.configJson,
+      contextId: data.contextId.present ? data.contextId.value : this.contextId,
+      configJson: data.configJson.present
+          ? data.configJson.value
+          : this.configJson,
       shuffledIdsJson: data.shuffledIdsJson.present
           ? data.shuffledIdsJson.value
           : this.shuffledIdsJson,
       currentIndex: data.currentIndex.present
           ? data.currentIndex.value
           : this.currentIndex,
-      createdAtMs:
-          data.createdAtMs.present ? data.createdAtMs.value : this.createdAtMs,
+      createdAtMs: data.createdAtMs.present
+          ? data.createdAtMs.value
+          : this.createdAtMs,
+      updatedAtMs: data.updatedAtMs.present
+          ? data.updatedAtMs.value
+          : this.updatedAtMs,
+      stateJson: data.stateJson.present ? data.stateJson.value : this.stateJson,
     );
   }
 
@@ -3169,78 +3987,114 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
   String toString() {
     return (StringBuffer('ShuffleStateRow(')
           ..write('id: $id, ')
+          ..write('contextId: $contextId, ')
           ..write('configJson: $configJson, ')
           ..write('shuffledIdsJson: $shuffledIdsJson, ')
           ..write('currentIndex: $currentIndex, ')
-          ..write('createdAtMs: $createdAtMs')
+          ..write('createdAtMs: $createdAtMs, ')
+          ..write('updatedAtMs: $updatedAtMs, ')
+          ..write('stateJson: $stateJson')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, configJson, shuffledIdsJson, currentIndex, createdAtMs);
+  int get hashCode => Object.hash(
+    id,
+    contextId,
+    configJson,
+    shuffledIdsJson,
+    currentIndex,
+    createdAtMs,
+    updatedAtMs,
+    stateJson,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ShuffleStateRow &&
           other.id == this.id &&
+          other.contextId == this.contextId &&
           other.configJson == this.configJson &&
           other.shuffledIdsJson == this.shuffledIdsJson &&
           other.currentIndex == this.currentIndex &&
-          other.createdAtMs == this.createdAtMs);
+          other.createdAtMs == this.createdAtMs &&
+          other.updatedAtMs == this.updatedAtMs &&
+          other.stateJson == this.stateJson);
 }
 
 class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
   final Value<int> id;
+  final Value<String> contextId;
   final Value<String> configJson;
   final Value<String> shuffledIdsJson;
   final Value<int> currentIndex;
   final Value<int> createdAtMs;
+  final Value<int> updatedAtMs;
+  final Value<String> stateJson;
   const ShuffleStateTableCompanion({
     this.id = const Value.absent(),
+    this.contextId = const Value.absent(),
     this.configJson = const Value.absent(),
     this.shuffledIdsJson = const Value.absent(),
     this.currentIndex = const Value.absent(),
     this.createdAtMs = const Value.absent(),
+    this.updatedAtMs = const Value.absent(),
+    this.stateJson = const Value.absent(),
   });
   ShuffleStateTableCompanion.insert({
     this.id = const Value.absent(),
+    this.contextId = const Value.absent(),
     required String configJson,
     required String shuffledIdsJson,
     this.currentIndex = const Value.absent(),
     required int createdAtMs,
-  })  : configJson = Value(configJson),
-        shuffledIdsJson = Value(shuffledIdsJson),
-        createdAtMs = Value(createdAtMs);
+    this.updatedAtMs = const Value.absent(),
+    this.stateJson = const Value.absent(),
+  }) : configJson = Value(configJson),
+       shuffledIdsJson = Value(shuffledIdsJson),
+       createdAtMs = Value(createdAtMs);
   static Insertable<ShuffleStateRow> custom({
     Expression<int>? id,
+    Expression<String>? contextId,
     Expression<String>? configJson,
     Expression<String>? shuffledIdsJson,
     Expression<int>? currentIndex,
     Expression<int>? createdAtMs,
+    Expression<int>? updatedAtMs,
+    Expression<String>? stateJson,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (contextId != null) 'context_id': contextId,
       if (configJson != null) 'config_json': configJson,
       if (shuffledIdsJson != null) 'shuffled_ids_json': shuffledIdsJson,
       if (currentIndex != null) 'current_index': currentIndex,
       if (createdAtMs != null) 'created_at_ms': createdAtMs,
+      if (updatedAtMs != null) 'updated_at_ms': updatedAtMs,
+      if (stateJson != null) 'state_json': stateJson,
     });
   }
 
-  ShuffleStateTableCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? configJson,
-      Value<String>? shuffledIdsJson,
-      Value<int>? currentIndex,
-      Value<int>? createdAtMs}) {
+  ShuffleStateTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? contextId,
+    Value<String>? configJson,
+    Value<String>? shuffledIdsJson,
+    Value<int>? currentIndex,
+    Value<int>? createdAtMs,
+    Value<int>? updatedAtMs,
+    Value<String>? stateJson,
+  }) {
     return ShuffleStateTableCompanion(
       id: id ?? this.id,
+      contextId: contextId ?? this.contextId,
       configJson: configJson ?? this.configJson,
       shuffledIdsJson: shuffledIdsJson ?? this.shuffledIdsJson,
       currentIndex: currentIndex ?? this.currentIndex,
       createdAtMs: createdAtMs ?? this.createdAtMs,
+      updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+      stateJson: stateJson ?? this.stateJson,
     );
   }
 
@@ -3249,6 +4103,9 @@ class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (contextId.present) {
+      map['context_id'] = Variable<String>(contextId.value);
     }
     if (configJson.present) {
       map['config_json'] = Variable<String>(configJson.value);
@@ -3262,6 +4119,12 @@ class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
     if (createdAtMs.present) {
       map['created_at_ms'] = Variable<int>(createdAtMs.value);
     }
+    if (updatedAtMs.present) {
+      map['updated_at_ms'] = Variable<int>(updatedAtMs.value);
+    }
+    if (stateJson.present) {
+      map['state_json'] = Variable<String>(stateJson.value);
+    }
     return map;
   }
 
@@ -3269,10 +4132,13 @@ class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
   String toString() {
     return (StringBuffer('ShuffleStateTableCompanion(')
           ..write('id: $id, ')
+          ..write('contextId: $contextId, ')
           ..write('configJson: $configJson, ')
           ..write('shuffledIdsJson: $shuffledIdsJson, ')
           ..write('currentIndex: $currentIndex, ')
-          ..write('createdAtMs: $createdAtMs')
+          ..write('createdAtMs: $createdAtMs, ')
+          ..write('updatedAtMs: $updatedAtMs, ')
+          ..write('stateJson: $stateJson')
           ..write(')'))
         .toString();
   }
@@ -3284,124 +4150,215 @@ class $AudioFeaturesTableTable extends AudioFeaturesTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $AudioFeaturesTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _trackIdMeta =
-      const VerificationMeta('trackId');
+  static const VerificationMeta _trackIdMeta = const VerificationMeta(
+    'trackId',
+  );
   @override
   late final GeneratedColumn<String> trackId = GeneratedColumn<String>(
-      'track_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'track_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _tempoMeta = const VerificationMeta('tempo');
   @override
   late final GeneratedColumn<double> tempo = GeneratedColumn<double>(
-      'tempo', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'tempo',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   static const VerificationMeta _energyMeta = const VerificationMeta('energy');
   @override
   late final GeneratedColumn<double> energy = GeneratedColumn<double>(
-      'energy', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _valenceMeta =
-      const VerificationMeta('valence');
+    'energy',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _valenceMeta = const VerificationMeta(
+    'valence',
+  );
   @override
   late final GeneratedColumn<double> valence = GeneratedColumn<double>(
-      'valence', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _danceabilityMeta =
-      const VerificationMeta('danceability');
+    'valence',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _danceabilityMeta = const VerificationMeta(
+    'danceability',
+  );
   @override
   late final GeneratedColumn<double> danceability = GeneratedColumn<double>(
-      'danceability', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _loudnessMeta =
-      const VerificationMeta('loudness');
+    'danceability',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _loudnessMeta = const VerificationMeta(
+    'loudness',
+  );
   @override
   late final GeneratedColumn<double> loudness = GeneratedColumn<double>(
-      'loudness', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _acousticnessMeta =
-      const VerificationMeta('acousticness');
+    'loudness',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _acousticnessMeta = const VerificationMeta(
+    'acousticness',
+  );
   @override
   late final GeneratedColumn<double> acousticness = GeneratedColumn<double>(
-      'acousticness', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _fingerprintHashMeta =
-      const VerificationMeta('fingerprintHash');
+    'acousticness',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _musicalKeyMeta = const VerificationMeta(
+    'musicalKey',
+  );
+  @override
+  late final GeneratedColumn<int> musicalKey = GeneratedColumn<int>(
+    'musical_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(-1),
+  );
+  static const VerificationMeta _keyNameMeta = const VerificationMeta(
+    'keyName',
+  );
+  @override
+  late final GeneratedColumn<String> keyName = GeneratedColumn<String>(
+    'key_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _fingerprintHashMeta = const VerificationMeta(
+    'fingerprintHash',
+  );
   @override
   late final GeneratedColumn<String> fingerprintHash = GeneratedColumn<String>(
-      'fingerprint_hash', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'fingerprint_hash',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        trackId,
-        tempo,
-        energy,
-        valence,
-        danceability,
-        loudness,
-        acousticness,
-        fingerprintHash
-      ];
+    trackId,
+    tempo,
+    energy,
+    valence,
+    danceability,
+    loudness,
+    acousticness,
+    musicalKey,
+    keyName,
+    fingerprintHash,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'audio_features';
   @override
-  VerificationContext validateIntegrity(Insertable<AudioFeaturesRow> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<AudioFeaturesRow> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('track_id')) {
-      context.handle(_trackIdMeta,
-          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+      context.handle(
+        _trackIdMeta,
+        trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_trackIdMeta);
     }
     if (data.containsKey('tempo')) {
       context.handle(
-          _tempoMeta, tempo.isAcceptableOrUnknown(data['tempo']!, _tempoMeta));
+        _tempoMeta,
+        tempo.isAcceptableOrUnknown(data['tempo']!, _tempoMeta),
+      );
     }
     if (data.containsKey('energy')) {
-      context.handle(_energyMeta,
-          energy.isAcceptableOrUnknown(data['energy']!, _energyMeta));
+      context.handle(
+        _energyMeta,
+        energy.isAcceptableOrUnknown(data['energy']!, _energyMeta),
+      );
     }
     if (data.containsKey('valence')) {
-      context.handle(_valenceMeta,
-          valence.isAcceptableOrUnknown(data['valence']!, _valenceMeta));
+      context.handle(
+        _valenceMeta,
+        valence.isAcceptableOrUnknown(data['valence']!, _valenceMeta),
+      );
     }
     if (data.containsKey('danceability')) {
       context.handle(
+        _danceabilityMeta,
+        danceability.isAcceptableOrUnknown(
+          data['danceability']!,
           _danceabilityMeta,
-          danceability.isAcceptableOrUnknown(
-              data['danceability']!, _danceabilityMeta));
+        ),
+      );
     }
     if (data.containsKey('loudness')) {
-      context.handle(_loudnessMeta,
-          loudness.isAcceptableOrUnknown(data['loudness']!, _loudnessMeta));
+      context.handle(
+        _loudnessMeta,
+        loudness.isAcceptableOrUnknown(data['loudness']!, _loudnessMeta),
+      );
     }
     if (data.containsKey('acousticness')) {
       context.handle(
+        _acousticnessMeta,
+        acousticness.isAcceptableOrUnknown(
+          data['acousticness']!,
           _acousticnessMeta,
-          acousticness.isAcceptableOrUnknown(
-              data['acousticness']!, _acousticnessMeta));
+        ),
+      );
+    }
+    if (data.containsKey('musical_key')) {
+      context.handle(
+        _musicalKeyMeta,
+        musicalKey.isAcceptableOrUnknown(data['musical_key']!, _musicalKeyMeta),
+      );
+    }
+    if (data.containsKey('key_name')) {
+      context.handle(
+        _keyNameMeta,
+        keyName.isAcceptableOrUnknown(data['key_name']!, _keyNameMeta),
+      );
     }
     if (data.containsKey('fingerprint_hash')) {
       context.handle(
+        _fingerprintHashMeta,
+        fingerprintHash.isAcceptableOrUnknown(
+          data['fingerprint_hash']!,
           _fingerprintHashMeta,
-          fingerprintHash.isAcceptableOrUnknown(
-              data['fingerprint_hash']!, _fingerprintHashMeta));
+        ),
+      );
     }
     return context;
   }
@@ -3412,22 +4369,46 @@ class $AudioFeaturesTableTable extends AudioFeaturesTable
   AudioFeaturesRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AudioFeaturesRow(
-      trackId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}track_id'])!,
-      tempo: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}tempo'])!,
-      energy: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}energy'])!,
-      valence: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}valence'])!,
-      danceability: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}danceability'])!,
-      loudness: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}loudness'])!,
-      acousticness: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}acousticness'])!,
+      trackId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}track_id'],
+      )!,
+      tempo: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}tempo'],
+      )!,
+      energy: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}energy'],
+      )!,
+      valence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}valence'],
+      )!,
+      danceability: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}danceability'],
+      )!,
+      loudness: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}loudness'],
+      )!,
+      acousticness: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}acousticness'],
+      )!,
+      musicalKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}musical_key'],
+      )!,
+      keyName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key_name'],
+      )!,
       fingerprintHash: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}fingerprint_hash']),
+        DriftSqlType.string,
+        data['${effectivePrefix}fingerprint_hash'],
+      ),
     );
   }
 
@@ -3461,16 +4442,24 @@ class AudioFeaturesRow extends DataClass
   final double acousticness;
 
   /// Chromaprint fingerprint hash (hex string). Used by DuplicateDetector path 3.
+  /// Camelot/pitch-class key, 0-11 (C..B). -1 when not yet analysed.
+  final int musicalKey;
+
+  /// Human-readable key, e.g. "A minor" / Camelot "8A". Empty when unknown.
+  final String keyName;
   final String? fingerprintHash;
-  const AudioFeaturesRow(
-      {required this.trackId,
-      required this.tempo,
-      required this.energy,
-      required this.valence,
-      required this.danceability,
-      required this.loudness,
-      required this.acousticness,
-      this.fingerprintHash});
+  const AudioFeaturesRow({
+    required this.trackId,
+    required this.tempo,
+    required this.energy,
+    required this.valence,
+    required this.danceability,
+    required this.loudness,
+    required this.acousticness,
+    required this.musicalKey,
+    required this.keyName,
+    this.fingerprintHash,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3481,6 +4470,8 @@ class AudioFeaturesRow extends DataClass
     map['danceability'] = Variable<double>(danceability);
     map['loudness'] = Variable<double>(loudness);
     map['acousticness'] = Variable<double>(acousticness);
+    map['musical_key'] = Variable<int>(musicalKey);
+    map['key_name'] = Variable<String>(keyName);
     if (!nullToAbsent || fingerprintHash != null) {
       map['fingerprint_hash'] = Variable<String>(fingerprintHash);
     }
@@ -3496,14 +4487,18 @@ class AudioFeaturesRow extends DataClass
       danceability: Value(danceability),
       loudness: Value(loudness),
       acousticness: Value(acousticness),
+      musicalKey: Value(musicalKey),
+      keyName: Value(keyName),
       fingerprintHash: fingerprintHash == null && nullToAbsent
           ? const Value.absent()
           : Value(fingerprintHash),
     );
   }
 
-  factory AudioFeaturesRow.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory AudioFeaturesRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AudioFeaturesRow(
       trackId: serializer.fromJson<String>(json['trackId']),
@@ -3513,6 +4508,8 @@ class AudioFeaturesRow extends DataClass
       danceability: serializer.fromJson<double>(json['danceability']),
       loudness: serializer.fromJson<double>(json['loudness']),
       acousticness: serializer.fromJson<double>(json['acousticness']),
+      musicalKey: serializer.fromJson<int>(json['musicalKey']),
+      keyName: serializer.fromJson<String>(json['keyName']),
       fingerprintHash: serializer.fromJson<String?>(json['fingerprintHash']),
     );
   }
@@ -3527,31 +4524,37 @@ class AudioFeaturesRow extends DataClass
       'danceability': serializer.toJson<double>(danceability),
       'loudness': serializer.toJson<double>(loudness),
       'acousticness': serializer.toJson<double>(acousticness),
+      'musicalKey': serializer.toJson<int>(musicalKey),
+      'keyName': serializer.toJson<String>(keyName),
       'fingerprintHash': serializer.toJson<String?>(fingerprintHash),
     };
   }
 
-  AudioFeaturesRow copyWith(
-          {String? trackId,
-          double? tempo,
-          double? energy,
-          double? valence,
-          double? danceability,
-          double? loudness,
-          double? acousticness,
-          Value<String?> fingerprintHash = const Value.absent()}) =>
-      AudioFeaturesRow(
-        trackId: trackId ?? this.trackId,
-        tempo: tempo ?? this.tempo,
-        energy: energy ?? this.energy,
-        valence: valence ?? this.valence,
-        danceability: danceability ?? this.danceability,
-        loudness: loudness ?? this.loudness,
-        acousticness: acousticness ?? this.acousticness,
-        fingerprintHash: fingerprintHash.present
-            ? fingerprintHash.value
-            : this.fingerprintHash,
-      );
+  AudioFeaturesRow copyWith({
+    String? trackId,
+    double? tempo,
+    double? energy,
+    double? valence,
+    double? danceability,
+    double? loudness,
+    double? acousticness,
+    int? musicalKey,
+    String? keyName,
+    Value<String?> fingerprintHash = const Value.absent(),
+  }) => AudioFeaturesRow(
+    trackId: trackId ?? this.trackId,
+    tempo: tempo ?? this.tempo,
+    energy: energy ?? this.energy,
+    valence: valence ?? this.valence,
+    danceability: danceability ?? this.danceability,
+    loudness: loudness ?? this.loudness,
+    acousticness: acousticness ?? this.acousticness,
+    musicalKey: musicalKey ?? this.musicalKey,
+    keyName: keyName ?? this.keyName,
+    fingerprintHash: fingerprintHash.present
+        ? fingerprintHash.value
+        : this.fingerprintHash,
+  );
   AudioFeaturesRow copyWithCompanion(AudioFeaturesTableCompanion data) {
     return AudioFeaturesRow(
       trackId: data.trackId.present ? data.trackId.value : this.trackId,
@@ -3565,6 +4568,10 @@ class AudioFeaturesRow extends DataClass
       acousticness: data.acousticness.present
           ? data.acousticness.value
           : this.acousticness,
+      musicalKey: data.musicalKey.present
+          ? data.musicalKey.value
+          : this.musicalKey,
+      keyName: data.keyName.present ? data.keyName.value : this.keyName,
       fingerprintHash: data.fingerprintHash.present
           ? data.fingerprintHash.value
           : this.fingerprintHash,
@@ -3581,14 +4588,26 @@ class AudioFeaturesRow extends DataClass
           ..write('danceability: $danceability, ')
           ..write('loudness: $loudness, ')
           ..write('acousticness: $acousticness, ')
+          ..write('musicalKey: $musicalKey, ')
+          ..write('keyName: $keyName, ')
           ..write('fingerprintHash: $fingerprintHash')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(trackId, tempo, energy, valence, danceability,
-      loudness, acousticness, fingerprintHash);
+  int get hashCode => Object.hash(
+    trackId,
+    tempo,
+    energy,
+    valence,
+    danceability,
+    loudness,
+    acousticness,
+    musicalKey,
+    keyName,
+    fingerprintHash,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3600,6 +4619,8 @@ class AudioFeaturesRow extends DataClass
           other.danceability == this.danceability &&
           other.loudness == this.loudness &&
           other.acousticness == this.acousticness &&
+          other.musicalKey == this.musicalKey &&
+          other.keyName == this.keyName &&
           other.fingerprintHash == this.fingerprintHash);
 }
 
@@ -3611,6 +4632,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
   final Value<double> danceability;
   final Value<double> loudness;
   final Value<double> acousticness;
+  final Value<int> musicalKey;
+  final Value<String> keyName;
   final Value<String?> fingerprintHash;
   final Value<int> rowid;
   const AudioFeaturesTableCompanion({
@@ -3621,6 +4644,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     this.danceability = const Value.absent(),
     this.loudness = const Value.absent(),
     this.acousticness = const Value.absent(),
+    this.musicalKey = const Value.absent(),
+    this.keyName = const Value.absent(),
     this.fingerprintHash = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -3632,6 +4657,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     this.danceability = const Value.absent(),
     this.loudness = const Value.absent(),
     this.acousticness = const Value.absent(),
+    this.musicalKey = const Value.absent(),
+    this.keyName = const Value.absent(),
     this.fingerprintHash = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : trackId = Value(trackId);
@@ -3643,6 +4670,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     Expression<double>? danceability,
     Expression<double>? loudness,
     Expression<double>? acousticness,
+    Expression<int>? musicalKey,
+    Expression<String>? keyName,
     Expression<String>? fingerprintHash,
     Expression<int>? rowid,
   }) {
@@ -3654,21 +4683,26 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
       if (danceability != null) 'danceability': danceability,
       if (loudness != null) 'loudness': loudness,
       if (acousticness != null) 'acousticness': acousticness,
+      if (musicalKey != null) 'musical_key': musicalKey,
+      if (keyName != null) 'key_name': keyName,
       if (fingerprintHash != null) 'fingerprint_hash': fingerprintHash,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  AudioFeaturesTableCompanion copyWith(
-      {Value<String>? trackId,
-      Value<double>? tempo,
-      Value<double>? energy,
-      Value<double>? valence,
-      Value<double>? danceability,
-      Value<double>? loudness,
-      Value<double>? acousticness,
-      Value<String?>? fingerprintHash,
-      Value<int>? rowid}) {
+  AudioFeaturesTableCompanion copyWith({
+    Value<String>? trackId,
+    Value<double>? tempo,
+    Value<double>? energy,
+    Value<double>? valence,
+    Value<double>? danceability,
+    Value<double>? loudness,
+    Value<double>? acousticness,
+    Value<int>? musicalKey,
+    Value<String>? keyName,
+    Value<String?>? fingerprintHash,
+    Value<int>? rowid,
+  }) {
     return AudioFeaturesTableCompanion(
       trackId: trackId ?? this.trackId,
       tempo: tempo ?? this.tempo,
@@ -3677,6 +4711,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
       danceability: danceability ?? this.danceability,
       loudness: loudness ?? this.loudness,
       acousticness: acousticness ?? this.acousticness,
+      musicalKey: musicalKey ?? this.musicalKey,
+      keyName: keyName ?? this.keyName,
       fingerprintHash: fingerprintHash ?? this.fingerprintHash,
       rowid: rowid ?? this.rowid,
     );
@@ -3706,6 +4742,12 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     if (acousticness.present) {
       map['acousticness'] = Variable<double>(acousticness.value);
     }
+    if (musicalKey.present) {
+      map['musical_key'] = Variable<int>(musicalKey.value);
+    }
+    if (keyName.present) {
+      map['key_name'] = Variable<String>(keyName.value);
+    }
     if (fingerprintHash.present) {
       map['fingerprint_hash'] = Variable<String>(fingerprintHash.value);
     }
@@ -3725,7 +4767,281 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
           ..write('danceability: $danceability, ')
           ..write('loudness: $loudness, ')
           ..write('acousticness: $acousticness, ')
+          ..write('musicalKey: $musicalKey, ')
+          ..write('keyName: $keyName, ')
           ..write('fingerprintHash: $fingerprintHash, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SettingsTableTable extends SettingsTable
+    with TableInfo<$SettingsTableTable, SettingRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SettingsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+    'key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+    'value',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMsMeta = const VerificationMeta(
+    'updatedAtMs',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAtMs = GeneratedColumn<int>(
+    'updated_at_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [key, value, updatedAtMs];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'settings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SettingRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+        _keyMeta,
+        key.isAcceptableOrUnknown(data['key']!, _keyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+        _valueMeta,
+        value.isAcceptableOrUnknown(data['value']!, _valueMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    if (data.containsKey('updated_at_ms')) {
+      context.handle(
+        _updatedAtMsMeta,
+        updatedAtMs.isAcceptableOrUnknown(
+          data['updated_at_ms']!,
+          _updatedAtMsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  SettingRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SettingRow(
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      value: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}value'],
+      )!,
+      updatedAtMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at_ms'],
+      )!,
+    );
+  }
+
+  @override
+  $SettingsTableTable createAlias(String alias) {
+    return $SettingsTableTable(attachedDatabase, alias);
+  }
+}
+
+class SettingRow extends DataClass implements Insertable<SettingRow> {
+  final String key;
+
+  /// JSON-encoded value. Readers tolerate a malformed value by falling back to
+  /// the default rather than failing the whole load.
+  final String value;
+
+  /// Epoch ms of the last write, so an import can tell which side is newer.
+  final int updatedAtMs;
+  const SettingRow({
+    required this.key,
+    required this.value,
+    required this.updatedAtMs,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<String>(value);
+    map['updated_at_ms'] = Variable<int>(updatedAtMs);
+    return map;
+  }
+
+  SettingsTableCompanion toCompanion(bool nullToAbsent) {
+    return SettingsTableCompanion(
+      key: Value(key),
+      value: Value(value),
+      updatedAtMs: Value(updatedAtMs),
+    );
+  }
+
+  factory SettingRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SettingRow(
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+      updatedAtMs: serializer.fromJson<int>(json['updatedAtMs']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+      'updatedAtMs': serializer.toJson<int>(updatedAtMs),
+    };
+  }
+
+  SettingRow copyWith({String? key, String? value, int? updatedAtMs}) =>
+      SettingRow(
+        key: key ?? this.key,
+        value: value ?? this.value,
+        updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+      );
+  SettingRow copyWithCompanion(SettingsTableCompanion data) {
+    return SettingRow(
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+      updatedAtMs: data.updatedAtMs.present
+          ? data.updatedAtMs.value
+          : this.updatedAtMs,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SettingRow(')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
+          ..write('updatedAtMs: $updatedAtMs')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(key, value, updatedAtMs);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SettingRow &&
+          other.key == this.key &&
+          other.value == this.value &&
+          other.updatedAtMs == this.updatedAtMs);
+}
+
+class SettingsTableCompanion extends UpdateCompanion<SettingRow> {
+  final Value<String> key;
+  final Value<String> value;
+  final Value<int> updatedAtMs;
+  final Value<int> rowid;
+  const SettingsTableCompanion({
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+    this.updatedAtMs = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SettingsTableCompanion.insert({
+    required String key,
+    required String value,
+    required int updatedAtMs,
+    this.rowid = const Value.absent(),
+  }) : key = Value(key),
+       value = Value(value),
+       updatedAtMs = Value(updatedAtMs);
+  static Insertable<SettingRow> custom({
+    Expression<String>? key,
+    Expression<String>? value,
+    Expression<int>? updatedAtMs,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+      if (updatedAtMs != null) 'updated_at_ms': updatedAtMs,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SettingsTableCompanion copyWith({
+    Value<String>? key,
+    Value<String>? value,
+    Value<int>? updatedAtMs,
+    Value<int>? rowid,
+  }) {
+    return SettingsTableCompanion(
+      key: key ?? this.key,
+      value: value ?? this.value,
+      updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (updatedAtMs.present) {
+      map['updated_at_ms'] = Variable<int>(updatedAtMs.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SettingsTableCompanion(')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
+          ..write('updatedAtMs: $updatedAtMs, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3747,91 +5063,95 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ShuffleStateTableTable(this);
   late final $AudioFeaturesTableTable audioFeaturesTable =
       $AudioFeaturesTableTable(this);
+  late final $SettingsTableTable settingsTable = $SettingsTableTable(this);
   late final TrackDao trackDao = TrackDao(this as AppDatabase);
   late final BehaviorDao behaviorDao = BehaviorDao(this as AppDatabase);
   late final PlaylistDao playlistDao = PlaylistDao(this as AppDatabase);
+  late final ShuffleStateDao shuffleStateDao = ShuffleStateDao(
+    this as AppDatabase,
+  );
+  late final SettingsDao settingsDao = SettingsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        tracksTable,
-        albumsTable,
-        artistsTable,
-        playlistsTable,
-        playlistTracksTable,
-        playbackHistoryTable,
-        shuffleStateTable,
-        audioFeaturesTable
-      ];
+    tracksTable,
+    albumsTable,
+    artistsTable,
+    playlistsTable,
+    playlistTracksTable,
+    playbackHistoryTable,
+    shuffleStateTable,
+    audioFeaturesTable,
+    settingsTable,
+  ];
   @override
-  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
-        [
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('playlists',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('playlist_tracks', kind: UpdateKind.delete),
-            ],
-          ),
-        ],
-      );
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'playlists',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('playlist_tracks', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
-typedef $$TracksTableTableCreateCompanionBuilder = TracksTableCompanion
-    Function({
-  required String id,
-  required String title,
-  required String artistName,
-  required String albumTitle,
-  required String artistId,
-  required String albumId,
-  required int durationMs,
-  required String filePath,
-  Value<int> fileSizeBytes,
-  Value<String> format,
-  Value<int> bitRateKbps,
-  Value<int> sampleRateHz,
-  Value<int> playCount,
-  Value<int> skipCount,
-  Value<int> rating,
-  required int dateAddedMs,
-  Value<int?> lastPlayedMs,
-  Value<bool> isDeleted,
-  Value<String?> coverArtPath,
-  Value<int> trackNumber,
-  Value<int> discNumber,
-  Value<String> genre,
-  Value<int> year,
-  Value<int> rowid,
-});
-typedef $$TracksTableTableUpdateCompanionBuilder = TracksTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> artistName,
-  Value<String> albumTitle,
-  Value<String> artistId,
-  Value<String> albumId,
-  Value<int> durationMs,
-  Value<String> filePath,
-  Value<int> fileSizeBytes,
-  Value<String> format,
-  Value<int> bitRateKbps,
-  Value<int> sampleRateHz,
-  Value<int> playCount,
-  Value<int> skipCount,
-  Value<int> rating,
-  Value<int> dateAddedMs,
-  Value<int?> lastPlayedMs,
-  Value<bool> isDeleted,
-  Value<String?> coverArtPath,
-  Value<int> trackNumber,
-  Value<int> discNumber,
-  Value<String> genre,
-  Value<int> year,
-  Value<int> rowid,
-});
+typedef $$TracksTableTableCreateCompanionBuilder =
+    TracksTableCompanion Function({
+      required String id,
+      required String title,
+      required String artistName,
+      required String albumTitle,
+      required String artistId,
+      required String albumId,
+      required int durationMs,
+      required String filePath,
+      Value<int> fileSizeBytes,
+      Value<String> format,
+      Value<int> bitRateKbps,
+      Value<int> sampleRateHz,
+      Value<int> playCount,
+      Value<int> skipCount,
+      Value<int> rating,
+      required int dateAddedMs,
+      Value<int?> lastPlayedMs,
+      Value<bool> isDeleted,
+      Value<String?> coverArtPath,
+      Value<int> trackNumber,
+      Value<int> discNumber,
+      Value<String> genre,
+      Value<int> year,
+      Value<int> rowid,
+    });
+typedef $$TracksTableTableUpdateCompanionBuilder =
+    TracksTableCompanion Function({
+      Value<String> id,
+      Value<String> title,
+      Value<String> artistName,
+      Value<String> albumTitle,
+      Value<String> artistId,
+      Value<String> albumId,
+      Value<int> durationMs,
+      Value<String> filePath,
+      Value<int> fileSizeBytes,
+      Value<String> format,
+      Value<int> bitRateKbps,
+      Value<int> sampleRateHz,
+      Value<int> playCount,
+      Value<int> skipCount,
+      Value<int> rating,
+      Value<int> dateAddedMs,
+      Value<int?> lastPlayedMs,
+      Value<bool> isDeleted,
+      Value<String?> coverArtPath,
+      Value<int> trackNumber,
+      Value<int> discNumber,
+      Value<String> genre,
+      Value<int> year,
+      Value<int> rowid,
+    });
 
 class $$TracksTableTableFilterComposer
     extends Composer<_$AppDatabase, $TracksTableTable> {
@@ -3843,73 +5163,119 @@ class $$TracksTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnFilters(column));
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get artistName => $composableBuilder(
-      column: $table.artistName, builder: (column) => ColumnFilters(column));
+    column: $table.artistName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get albumTitle => $composableBuilder(
-      column: $table.albumTitle, builder: (column) => ColumnFilters(column));
+    column: $table.albumTitle,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get artistId => $composableBuilder(
-      column: $table.artistId, builder: (column) => ColumnFilters(column));
+    column: $table.artistId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get albumId => $composableBuilder(
-      column: $table.albumId, builder: (column) => ColumnFilters(column));
+    column: $table.albumId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get durationMs => $composableBuilder(
-      column: $table.durationMs, builder: (column) => ColumnFilters(column));
+    column: $table.durationMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get filePath => $composableBuilder(
-      column: $table.filePath, builder: (column) => ColumnFilters(column));
+    column: $table.filePath,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get fileSizeBytes => $composableBuilder(
-      column: $table.fileSizeBytes, builder: (column) => ColumnFilters(column));
+    column: $table.fileSizeBytes,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get format => $composableBuilder(
-      column: $table.format, builder: (column) => ColumnFilters(column));
+    column: $table.format,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get bitRateKbps => $composableBuilder(
-      column: $table.bitRateKbps, builder: (column) => ColumnFilters(column));
+    column: $table.bitRateKbps,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get sampleRateHz => $composableBuilder(
-      column: $table.sampleRateHz, builder: (column) => ColumnFilters(column));
+    column: $table.sampleRateHz,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get playCount => $composableBuilder(
-      column: $table.playCount, builder: (column) => ColumnFilters(column));
+    column: $table.playCount,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get skipCount => $composableBuilder(
-      column: $table.skipCount, builder: (column) => ColumnFilters(column));
+    column: $table.skipCount,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get rating => $composableBuilder(
-      column: $table.rating, builder: (column) => ColumnFilters(column));
+    column: $table.rating,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get dateAddedMs => $composableBuilder(
-      column: $table.dateAddedMs, builder: (column) => ColumnFilters(column));
+    column: $table.dateAddedMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get lastPlayedMs => $composableBuilder(
-      column: $table.lastPlayedMs, builder: (column) => ColumnFilters(column));
+    column: $table.lastPlayedMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get isDeleted => $composableBuilder(
-      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath, builder: (column) => ColumnFilters(column));
+    column: $table.coverArtPath,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get trackNumber => $composableBuilder(
-      column: $table.trackNumber, builder: (column) => ColumnFilters(column));
+    column: $table.trackNumber,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get discNumber => $composableBuilder(
-      column: $table.discNumber, builder: (column) => ColumnFilters(column));
+    column: $table.discNumber,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get genre => $composableBuilder(
-      column: $table.genre, builder: (column) => ColumnFilters(column));
+    column: $table.genre,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get year => $composableBuilder(
-      column: $table.year, builder: (column) => ColumnFilters(column));
+    column: $table.year,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$TracksTableTableOrderingComposer
@@ -3922,77 +5288,119 @@ class $$TracksTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnOrderings(column));
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get artistName => $composableBuilder(
-      column: $table.artistName, builder: (column) => ColumnOrderings(column));
+    column: $table.artistName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get albumTitle => $composableBuilder(
-      column: $table.albumTitle, builder: (column) => ColumnOrderings(column));
+    column: $table.albumTitle,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get artistId => $composableBuilder(
-      column: $table.artistId, builder: (column) => ColumnOrderings(column));
+    column: $table.artistId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get albumId => $composableBuilder(
-      column: $table.albumId, builder: (column) => ColumnOrderings(column));
+    column: $table.albumId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get durationMs => $composableBuilder(
-      column: $table.durationMs, builder: (column) => ColumnOrderings(column));
+    column: $table.durationMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get filePath => $composableBuilder(
-      column: $table.filePath, builder: (column) => ColumnOrderings(column));
+    column: $table.filePath,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get fileSizeBytes => $composableBuilder(
-      column: $table.fileSizeBytes,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.fileSizeBytes,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get format => $composableBuilder(
-      column: $table.format, builder: (column) => ColumnOrderings(column));
+    column: $table.format,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get bitRateKbps => $composableBuilder(
-      column: $table.bitRateKbps, builder: (column) => ColumnOrderings(column));
+    column: $table.bitRateKbps,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get sampleRateHz => $composableBuilder(
-      column: $table.sampleRateHz,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.sampleRateHz,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get playCount => $composableBuilder(
-      column: $table.playCount, builder: (column) => ColumnOrderings(column));
+    column: $table.playCount,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get skipCount => $composableBuilder(
-      column: $table.skipCount, builder: (column) => ColumnOrderings(column));
+    column: $table.skipCount,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get rating => $composableBuilder(
-      column: $table.rating, builder: (column) => ColumnOrderings(column));
+    column: $table.rating,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get dateAddedMs => $composableBuilder(
-      column: $table.dateAddedMs, builder: (column) => ColumnOrderings(column));
+    column: $table.dateAddedMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get lastPlayedMs => $composableBuilder(
-      column: $table.lastPlayedMs,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.lastPlayedMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get isDeleted => $composableBuilder(
-      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.coverArtPath,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get trackNumber => $composableBuilder(
-      column: $table.trackNumber, builder: (column) => ColumnOrderings(column));
+    column: $table.trackNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get discNumber => $composableBuilder(
-      column: $table.discNumber, builder: (column) => ColumnOrderings(column));
+    column: $table.discNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get genre => $composableBuilder(
-      column: $table.genre, builder: (column) => ColumnOrderings(column));
+    column: $table.genre,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get year => $composableBuilder(
-      column: $table.year, builder: (column) => ColumnOrderings(column));
+    column: $table.year,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TracksTableTableAnnotationComposer
@@ -4011,10 +5419,14 @@ class $$TracksTableTableAnnotationComposer
       $composableBuilder(column: $table.title, builder: (column) => column);
 
   GeneratedColumn<String> get artistName => $composableBuilder(
-      column: $table.artistName, builder: (column) => column);
+    column: $table.artistName,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get albumTitle => $composableBuilder(
-      column: $table.albumTitle, builder: (column) => column);
+    column: $table.albumTitle,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get artistId =>
       $composableBuilder(column: $table.artistId, builder: (column) => column);
@@ -4023,22 +5435,30 @@ class $$TracksTableTableAnnotationComposer
       $composableBuilder(column: $table.albumId, builder: (column) => column);
 
   GeneratedColumn<int> get durationMs => $composableBuilder(
-      column: $table.durationMs, builder: (column) => column);
+    column: $table.durationMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get filePath =>
       $composableBuilder(column: $table.filePath, builder: (column) => column);
 
   GeneratedColumn<int> get fileSizeBytes => $composableBuilder(
-      column: $table.fileSizeBytes, builder: (column) => column);
+    column: $table.fileSizeBytes,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get format =>
       $composableBuilder(column: $table.format, builder: (column) => column);
 
   GeneratedColumn<int> get bitRateKbps => $composableBuilder(
-      column: $table.bitRateKbps, builder: (column) => column);
+    column: $table.bitRateKbps,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get sampleRateHz => $composableBuilder(
-      column: $table.sampleRateHz, builder: (column) => column);
+    column: $table.sampleRateHz,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get playCount =>
       $composableBuilder(column: $table.playCount, builder: (column) => column);
@@ -4050,22 +5470,32 @@ class $$TracksTableTableAnnotationComposer
       $composableBuilder(column: $table.rating, builder: (column) => column);
 
   GeneratedColumn<int> get dateAddedMs => $composableBuilder(
-      column: $table.dateAddedMs, builder: (column) => column);
+    column: $table.dateAddedMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get lastPlayedMs => $composableBuilder(
-      column: $table.lastPlayedMs, builder: (column) => column);
+    column: $table.lastPlayedMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get isDeleted =>
       $composableBuilder(column: $table.isDeleted, builder: (column) => column);
 
   GeneratedColumn<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath, builder: (column) => column);
+    column: $table.coverArtPath,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get trackNumber => $composableBuilder(
-      column: $table.trackNumber, builder: (column) => column);
+    column: $table.trackNumber,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get discNumber => $composableBuilder(
-      column: $table.discNumber, builder: (column) => column);
+    column: $table.discNumber,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get genre =>
       $composableBuilder(column: $table.genre, builder: (column) => column);
@@ -4074,20 +5504,27 @@ class $$TracksTableTableAnnotationComposer
       $composableBuilder(column: $table.year, builder: (column) => column);
 }
 
-class $$TracksTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $TracksTableTable,
-    TrackRow,
-    $$TracksTableTableFilterComposer,
-    $$TracksTableTableOrderingComposer,
-    $$TracksTableTableAnnotationComposer,
-    $$TracksTableTableCreateCompanionBuilder,
-    $$TracksTableTableUpdateCompanionBuilder,
-    (TrackRow, BaseReferences<_$AppDatabase, $TracksTableTable, TrackRow>),
-    TrackRow,
-    PrefetchHooks Function()> {
+class $$TracksTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TracksTableTable,
+          TrackRow,
+          $$TracksTableTableFilterComposer,
+          $$TracksTableTableOrderingComposer,
+          $$TracksTableTableAnnotationComposer,
+          $$TracksTableTableCreateCompanionBuilder,
+          $$TracksTableTableUpdateCompanionBuilder,
+          (
+            TrackRow,
+            BaseReferences<_$AppDatabase, $TracksTableTable, TrackRow>,
+          ),
+          TrackRow,
+          PrefetchHooks Function()
+        > {
   $$TracksTableTableTableManager(_$AppDatabase db, $TracksTableTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4096,157 +5533,160 @@ class $$TracksTableTableTableManager extends RootTableManager<
               $$TracksTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$TracksTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> artistName = const Value.absent(),
-            Value<String> albumTitle = const Value.absent(),
-            Value<String> artistId = const Value.absent(),
-            Value<String> albumId = const Value.absent(),
-            Value<int> durationMs = const Value.absent(),
-            Value<String> filePath = const Value.absent(),
-            Value<int> fileSizeBytes = const Value.absent(),
-            Value<String> format = const Value.absent(),
-            Value<int> bitRateKbps = const Value.absent(),
-            Value<int> sampleRateHz = const Value.absent(),
-            Value<int> playCount = const Value.absent(),
-            Value<int> skipCount = const Value.absent(),
-            Value<int> rating = const Value.absent(),
-            Value<int> dateAddedMs = const Value.absent(),
-            Value<int?> lastPlayedMs = const Value.absent(),
-            Value<bool> isDeleted = const Value.absent(),
-            Value<String?> coverArtPath = const Value.absent(),
-            Value<int> trackNumber = const Value.absent(),
-            Value<int> discNumber = const Value.absent(),
-            Value<String> genre = const Value.absent(),
-            Value<int> year = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              TracksTableCompanion(
-            id: id,
-            title: title,
-            artistName: artistName,
-            albumTitle: albumTitle,
-            artistId: artistId,
-            albumId: albumId,
-            durationMs: durationMs,
-            filePath: filePath,
-            fileSizeBytes: fileSizeBytes,
-            format: format,
-            bitRateKbps: bitRateKbps,
-            sampleRateHz: sampleRateHz,
-            playCount: playCount,
-            skipCount: skipCount,
-            rating: rating,
-            dateAddedMs: dateAddedMs,
-            lastPlayedMs: lastPlayedMs,
-            isDeleted: isDeleted,
-            coverArtPath: coverArtPath,
-            trackNumber: trackNumber,
-            discNumber: discNumber,
-            genre: genre,
-            year: year,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String title,
-            required String artistName,
-            required String albumTitle,
-            required String artistId,
-            required String albumId,
-            required int durationMs,
-            required String filePath,
-            Value<int> fileSizeBytes = const Value.absent(),
-            Value<String> format = const Value.absent(),
-            Value<int> bitRateKbps = const Value.absent(),
-            Value<int> sampleRateHz = const Value.absent(),
-            Value<int> playCount = const Value.absent(),
-            Value<int> skipCount = const Value.absent(),
-            Value<int> rating = const Value.absent(),
-            required int dateAddedMs,
-            Value<int?> lastPlayedMs = const Value.absent(),
-            Value<bool> isDeleted = const Value.absent(),
-            Value<String?> coverArtPath = const Value.absent(),
-            Value<int> trackNumber = const Value.absent(),
-            Value<int> discNumber = const Value.absent(),
-            Value<String> genre = const Value.absent(),
-            Value<int> year = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              TracksTableCompanion.insert(
-            id: id,
-            title: title,
-            artistName: artistName,
-            albumTitle: albumTitle,
-            artistId: artistId,
-            albumId: albumId,
-            durationMs: durationMs,
-            filePath: filePath,
-            fileSizeBytes: fileSizeBytes,
-            format: format,
-            bitRateKbps: bitRateKbps,
-            sampleRateHz: sampleRateHz,
-            playCount: playCount,
-            skipCount: skipCount,
-            rating: rating,
-            dateAddedMs: dateAddedMs,
-            lastPlayedMs: lastPlayedMs,
-            isDeleted: isDeleted,
-            coverArtPath: coverArtPath,
-            trackNumber: trackNumber,
-            discNumber: discNumber,
-            genre: genre,
-            year: year,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> artistName = const Value.absent(),
+                Value<String> albumTitle = const Value.absent(),
+                Value<String> artistId = const Value.absent(),
+                Value<String> albumId = const Value.absent(),
+                Value<int> durationMs = const Value.absent(),
+                Value<String> filePath = const Value.absent(),
+                Value<int> fileSizeBytes = const Value.absent(),
+                Value<String> format = const Value.absent(),
+                Value<int> bitRateKbps = const Value.absent(),
+                Value<int> sampleRateHz = const Value.absent(),
+                Value<int> playCount = const Value.absent(),
+                Value<int> skipCount = const Value.absent(),
+                Value<int> rating = const Value.absent(),
+                Value<int> dateAddedMs = const Value.absent(),
+                Value<int?> lastPlayedMs = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<String?> coverArtPath = const Value.absent(),
+                Value<int> trackNumber = const Value.absent(),
+                Value<int> discNumber = const Value.absent(),
+                Value<String> genre = const Value.absent(),
+                Value<int> year = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TracksTableCompanion(
+                id: id,
+                title: title,
+                artistName: artistName,
+                albumTitle: albumTitle,
+                artistId: artistId,
+                albumId: albumId,
+                durationMs: durationMs,
+                filePath: filePath,
+                fileSizeBytes: fileSizeBytes,
+                format: format,
+                bitRateKbps: bitRateKbps,
+                sampleRateHz: sampleRateHz,
+                playCount: playCount,
+                skipCount: skipCount,
+                rating: rating,
+                dateAddedMs: dateAddedMs,
+                lastPlayedMs: lastPlayedMs,
+                isDeleted: isDeleted,
+                coverArtPath: coverArtPath,
+                trackNumber: trackNumber,
+                discNumber: discNumber,
+                genre: genre,
+                year: year,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String title,
+                required String artistName,
+                required String albumTitle,
+                required String artistId,
+                required String albumId,
+                required int durationMs,
+                required String filePath,
+                Value<int> fileSizeBytes = const Value.absent(),
+                Value<String> format = const Value.absent(),
+                Value<int> bitRateKbps = const Value.absent(),
+                Value<int> sampleRateHz = const Value.absent(),
+                Value<int> playCount = const Value.absent(),
+                Value<int> skipCount = const Value.absent(),
+                Value<int> rating = const Value.absent(),
+                required int dateAddedMs,
+                Value<int?> lastPlayedMs = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<String?> coverArtPath = const Value.absent(),
+                Value<int> trackNumber = const Value.absent(),
+                Value<int> discNumber = const Value.absent(),
+                Value<String> genre = const Value.absent(),
+                Value<int> year = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TracksTableCompanion.insert(
+                id: id,
+                title: title,
+                artistName: artistName,
+                albumTitle: albumTitle,
+                artistId: artistId,
+                albumId: albumId,
+                durationMs: durationMs,
+                filePath: filePath,
+                fileSizeBytes: fileSizeBytes,
+                format: format,
+                bitRateKbps: bitRateKbps,
+                sampleRateHz: sampleRateHz,
+                playCount: playCount,
+                skipCount: skipCount,
+                rating: rating,
+                dateAddedMs: dateAddedMs,
+                lastPlayedMs: lastPlayedMs,
+                isDeleted: isDeleted,
+                coverArtPath: coverArtPath,
+                trackNumber: trackNumber,
+                discNumber: discNumber,
+                genre: genre,
+                year: year,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$TracksTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $TracksTableTable,
-    TrackRow,
-    $$TracksTableTableFilterComposer,
-    $$TracksTableTableOrderingComposer,
-    $$TracksTableTableAnnotationComposer,
-    $$TracksTableTableCreateCompanionBuilder,
-    $$TracksTableTableUpdateCompanionBuilder,
-    (TrackRow, BaseReferences<_$AppDatabase, $TracksTableTable, TrackRow>),
-    TrackRow,
-    PrefetchHooks Function()>;
-typedef $$AlbumsTableTableCreateCompanionBuilder = AlbumsTableCompanion
-    Function({
-  required String id,
-  required String title,
-  required String artistId,
-  required String artistName,
-  Value<int> year,
-  Value<String?> coverArtPath,
-  Value<int> trackCount,
-  Value<int> totalDurationMs,
-  Value<String> genre,
-  required int dateAddedMs,
-  Value<int> rowid,
-});
-typedef $$AlbumsTableTableUpdateCompanionBuilder = AlbumsTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> artistId,
-  Value<String> artistName,
-  Value<int> year,
-  Value<String?> coverArtPath,
-  Value<int> trackCount,
-  Value<int> totalDurationMs,
-  Value<String> genre,
-  Value<int> dateAddedMs,
-  Value<int> rowid,
-});
+typedef $$TracksTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TracksTableTable,
+      TrackRow,
+      $$TracksTableTableFilterComposer,
+      $$TracksTableTableOrderingComposer,
+      $$TracksTableTableAnnotationComposer,
+      $$TracksTableTableCreateCompanionBuilder,
+      $$TracksTableTableUpdateCompanionBuilder,
+      (TrackRow, BaseReferences<_$AppDatabase, $TracksTableTable, TrackRow>),
+      TrackRow,
+      PrefetchHooks Function()
+    >;
+typedef $$AlbumsTableTableCreateCompanionBuilder =
+    AlbumsTableCompanion Function({
+      required String id,
+      required String title,
+      required String artistId,
+      required String artistName,
+      Value<int> year,
+      Value<String?> coverArtPath,
+      Value<int> trackCount,
+      Value<int> totalDurationMs,
+      Value<String> genre,
+      required int dateAddedMs,
+      Value<int> rowid,
+    });
+typedef $$AlbumsTableTableUpdateCompanionBuilder =
+    AlbumsTableCompanion Function({
+      Value<String> id,
+      Value<String> title,
+      Value<String> artistId,
+      Value<String> artistName,
+      Value<int> year,
+      Value<String?> coverArtPath,
+      Value<int> trackCount,
+      Value<int> totalDurationMs,
+      Value<String> genre,
+      Value<int> dateAddedMs,
+      Value<int> rowid,
+    });
 
 class $$AlbumsTableTableFilterComposer
     extends Composer<_$AppDatabase, $AlbumsTableTable> {
@@ -4258,35 +5698,54 @@ class $$AlbumsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnFilters(column));
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get artistId => $composableBuilder(
-      column: $table.artistId, builder: (column) => ColumnFilters(column));
+    column: $table.artistId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get artistName => $composableBuilder(
-      column: $table.artistName, builder: (column) => ColumnFilters(column));
+    column: $table.artistName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get year => $composableBuilder(
-      column: $table.year, builder: (column) => ColumnFilters(column));
+    column: $table.year,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath, builder: (column) => ColumnFilters(column));
+    column: $table.coverArtPath,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get trackCount => $composableBuilder(
-      column: $table.trackCount, builder: (column) => ColumnFilters(column));
+    column: $table.trackCount,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get totalDurationMs => $composableBuilder(
-      column: $table.totalDurationMs,
-      builder: (column) => ColumnFilters(column));
+    column: $table.totalDurationMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get genre => $composableBuilder(
-      column: $table.genre, builder: (column) => ColumnFilters(column));
+    column: $table.genre,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get dateAddedMs => $composableBuilder(
-      column: $table.dateAddedMs, builder: (column) => ColumnFilters(column));
+    column: $table.dateAddedMs,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$AlbumsTableTableOrderingComposer
@@ -4299,36 +5758,54 @@ class $$AlbumsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnOrderings(column));
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get artistId => $composableBuilder(
-      column: $table.artistId, builder: (column) => ColumnOrderings(column));
+    column: $table.artistId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get artistName => $composableBuilder(
-      column: $table.artistName, builder: (column) => ColumnOrderings(column));
+    column: $table.artistName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get year => $composableBuilder(
-      column: $table.year, builder: (column) => ColumnOrderings(column));
+    column: $table.year,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.coverArtPath,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get trackCount => $composableBuilder(
-      column: $table.trackCount, builder: (column) => ColumnOrderings(column));
+    column: $table.trackCount,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get totalDurationMs => $composableBuilder(
-      column: $table.totalDurationMs,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.totalDurationMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get genre => $composableBuilder(
-      column: $table.genre, builder: (column) => ColumnOrderings(column));
+    column: $table.genre,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get dateAddedMs => $composableBuilder(
-      column: $table.dateAddedMs, builder: (column) => ColumnOrderings(column));
+    column: $table.dateAddedMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AlbumsTableTableAnnotationComposer
@@ -4350,41 +5827,58 @@ class $$AlbumsTableTableAnnotationComposer
       $composableBuilder(column: $table.artistId, builder: (column) => column);
 
   GeneratedColumn<String> get artistName => $composableBuilder(
-      column: $table.artistName, builder: (column) => column);
+    column: $table.artistName,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get year =>
       $composableBuilder(column: $table.year, builder: (column) => column);
 
   GeneratedColumn<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath, builder: (column) => column);
+    column: $table.coverArtPath,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get trackCount => $composableBuilder(
-      column: $table.trackCount, builder: (column) => column);
+    column: $table.trackCount,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get totalDurationMs => $composableBuilder(
-      column: $table.totalDurationMs, builder: (column) => column);
+    column: $table.totalDurationMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get genre =>
       $composableBuilder(column: $table.genre, builder: (column) => column);
 
   GeneratedColumn<int> get dateAddedMs => $composableBuilder(
-      column: $table.dateAddedMs, builder: (column) => column);
+    column: $table.dateAddedMs,
+    builder: (column) => column,
+  );
 }
 
-class $$AlbumsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $AlbumsTableTable,
-    AlbumRow,
-    $$AlbumsTableTableFilterComposer,
-    $$AlbumsTableTableOrderingComposer,
-    $$AlbumsTableTableAnnotationComposer,
-    $$AlbumsTableTableCreateCompanionBuilder,
-    $$AlbumsTableTableUpdateCompanionBuilder,
-    (AlbumRow, BaseReferences<_$AppDatabase, $AlbumsTableTable, AlbumRow>),
-    AlbumRow,
-    PrefetchHooks Function()> {
+class $$AlbumsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AlbumsTableTable,
+          AlbumRow,
+          $$AlbumsTableTableFilterComposer,
+          $$AlbumsTableTableOrderingComposer,
+          $$AlbumsTableTableAnnotationComposer,
+          $$AlbumsTableTableCreateCompanionBuilder,
+          $$AlbumsTableTableUpdateCompanionBuilder,
+          (
+            AlbumRow,
+            BaseReferences<_$AppDatabase, $AlbumsTableTable, AlbumRow>,
+          ),
+          AlbumRow,
+          PrefetchHooks Function()
+        > {
   $$AlbumsTableTableTableManager(_$AppDatabase db, $AlbumsTableTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4393,95 +5887,98 @@ class $$AlbumsTableTableTableManager extends RootTableManager<
               $$AlbumsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$AlbumsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> artistId = const Value.absent(),
-            Value<String> artistName = const Value.absent(),
-            Value<int> year = const Value.absent(),
-            Value<String?> coverArtPath = const Value.absent(),
-            Value<int> trackCount = const Value.absent(),
-            Value<int> totalDurationMs = const Value.absent(),
-            Value<String> genre = const Value.absent(),
-            Value<int> dateAddedMs = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              AlbumsTableCompanion(
-            id: id,
-            title: title,
-            artistId: artistId,
-            artistName: artistName,
-            year: year,
-            coverArtPath: coverArtPath,
-            trackCount: trackCount,
-            totalDurationMs: totalDurationMs,
-            genre: genre,
-            dateAddedMs: dateAddedMs,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String title,
-            required String artistId,
-            required String artistName,
-            Value<int> year = const Value.absent(),
-            Value<String?> coverArtPath = const Value.absent(),
-            Value<int> trackCount = const Value.absent(),
-            Value<int> totalDurationMs = const Value.absent(),
-            Value<String> genre = const Value.absent(),
-            required int dateAddedMs,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              AlbumsTableCompanion.insert(
-            id: id,
-            title: title,
-            artistId: artistId,
-            artistName: artistName,
-            year: year,
-            coverArtPath: coverArtPath,
-            trackCount: trackCount,
-            totalDurationMs: totalDurationMs,
-            genre: genre,
-            dateAddedMs: dateAddedMs,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> artistId = const Value.absent(),
+                Value<String> artistName = const Value.absent(),
+                Value<int> year = const Value.absent(),
+                Value<String?> coverArtPath = const Value.absent(),
+                Value<int> trackCount = const Value.absent(),
+                Value<int> totalDurationMs = const Value.absent(),
+                Value<String> genre = const Value.absent(),
+                Value<int> dateAddedMs = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AlbumsTableCompanion(
+                id: id,
+                title: title,
+                artistId: artistId,
+                artistName: artistName,
+                year: year,
+                coverArtPath: coverArtPath,
+                trackCount: trackCount,
+                totalDurationMs: totalDurationMs,
+                genre: genre,
+                dateAddedMs: dateAddedMs,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String title,
+                required String artistId,
+                required String artistName,
+                Value<int> year = const Value.absent(),
+                Value<String?> coverArtPath = const Value.absent(),
+                Value<int> trackCount = const Value.absent(),
+                Value<int> totalDurationMs = const Value.absent(),
+                Value<String> genre = const Value.absent(),
+                required int dateAddedMs,
+                Value<int> rowid = const Value.absent(),
+              }) => AlbumsTableCompanion.insert(
+                id: id,
+                title: title,
+                artistId: artistId,
+                artistName: artistName,
+                year: year,
+                coverArtPath: coverArtPath,
+                trackCount: trackCount,
+                totalDurationMs: totalDurationMs,
+                genre: genre,
+                dateAddedMs: dateAddedMs,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$AlbumsTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $AlbumsTableTable,
-    AlbumRow,
-    $$AlbumsTableTableFilterComposer,
-    $$AlbumsTableTableOrderingComposer,
-    $$AlbumsTableTableAnnotationComposer,
-    $$AlbumsTableTableCreateCompanionBuilder,
-    $$AlbumsTableTableUpdateCompanionBuilder,
-    (AlbumRow, BaseReferences<_$AppDatabase, $AlbumsTableTable, AlbumRow>),
-    AlbumRow,
-    PrefetchHooks Function()>;
-typedef $$ArtistsTableTableCreateCompanionBuilder = ArtistsTableCompanion
-    Function({
-  required String id,
-  required String name,
-  Value<int> trackCount,
-  Value<int> albumCount,
-  Value<String?> imagePath,
-  Value<int> rowid,
-});
-typedef $$ArtistsTableTableUpdateCompanionBuilder = ArtistsTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> name,
-  Value<int> trackCount,
-  Value<int> albumCount,
-  Value<String?> imagePath,
-  Value<int> rowid,
-});
+typedef $$AlbumsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AlbumsTableTable,
+      AlbumRow,
+      $$AlbumsTableTableFilterComposer,
+      $$AlbumsTableTableOrderingComposer,
+      $$AlbumsTableTableAnnotationComposer,
+      $$AlbumsTableTableCreateCompanionBuilder,
+      $$AlbumsTableTableUpdateCompanionBuilder,
+      (AlbumRow, BaseReferences<_$AppDatabase, $AlbumsTableTable, AlbumRow>),
+      AlbumRow,
+      PrefetchHooks Function()
+    >;
+typedef $$ArtistsTableTableCreateCompanionBuilder =
+    ArtistsTableCompanion Function({
+      required String id,
+      required String name,
+      Value<int> trackCount,
+      Value<int> albumCount,
+      Value<String?> imagePath,
+      Value<int> rowid,
+    });
+typedef $$ArtistsTableTableUpdateCompanionBuilder =
+    ArtistsTableCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<int> trackCount,
+      Value<int> albumCount,
+      Value<String?> imagePath,
+      Value<int> rowid,
+    });
 
 class $$ArtistsTableTableFilterComposer
     extends Composer<_$AppDatabase, $ArtistsTableTable> {
@@ -4493,19 +5990,29 @@ class $$ArtistsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get trackCount => $composableBuilder(
-      column: $table.trackCount, builder: (column) => ColumnFilters(column));
+    column: $table.trackCount,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get albumCount => $composableBuilder(
-      column: $table.albumCount, builder: (column) => ColumnFilters(column));
+    column: $table.albumCount,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get imagePath => $composableBuilder(
-      column: $table.imagePath, builder: (column) => ColumnFilters(column));
+    column: $table.imagePath,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ArtistsTableTableOrderingComposer
@@ -4518,19 +6025,29 @@ class $$ArtistsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get trackCount => $composableBuilder(
-      column: $table.trackCount, builder: (column) => ColumnOrderings(column));
+    column: $table.trackCount,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get albumCount => $composableBuilder(
-      column: $table.albumCount, builder: (column) => ColumnOrderings(column));
+    column: $table.albumCount,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get imagePath => $composableBuilder(
-      column: $table.imagePath, builder: (column) => ColumnOrderings(column));
+    column: $table.imagePath,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ArtistsTableTableAnnotationComposer
@@ -4549,29 +6066,40 @@ class $$ArtistsTableTableAnnotationComposer
       $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<int> get trackCount => $composableBuilder(
-      column: $table.trackCount, builder: (column) => column);
+    column: $table.trackCount,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get albumCount => $composableBuilder(
-      column: $table.albumCount, builder: (column) => column);
+    column: $table.albumCount,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get imagePath =>
       $composableBuilder(column: $table.imagePath, builder: (column) => column);
 }
 
-class $$ArtistsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ArtistsTableTable,
-    ArtistRow,
-    $$ArtistsTableTableFilterComposer,
-    $$ArtistsTableTableOrderingComposer,
-    $$ArtistsTableTableAnnotationComposer,
-    $$ArtistsTableTableCreateCompanionBuilder,
-    $$ArtistsTableTableUpdateCompanionBuilder,
-    (ArtistRow, BaseReferences<_$AppDatabase, $ArtistsTableTable, ArtistRow>),
-    ArtistRow,
-    PrefetchHooks Function()> {
+class $$ArtistsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ArtistsTableTable,
+          ArtistRow,
+          $$ArtistsTableTableFilterComposer,
+          $$ArtistsTableTableOrderingComposer,
+          $$ArtistsTableTableAnnotationComposer,
+          $$ArtistsTableTableCreateCompanionBuilder,
+          $$ArtistsTableTableUpdateCompanionBuilder,
+          (
+            ArtistRow,
+            BaseReferences<_$AppDatabase, $ArtistsTableTable, ArtistRow>,
+          ),
+          ArtistRow,
+          PrefetchHooks Function()
+        > {
   $$ArtistsTableTableTableManager(_$AppDatabase db, $ArtistsTableTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4580,104 +6108,119 @@ class $$ArtistsTableTableTableManager extends RootTableManager<
               $$ArtistsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$ArtistsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<int> trackCount = const Value.absent(),
-            Value<int> albumCount = const Value.absent(),
-            Value<String?> imagePath = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ArtistsTableCompanion(
-            id: id,
-            name: name,
-            trackCount: trackCount,
-            albumCount: albumCount,
-            imagePath: imagePath,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String name,
-            Value<int> trackCount = const Value.absent(),
-            Value<int> albumCount = const Value.absent(),
-            Value<String?> imagePath = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ArtistsTableCompanion.insert(
-            id: id,
-            name: name,
-            trackCount: trackCount,
-            albumCount: albumCount,
-            imagePath: imagePath,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<int> trackCount = const Value.absent(),
+                Value<int> albumCount = const Value.absent(),
+                Value<String?> imagePath = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ArtistsTableCompanion(
+                id: id,
+                name: name,
+                trackCount: trackCount,
+                albumCount: albumCount,
+                imagePath: imagePath,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                Value<int> trackCount = const Value.absent(),
+                Value<int> albumCount = const Value.absent(),
+                Value<String?> imagePath = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ArtistsTableCompanion.insert(
+                id: id,
+                name: name,
+                trackCount: trackCount,
+                albumCount: albumCount,
+                imagePath: imagePath,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ArtistsTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $ArtistsTableTable,
-    ArtistRow,
-    $$ArtistsTableTableFilterComposer,
-    $$ArtistsTableTableOrderingComposer,
-    $$ArtistsTableTableAnnotationComposer,
-    $$ArtistsTableTableCreateCompanionBuilder,
-    $$ArtistsTableTableUpdateCompanionBuilder,
-    (ArtistRow, BaseReferences<_$AppDatabase, $ArtistsTableTable, ArtistRow>),
-    ArtistRow,
-    PrefetchHooks Function()>;
-typedef $$PlaylistsTableTableCreateCompanionBuilder = PlaylistsTableCompanion
-    Function({
-  required String id,
-  required String name,
-  Value<String> description,
-  Value<String> type,
-  Value<String?> mood,
-  required int createdAtMs,
-  required int updatedAtMs,
-  Value<String?> coverArtPath,
-  Value<bool> isPinned,
-  Value<int> rowid,
-});
-typedef $$PlaylistsTableTableUpdateCompanionBuilder = PlaylistsTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> name,
-  Value<String> description,
-  Value<String> type,
-  Value<String?> mood,
-  Value<int> createdAtMs,
-  Value<int> updatedAtMs,
-  Value<String?> coverArtPath,
-  Value<bool> isPinned,
-  Value<int> rowid,
-});
+typedef $$ArtistsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ArtistsTableTable,
+      ArtistRow,
+      $$ArtistsTableTableFilterComposer,
+      $$ArtistsTableTableOrderingComposer,
+      $$ArtistsTableTableAnnotationComposer,
+      $$ArtistsTableTableCreateCompanionBuilder,
+      $$ArtistsTableTableUpdateCompanionBuilder,
+      (ArtistRow, BaseReferences<_$AppDatabase, $ArtistsTableTable, ArtistRow>),
+      ArtistRow,
+      PrefetchHooks Function()
+    >;
+typedef $$PlaylistsTableTableCreateCompanionBuilder =
+    PlaylistsTableCompanion Function({
+      required String id,
+      required String name,
+      Value<String> description,
+      Value<String> type,
+      Value<String?> mood,
+      required int createdAtMs,
+      required int updatedAtMs,
+      Value<String?> coverArtPath,
+      Value<String> coverArtPathsJson,
+      Value<bool> isPinned,
+      Value<int> rowid,
+    });
+typedef $$PlaylistsTableTableUpdateCompanionBuilder =
+    PlaylistsTableCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<String> description,
+      Value<String> type,
+      Value<String?> mood,
+      Value<int> createdAtMs,
+      Value<int> updatedAtMs,
+      Value<String?> coverArtPath,
+      Value<String> coverArtPathsJson,
+      Value<bool> isPinned,
+      Value<int> rowid,
+    });
 
 final class $$PlaylistsTableTableReferences
     extends BaseReferences<_$AppDatabase, $PlaylistsTableTable, PlaylistRow> {
   $$PlaylistsTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
 
   static MultiTypedResultKey<$PlaylistTracksTableTable, List<PlaylistTrackRow>>
-      _playlistTracksTableRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.playlistTracksTable,
-              aliasName: $_aliasNameGenerator(
-                  db.playlistsTable.id, db.playlistTracksTable.playlistId));
+  _playlistTracksTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.playlistTracksTable,
+        aliasName: $_aliasNameGenerator(
+          db.playlistsTable.id,
+          db.playlistTracksTable.playlistId,
+        ),
+      );
 
   $$PlaylistTracksTableTableProcessedTableManager get playlistTracksTableRefs {
     final manager = $$PlaylistTracksTableTableTableManager(
-            $_db, $_db.playlistTracksTable)
-        .filter((f) => f.playlistId.id.sqlEquals($_itemColumn<String>('id')!));
+      $_db,
+      $_db.playlistTracksTable,
+    ).filter((f) => f.playlistId.id.sqlEquals($_itemColumn<String>('id')!));
 
-    final cache =
-        $_typedResult.readTableOrNull(_playlistTracksTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(
+      _playlistTracksTableRefsTable($_db),
+    );
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
+      manager.$state.copyWith(prefetchedData: cache),
+    );
   }
 }
 
@@ -4691,50 +6234,77 @@ class $$PlaylistsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnFilters(column));
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get type => $composableBuilder(
-      column: $table.type, builder: (column) => ColumnFilters(column));
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get mood => $composableBuilder(
-      column: $table.mood, builder: (column) => ColumnFilters(column));
+    column: $table.mood,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get createdAtMs => $composableBuilder(
-      column: $table.createdAtMs, builder: (column) => ColumnFilters(column));
+    column: $table.createdAtMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get updatedAtMs => $composableBuilder(
-      column: $table.updatedAtMs, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAtMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath, builder: (column) => ColumnFilters(column));
+    column: $table.coverArtPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get coverArtPathsJson => $composableBuilder(
+    column: $table.coverArtPathsJson,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get isPinned => $composableBuilder(
-      column: $table.isPinned, builder: (column) => ColumnFilters(column));
+    column: $table.isPinned,
+    builder: (column) => ColumnFilters(column),
+  );
 
   Expression<bool> playlistTracksTableRefs(
-      Expression<bool> Function($$PlaylistTracksTableTableFilterComposer f) f) {
+    Expression<bool> Function($$PlaylistTracksTableTableFilterComposer f) f,
+  ) {
     final $$PlaylistTracksTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.playlistTracksTable,
-        getReferencedColumn: (t) => t.playlistId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlaylistTracksTableTableFilterComposer(
-              $db: $db,
-              $table: $db.playlistTracksTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.playlistTracksTable,
+      getReferencedColumn: (t) => t.playlistId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlaylistTracksTableTableFilterComposer(
+            $db: $db,
+            $table: $db.playlistTracksTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
@@ -4749,32 +6319,54 @@ class $$PlaylistsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnOrderings(column));
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get type => $composableBuilder(
-      column: $table.type, builder: (column) => ColumnOrderings(column));
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get mood => $composableBuilder(
-      column: $table.mood, builder: (column) => ColumnOrderings(column));
+    column: $table.mood,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get createdAtMs => $composableBuilder(
-      column: $table.createdAtMs, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAtMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get updatedAtMs => $composableBuilder(
-      column: $table.updatedAtMs, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAtMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.coverArtPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get coverArtPathsJson => $composableBuilder(
+    column: $table.coverArtPathsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get isPinned => $composableBuilder(
-      column: $table.isPinned, builder: (column) => ColumnOrderings(column));
+    column: $table.isPinned,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PlaylistsTableTableAnnotationComposer
@@ -4793,7 +6385,9 @@ class $$PlaylistsTableTableAnnotationComposer
       $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => column);
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
@@ -4802,56 +6396,75 @@ class $$PlaylistsTableTableAnnotationComposer
       $composableBuilder(column: $table.mood, builder: (column) => column);
 
   GeneratedColumn<int> get createdAtMs => $composableBuilder(
-      column: $table.createdAtMs, builder: (column) => column);
+    column: $table.createdAtMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get updatedAtMs => $composableBuilder(
-      column: $table.updatedAtMs, builder: (column) => column);
+    column: $table.updatedAtMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get coverArtPath => $composableBuilder(
-      column: $table.coverArtPath, builder: (column) => column);
+    column: $table.coverArtPath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get coverArtPathsJson => $composableBuilder(
+    column: $table.coverArtPathsJson,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get isPinned =>
       $composableBuilder(column: $table.isPinned, builder: (column) => column);
 
   Expression<T> playlistTracksTableRefs<T extends Object>(
-      Expression<T> Function($$PlaylistTracksTableTableAnnotationComposer a)
-          f) {
+    Expression<T> Function($$PlaylistTracksTableTableAnnotationComposer a) f,
+  ) {
     final $$PlaylistTracksTableTableAnnotationComposer composer =
         $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $db.playlistTracksTable,
-            getReferencedColumn: (t) => t.playlistId,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$PlaylistTracksTableTableAnnotationComposer(
-                  $db: $db,
-                  $table: $db.playlistTracksTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.playlistTracksTable,
+          getReferencedColumn: (t) => t.playlistId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$PlaylistTracksTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.playlistTracksTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 }
 
-class $$PlaylistsTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $PlaylistsTableTable,
-    PlaylistRow,
-    $$PlaylistsTableTableFilterComposer,
-    $$PlaylistsTableTableOrderingComposer,
-    $$PlaylistsTableTableAnnotationComposer,
-    $$PlaylistsTableTableCreateCompanionBuilder,
-    $$PlaylistsTableTableUpdateCompanionBuilder,
-    (PlaylistRow, $$PlaylistsTableTableReferences),
-    PlaylistRow,
-    PrefetchHooks Function({bool playlistTracksTableRefs})> {
+class $$PlaylistsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlaylistsTableTable,
+          PlaylistRow,
+          $$PlaylistsTableTableFilterComposer,
+          $$PlaylistsTableTableOrderingComposer,
+          $$PlaylistsTableTableAnnotationComposer,
+          $$PlaylistsTableTableCreateCompanionBuilder,
+          $$PlaylistsTableTableUpdateCompanionBuilder,
+          (PlaylistRow, $$PlaylistsTableTableReferences),
+          PlaylistRow,
+          PrefetchHooks Function({bool playlistTracksTableRefs})
+        > {
   $$PlaylistsTableTableTableManager(
-      _$AppDatabase db, $PlaylistsTableTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $PlaylistsTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4860,134 +6473,164 @@ class $$PlaylistsTableTableTableManager extends RootTableManager<
               $$PlaylistsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$PlaylistsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String> description = const Value.absent(),
-            Value<String> type = const Value.absent(),
-            Value<String?> mood = const Value.absent(),
-            Value<int> createdAtMs = const Value.absent(),
-            Value<int> updatedAtMs = const Value.absent(),
-            Value<String?> coverArtPath = const Value.absent(),
-            Value<bool> isPinned = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              PlaylistsTableCompanion(
-            id: id,
-            name: name,
-            description: description,
-            type: type,
-            mood: mood,
-            createdAtMs: createdAtMs,
-            updatedAtMs: updatedAtMs,
-            coverArtPath: coverArtPath,
-            isPinned: isPinned,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String name,
-            Value<String> description = const Value.absent(),
-            Value<String> type = const Value.absent(),
-            Value<String?> mood = const Value.absent(),
-            required int createdAtMs,
-            required int updatedAtMs,
-            Value<String?> coverArtPath = const Value.absent(),
-            Value<bool> isPinned = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              PlaylistsTableCompanion.insert(
-            id: id,
-            name: name,
-            description: description,
-            type: type,
-            mood: mood,
-            createdAtMs: createdAtMs,
-            updatedAtMs: updatedAtMs,
-            coverArtPath: coverArtPath,
-            isPinned: isPinned,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String?> mood = const Value.absent(),
+                Value<int> createdAtMs = const Value.absent(),
+                Value<int> updatedAtMs = const Value.absent(),
+                Value<String?> coverArtPath = const Value.absent(),
+                Value<String> coverArtPathsJson = const Value.absent(),
+                Value<bool> isPinned = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PlaylistsTableCompanion(
+                id: id,
+                name: name,
+                description: description,
+                type: type,
+                mood: mood,
+                createdAtMs: createdAtMs,
+                updatedAtMs: updatedAtMs,
+                coverArtPath: coverArtPath,
+                coverArtPathsJson: coverArtPathsJson,
+                isPinned: isPinned,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                Value<String> description = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String?> mood = const Value.absent(),
+                required int createdAtMs,
+                required int updatedAtMs,
+                Value<String?> coverArtPath = const Value.absent(),
+                Value<String> coverArtPathsJson = const Value.absent(),
+                Value<bool> isPinned = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PlaylistsTableCompanion.insert(
+                id: id,
+                name: name,
+                description: description,
+                type: type,
+                mood: mood,
+                createdAtMs: createdAtMs,
+                updatedAtMs: updatedAtMs,
+                coverArtPath: coverArtPath,
+                coverArtPathsJson: coverArtPathsJson,
+                isPinned: isPinned,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$PlaylistsTableTableReferences(db, table, e)
-                  ))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$PlaylistsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({playlistTracksTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (playlistTracksTableRefs) db.playlistTracksTable
+                if (playlistTracksTableRefs) db.playlistTracksTable,
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (playlistTracksTableRefs)
-                    await $_getPrefetchedData<PlaylistRow, $PlaylistsTableTable,
-                            PlaylistTrackRow>(
-                        currentTable: table,
-                        referencedTable: $$PlaylistsTableTableReferences
-                            ._playlistTracksTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$PlaylistsTableTableReferences(db, table, p0)
-                                .playlistTracksTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.playlistId == item.id),
-                        typedResults: items)
+                    await $_getPrefetchedData<
+                      PlaylistRow,
+                      $PlaylistsTableTable,
+                      PlaylistTrackRow
+                    >(
+                      currentTable: table,
+                      referencedTable: $$PlaylistsTableTableReferences
+                          ._playlistTracksTableRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$PlaylistsTableTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).playlistTracksTableRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.playlistId == item.id),
+                      typedResults: items,
+                    ),
                 ];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$PlaylistsTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $PlaylistsTableTable,
-    PlaylistRow,
-    $$PlaylistsTableTableFilterComposer,
-    $$PlaylistsTableTableOrderingComposer,
-    $$PlaylistsTableTableAnnotationComposer,
-    $$PlaylistsTableTableCreateCompanionBuilder,
-    $$PlaylistsTableTableUpdateCompanionBuilder,
-    (PlaylistRow, $$PlaylistsTableTableReferences),
-    PlaylistRow,
-    PrefetchHooks Function({bool playlistTracksTableRefs})>;
-typedef $$PlaylistTracksTableTableCreateCompanionBuilder
-    = PlaylistTracksTableCompanion Function({
-  required String playlistId,
-  required String trackId,
-  required int position,
-  Value<int> rowid,
-});
-typedef $$PlaylistTracksTableTableUpdateCompanionBuilder
-    = PlaylistTracksTableCompanion Function({
-  Value<String> playlistId,
-  Value<String> trackId,
-  Value<int> position,
-  Value<int> rowid,
-});
+typedef $$PlaylistsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlaylistsTableTable,
+      PlaylistRow,
+      $$PlaylistsTableTableFilterComposer,
+      $$PlaylistsTableTableOrderingComposer,
+      $$PlaylistsTableTableAnnotationComposer,
+      $$PlaylistsTableTableCreateCompanionBuilder,
+      $$PlaylistsTableTableUpdateCompanionBuilder,
+      (PlaylistRow, $$PlaylistsTableTableReferences),
+      PlaylistRow,
+      PrefetchHooks Function({bool playlistTracksTableRefs})
+    >;
+typedef $$PlaylistTracksTableTableCreateCompanionBuilder =
+    PlaylistTracksTableCompanion Function({
+      required String playlistId,
+      required String trackId,
+      required int position,
+      Value<int> rowid,
+    });
+typedef $$PlaylistTracksTableTableUpdateCompanionBuilder =
+    PlaylistTracksTableCompanion Function({
+      Value<String> playlistId,
+      Value<String> trackId,
+      Value<int> position,
+      Value<int> rowid,
+    });
 
-final class $$PlaylistTracksTableTableReferences extends BaseReferences<
-    _$AppDatabase, $PlaylistTracksTableTable, PlaylistTrackRow> {
+final class $$PlaylistTracksTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $PlaylistTracksTableTable,
+          PlaylistTrackRow
+        > {
   $$PlaylistTracksTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
 
   static $PlaylistsTableTable _playlistIdTable(_$AppDatabase db) =>
-      db.playlistsTable.createAlias($_aliasNameGenerator(
-          db.playlistTracksTable.playlistId, db.playlistsTable.id));
+      db.playlistsTable.createAlias(
+        $_aliasNameGenerator(
+          db.playlistTracksTable.playlistId,
+          db.playlistsTable.id,
+        ),
+      );
 
   $$PlaylistsTableTableProcessedTableManager get playlistId {
     final $_column = $_itemColumn<String>('playlist_id')!;
 
-    final manager = $$PlaylistsTableTableTableManager($_db, $_db.playlistsTable)
-        .filter((f) => f.id.sqlEquals($_column));
+    final manager = $$PlaylistsTableTableTableManager(
+      $_db,
+      $_db.playlistsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_playlistIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
   }
 }
 
@@ -5001,28 +6644,35 @@ class $$PlaylistTracksTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get trackId => $composableBuilder(
-      column: $table.trackId, builder: (column) => ColumnFilters(column));
+    column: $table.trackId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get position => $composableBuilder(
-      column: $table.position, builder: (column) => ColumnFilters(column));
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
 
   $$PlaylistsTableTableFilterComposer get playlistId {
     final $$PlaylistsTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.playlistId,
-        referencedTable: $db.playlistsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlaylistsTableTableFilterComposer(
-              $db: $db,
-              $table: $db.playlistsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.playlistId,
+      referencedTable: $db.playlistsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlaylistsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.playlistsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -5037,28 +6687,35 @@ class $$PlaylistTracksTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get trackId => $composableBuilder(
-      column: $table.trackId, builder: (column) => ColumnOrderings(column));
+    column: $table.trackId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get position => $composableBuilder(
-      column: $table.position, builder: (column) => ColumnOrderings(column));
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   $$PlaylistsTableTableOrderingComposer get playlistId {
     final $$PlaylistsTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.playlistId,
-        referencedTable: $db.playlistsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlaylistsTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.playlistsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.playlistId,
+      referencedTable: $db.playlistsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlaylistsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.playlistsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -5080,86 +6737,101 @@ class $$PlaylistTracksTableTableAnnotationComposer
 
   $$PlaylistsTableTableAnnotationComposer get playlistId {
     final $$PlaylistsTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.playlistId,
-        referencedTable: $db.playlistsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlaylistsTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.playlistsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.playlistId,
+      referencedTable: $db.playlistsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlaylistsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.playlistsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
 
-class $$PlaylistTracksTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $PlaylistTracksTableTable,
-    PlaylistTrackRow,
-    $$PlaylistTracksTableTableFilterComposer,
-    $$PlaylistTracksTableTableOrderingComposer,
-    $$PlaylistTracksTableTableAnnotationComposer,
-    $$PlaylistTracksTableTableCreateCompanionBuilder,
-    $$PlaylistTracksTableTableUpdateCompanionBuilder,
-    (PlaylistTrackRow, $$PlaylistTracksTableTableReferences),
-    PlaylistTrackRow,
-    PrefetchHooks Function({bool playlistId})> {
+class $$PlaylistTracksTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlaylistTracksTableTable,
+          PlaylistTrackRow,
+          $$PlaylistTracksTableTableFilterComposer,
+          $$PlaylistTracksTableTableOrderingComposer,
+          $$PlaylistTracksTableTableAnnotationComposer,
+          $$PlaylistTracksTableTableCreateCompanionBuilder,
+          $$PlaylistTracksTableTableUpdateCompanionBuilder,
+          (PlaylistTrackRow, $$PlaylistTracksTableTableReferences),
+          PlaylistTrackRow,
+          PrefetchHooks Function({bool playlistId})
+        > {
   $$PlaylistTracksTableTableTableManager(
-      _$AppDatabase db, $PlaylistTracksTableTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $PlaylistTracksTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
               $$PlaylistTracksTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
               $$PlaylistTracksTableTableOrderingComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
               $$PlaylistTracksTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> playlistId = const Value.absent(),
-            Value<String> trackId = const Value.absent(),
-            Value<int> position = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              PlaylistTracksTableCompanion(
-            playlistId: playlistId,
-            trackId: trackId,
-            position: position,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String playlistId,
-            required String trackId,
-            required int position,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              PlaylistTracksTableCompanion.insert(
-            playlistId: playlistId,
-            trackId: trackId,
-            position: position,
-            rowid: rowid,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> playlistId = const Value.absent(),
+                Value<String> trackId = const Value.absent(),
+                Value<int> position = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PlaylistTracksTableCompanion(
+                playlistId: playlistId,
+                trackId: trackId,
+                position: position,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String playlistId,
+                required String trackId,
+                required int position,
+                Value<int> rowid = const Value.absent(),
+              }) => PlaylistTracksTableCompanion.insert(
+                playlistId: playlistId,
+                trackId: trackId,
+                position: position,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$PlaylistTracksTableTableReferences(db, table, e)
-                  ))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$PlaylistTracksTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({playlistId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
+              addJoins:
+                  <
+                    T extends TableManagerState<
                       dynamic,
                       dynamic,
                       dynamic,
@@ -5170,59 +6842,70 @@ class $$PlaylistTracksTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
-                      dynamic>>(state) {
-                if (playlistId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.playlistId,
-                    referencedTable: $$PlaylistTracksTableTableReferences
-                        ._playlistIdTable(db),
-                    referencedColumn: $$PlaylistTracksTableTableReferences
-                        ._playlistIdTable(db)
-                        .id,
-                  ) as T;
-                }
+                      dynamic
+                    >
+                  >(state) {
+                    if (playlistId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.playlistId,
+                                referencedTable:
+                                    $$PlaylistTracksTableTableReferences
+                                        ._playlistIdTable(db),
+                                referencedColumn:
+                                    $$PlaylistTracksTableTableReferences
+                                        ._playlistIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$PlaylistTracksTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $PlaylistTracksTableTable,
-    PlaylistTrackRow,
-    $$PlaylistTracksTableTableFilterComposer,
-    $$PlaylistTracksTableTableOrderingComposer,
-    $$PlaylistTracksTableTableAnnotationComposer,
-    $$PlaylistTracksTableTableCreateCompanionBuilder,
-    $$PlaylistTracksTableTableUpdateCompanionBuilder,
-    (PlaylistTrackRow, $$PlaylistTracksTableTableReferences),
-    PlaylistTrackRow,
-    PrefetchHooks Function({bool playlistId})>;
-typedef $$PlaybackHistoryTableTableCreateCompanionBuilder
-    = PlaybackHistoryTableCompanion Function({
-  Value<int> id,
-  required String trackId,
-  required int playedAtMs,
-  required int durationPlayedMs,
-  Value<bool> skipped,
-  Value<String> contextType,
-});
-typedef $$PlaybackHistoryTableTableUpdateCompanionBuilder
-    = PlaybackHistoryTableCompanion Function({
-  Value<int> id,
-  Value<String> trackId,
-  Value<int> playedAtMs,
-  Value<int> durationPlayedMs,
-  Value<bool> skipped,
-  Value<String> contextType,
-});
+typedef $$PlaylistTracksTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlaylistTracksTableTable,
+      PlaylistTrackRow,
+      $$PlaylistTracksTableTableFilterComposer,
+      $$PlaylistTracksTableTableOrderingComposer,
+      $$PlaylistTracksTableTableAnnotationComposer,
+      $$PlaylistTracksTableTableCreateCompanionBuilder,
+      $$PlaylistTracksTableTableUpdateCompanionBuilder,
+      (PlaylistTrackRow, $$PlaylistTracksTableTableReferences),
+      PlaylistTrackRow,
+      PrefetchHooks Function({bool playlistId})
+    >;
+typedef $$PlaybackHistoryTableTableCreateCompanionBuilder =
+    PlaybackHistoryTableCompanion Function({
+      Value<int> id,
+      required String trackId,
+      required int playedAtMs,
+      required int durationPlayedMs,
+      Value<bool> skipped,
+      Value<bool> completed,
+      Value<String> contextType,
+    });
+typedef $$PlaybackHistoryTableTableUpdateCompanionBuilder =
+    PlaybackHistoryTableCompanion Function({
+      Value<int> id,
+      Value<String> trackId,
+      Value<int> playedAtMs,
+      Value<int> durationPlayedMs,
+      Value<bool> skipped,
+      Value<bool> completed,
+      Value<String> contextType,
+    });
 
 class $$PlaybackHistoryTableTableFilterComposer
     extends Composer<_$AppDatabase, $PlaybackHistoryTableTable> {
@@ -5234,23 +6917,39 @@ class $$PlaybackHistoryTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get trackId => $composableBuilder(
-      column: $table.trackId, builder: (column) => ColumnFilters(column));
+    column: $table.trackId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get playedAtMs => $composableBuilder(
-      column: $table.playedAtMs, builder: (column) => ColumnFilters(column));
+    column: $table.playedAtMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get durationPlayedMs => $composableBuilder(
-      column: $table.durationPlayedMs,
-      builder: (column) => ColumnFilters(column));
+    column: $table.durationPlayedMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get skipped => $composableBuilder(
-      column: $table.skipped, builder: (column) => ColumnFilters(column));
+    column: $table.skipped,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get completed => $composableBuilder(
+    column: $table.completed,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get contextType => $composableBuilder(
-      column: $table.contextType, builder: (column) => ColumnFilters(column));
+    column: $table.contextType,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$PlaybackHistoryTableTableOrderingComposer
@@ -5263,23 +6962,39 @@ class $$PlaybackHistoryTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get trackId => $composableBuilder(
-      column: $table.trackId, builder: (column) => ColumnOrderings(column));
+    column: $table.trackId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get playedAtMs => $composableBuilder(
-      column: $table.playedAtMs, builder: (column) => ColumnOrderings(column));
+    column: $table.playedAtMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get durationPlayedMs => $composableBuilder(
-      column: $table.durationPlayedMs,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.durationPlayedMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get skipped => $composableBuilder(
-      column: $table.skipped, builder: (column) => ColumnOrderings(column));
+    column: $table.skipped,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get completed => $composableBuilder(
+    column: $table.completed,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get contextType => $composableBuilder(
-      column: $table.contextType, builder: (column) => ColumnOrderings(column));
+    column: $table.contextType,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PlaybackHistoryTableTableAnnotationComposer
@@ -5298,119 +7013,155 @@ class $$PlaybackHistoryTableTableAnnotationComposer
       $composableBuilder(column: $table.trackId, builder: (column) => column);
 
   GeneratedColumn<int> get playedAtMs => $composableBuilder(
-      column: $table.playedAtMs, builder: (column) => column);
+    column: $table.playedAtMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get durationPlayedMs => $composableBuilder(
-      column: $table.durationPlayedMs, builder: (column) => column);
+    column: $table.durationPlayedMs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get skipped =>
       $composableBuilder(column: $table.skipped, builder: (column) => column);
 
+  GeneratedColumn<bool> get completed =>
+      $composableBuilder(column: $table.completed, builder: (column) => column);
+
   GeneratedColumn<String> get contextType => $composableBuilder(
-      column: $table.contextType, builder: (column) => column);
+    column: $table.contextType,
+    builder: (column) => column,
+  );
 }
 
-class $$PlaybackHistoryTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $PlaybackHistoryTableTable,
-    PlaybackHistoryRow,
-    $$PlaybackHistoryTableTableFilterComposer,
-    $$PlaybackHistoryTableTableOrderingComposer,
-    $$PlaybackHistoryTableTableAnnotationComposer,
-    $$PlaybackHistoryTableTableCreateCompanionBuilder,
-    $$PlaybackHistoryTableTableUpdateCompanionBuilder,
-    (
-      PlaybackHistoryRow,
-      BaseReferences<_$AppDatabase, $PlaybackHistoryTableTable,
-          PlaybackHistoryRow>
-    ),
-    PlaybackHistoryRow,
-    PrefetchHooks Function()> {
+class $$PlaybackHistoryTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlaybackHistoryTableTable,
+          PlaybackHistoryRow,
+          $$PlaybackHistoryTableTableFilterComposer,
+          $$PlaybackHistoryTableTableOrderingComposer,
+          $$PlaybackHistoryTableTableAnnotationComposer,
+          $$PlaybackHistoryTableTableCreateCompanionBuilder,
+          $$PlaybackHistoryTableTableUpdateCompanionBuilder,
+          (
+            PlaybackHistoryRow,
+            BaseReferences<
+              _$AppDatabase,
+              $PlaybackHistoryTableTable,
+              PlaybackHistoryRow
+            >,
+          ),
+          PlaybackHistoryRow,
+          PrefetchHooks Function()
+        > {
   $$PlaybackHistoryTableTableTableManager(
-      _$AppDatabase db, $PlaybackHistoryTableTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $PlaybackHistoryTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
               $$PlaybackHistoryTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
               $$PlaybackHistoryTableTableOrderingComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
               $$PlaybackHistoryTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> trackId = const Value.absent(),
-            Value<int> playedAtMs = const Value.absent(),
-            Value<int> durationPlayedMs = const Value.absent(),
-            Value<bool> skipped = const Value.absent(),
-            Value<String> contextType = const Value.absent(),
-          }) =>
-              PlaybackHistoryTableCompanion(
-            id: id,
-            trackId: trackId,
-            playedAtMs: playedAtMs,
-            durationPlayedMs: durationPlayedMs,
-            skipped: skipped,
-            contextType: contextType,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String trackId,
-            required int playedAtMs,
-            required int durationPlayedMs,
-            Value<bool> skipped = const Value.absent(),
-            Value<String> contextType = const Value.absent(),
-          }) =>
-              PlaybackHistoryTableCompanion.insert(
-            id: id,
-            trackId: trackId,
-            playedAtMs: playedAtMs,
-            durationPlayedMs: durationPlayedMs,
-            skipped: skipped,
-            contextType: contextType,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> trackId = const Value.absent(),
+                Value<int> playedAtMs = const Value.absent(),
+                Value<int> durationPlayedMs = const Value.absent(),
+                Value<bool> skipped = const Value.absent(),
+                Value<bool> completed = const Value.absent(),
+                Value<String> contextType = const Value.absent(),
+              }) => PlaybackHistoryTableCompanion(
+                id: id,
+                trackId: trackId,
+                playedAtMs: playedAtMs,
+                durationPlayedMs: durationPlayedMs,
+                skipped: skipped,
+                completed: completed,
+                contextType: contextType,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String trackId,
+                required int playedAtMs,
+                required int durationPlayedMs,
+                Value<bool> skipped = const Value.absent(),
+                Value<bool> completed = const Value.absent(),
+                Value<String> contextType = const Value.absent(),
+              }) => PlaybackHistoryTableCompanion.insert(
+                id: id,
+                trackId: trackId,
+                playedAtMs: playedAtMs,
+                durationPlayedMs: durationPlayedMs,
+                skipped: skipped,
+                completed: completed,
+                contextType: contextType,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$PlaybackHistoryTableTableProcessedTableManager
-    = ProcessedTableManager<
-        _$AppDatabase,
-        $PlaybackHistoryTableTable,
+typedef $$PlaybackHistoryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlaybackHistoryTableTable,
+      PlaybackHistoryRow,
+      $$PlaybackHistoryTableTableFilterComposer,
+      $$PlaybackHistoryTableTableOrderingComposer,
+      $$PlaybackHistoryTableTableAnnotationComposer,
+      $$PlaybackHistoryTableTableCreateCompanionBuilder,
+      $$PlaybackHistoryTableTableUpdateCompanionBuilder,
+      (
         PlaybackHistoryRow,
-        $$PlaybackHistoryTableTableFilterComposer,
-        $$PlaybackHistoryTableTableOrderingComposer,
-        $$PlaybackHistoryTableTableAnnotationComposer,
-        $$PlaybackHistoryTableTableCreateCompanionBuilder,
-        $$PlaybackHistoryTableTableUpdateCompanionBuilder,
-        (
-          PlaybackHistoryRow,
-          BaseReferences<_$AppDatabase, $PlaybackHistoryTableTable,
-              PlaybackHistoryRow>
-        ),
-        PlaybackHistoryRow,
-        PrefetchHooks Function()>;
-typedef $$ShuffleStateTableTableCreateCompanionBuilder
-    = ShuffleStateTableCompanion Function({
-  Value<int> id,
-  required String configJson,
-  required String shuffledIdsJson,
-  Value<int> currentIndex,
-  required int createdAtMs,
-});
-typedef $$ShuffleStateTableTableUpdateCompanionBuilder
-    = ShuffleStateTableCompanion Function({
-  Value<int> id,
-  Value<String> configJson,
-  Value<String> shuffledIdsJson,
-  Value<int> currentIndex,
-  Value<int> createdAtMs,
-});
+        BaseReferences<
+          _$AppDatabase,
+          $PlaybackHistoryTableTable,
+          PlaybackHistoryRow
+        >,
+      ),
+      PlaybackHistoryRow,
+      PrefetchHooks Function()
+    >;
+typedef $$ShuffleStateTableTableCreateCompanionBuilder =
+    ShuffleStateTableCompanion Function({
+      Value<int> id,
+      Value<String> contextId,
+      required String configJson,
+      required String shuffledIdsJson,
+      Value<int> currentIndex,
+      required int createdAtMs,
+      Value<int> updatedAtMs,
+      Value<String> stateJson,
+    });
+typedef $$ShuffleStateTableTableUpdateCompanionBuilder =
+    ShuffleStateTableCompanion Function({
+      Value<int> id,
+      Value<String> contextId,
+      Value<String> configJson,
+      Value<String> shuffledIdsJson,
+      Value<int> currentIndex,
+      Value<int> createdAtMs,
+      Value<int> updatedAtMs,
+      Value<String> stateJson,
+    });
 
 class $$ShuffleStateTableTableFilterComposer
     extends Composer<_$AppDatabase, $ShuffleStateTableTable> {
@@ -5422,20 +7173,44 @@ class $$ShuffleStateTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contextId => $composableBuilder(
+    column: $table.contextId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get configJson => $composableBuilder(
-      column: $table.configJson, builder: (column) => ColumnFilters(column));
+    column: $table.configJson,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get shuffledIdsJson => $composableBuilder(
-      column: $table.shuffledIdsJson,
-      builder: (column) => ColumnFilters(column));
+    column: $table.shuffledIdsJson,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get currentIndex => $composableBuilder(
-      column: $table.currentIndex, builder: (column) => ColumnFilters(column));
+    column: $table.currentIndex,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get createdAtMs => $composableBuilder(
-      column: $table.createdAtMs, builder: (column) => ColumnFilters(column));
+    column: $table.createdAtMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAtMs => $composableBuilder(
+    column: $table.updatedAtMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get stateJson => $composableBuilder(
+    column: $table.stateJson,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ShuffleStateTableTableOrderingComposer
@@ -5448,21 +7223,44 @@ class $$ShuffleStateTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contextId => $composableBuilder(
+    column: $table.contextId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get configJson => $composableBuilder(
-      column: $table.configJson, builder: (column) => ColumnOrderings(column));
+    column: $table.configJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get shuffledIdsJson => $composableBuilder(
-      column: $table.shuffledIdsJson,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.shuffledIdsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get currentIndex => $composableBuilder(
-      column: $table.currentIndex,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.currentIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get createdAtMs => $composableBuilder(
-      column: $table.createdAtMs, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAtMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAtMs => $composableBuilder(
+    column: $table.updatedAtMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get stateJson => $composableBuilder(
+    column: $table.stateJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ShuffleStateTableTableAnnotationComposer
@@ -5477,37 +7275,65 @@ class $$ShuffleStateTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get contextId =>
+      $composableBuilder(column: $table.contextId, builder: (column) => column);
+
   GeneratedColumn<String> get configJson => $composableBuilder(
-      column: $table.configJson, builder: (column) => column);
+    column: $table.configJson,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get shuffledIdsJson => $composableBuilder(
-      column: $table.shuffledIdsJson, builder: (column) => column);
+    column: $table.shuffledIdsJson,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get currentIndex => $composableBuilder(
-      column: $table.currentIndex, builder: (column) => column);
+    column: $table.currentIndex,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get createdAtMs => $composableBuilder(
-      column: $table.createdAtMs, builder: (column) => column);
+    column: $table.createdAtMs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get updatedAtMs => $composableBuilder(
+    column: $table.updatedAtMs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get stateJson =>
+      $composableBuilder(column: $table.stateJson, builder: (column) => column);
 }
 
-class $$ShuffleStateTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ShuffleStateTableTable,
-    ShuffleStateRow,
-    $$ShuffleStateTableTableFilterComposer,
-    $$ShuffleStateTableTableOrderingComposer,
-    $$ShuffleStateTableTableAnnotationComposer,
-    $$ShuffleStateTableTableCreateCompanionBuilder,
-    $$ShuffleStateTableTableUpdateCompanionBuilder,
-    (
-      ShuffleStateRow,
-      BaseReferences<_$AppDatabase, $ShuffleStateTableTable, ShuffleStateRow>
-    ),
-    ShuffleStateRow,
-    PrefetchHooks Function()> {
+class $$ShuffleStateTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ShuffleStateTableTable,
+          ShuffleStateRow,
+          $$ShuffleStateTableTableFilterComposer,
+          $$ShuffleStateTableTableOrderingComposer,
+          $$ShuffleStateTableTableAnnotationComposer,
+          $$ShuffleStateTableTableCreateCompanionBuilder,
+          $$ShuffleStateTableTableUpdateCompanionBuilder,
+          (
+            ShuffleStateRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ShuffleStateTableTable,
+              ShuffleStateRow
+            >,
+          ),
+          ShuffleStateRow,
+          PrefetchHooks Function()
+        > {
   $$ShuffleStateTableTableTableManager(
-      _$AppDatabase db, $ShuffleStateTableTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $ShuffleStateTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5516,81 +7342,102 @@ class $$ShuffleStateTableTableTableManager extends RootTableManager<
               $$ShuffleStateTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$ShuffleStateTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> configJson = const Value.absent(),
-            Value<String> shuffledIdsJson = const Value.absent(),
-            Value<int> currentIndex = const Value.absent(),
-            Value<int> createdAtMs = const Value.absent(),
-          }) =>
-              ShuffleStateTableCompanion(
-            id: id,
-            configJson: configJson,
-            shuffledIdsJson: shuffledIdsJson,
-            currentIndex: currentIndex,
-            createdAtMs: createdAtMs,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String configJson,
-            required String shuffledIdsJson,
-            Value<int> currentIndex = const Value.absent(),
-            required int createdAtMs,
-          }) =>
-              ShuffleStateTableCompanion.insert(
-            id: id,
-            configJson: configJson,
-            shuffledIdsJson: shuffledIdsJson,
-            currentIndex: currentIndex,
-            createdAtMs: createdAtMs,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> contextId = const Value.absent(),
+                Value<String> configJson = const Value.absent(),
+                Value<String> shuffledIdsJson = const Value.absent(),
+                Value<int> currentIndex = const Value.absent(),
+                Value<int> createdAtMs = const Value.absent(),
+                Value<int> updatedAtMs = const Value.absent(),
+                Value<String> stateJson = const Value.absent(),
+              }) => ShuffleStateTableCompanion(
+                id: id,
+                contextId: contextId,
+                configJson: configJson,
+                shuffledIdsJson: shuffledIdsJson,
+                currentIndex: currentIndex,
+                createdAtMs: createdAtMs,
+                updatedAtMs: updatedAtMs,
+                stateJson: stateJson,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> contextId = const Value.absent(),
+                required String configJson,
+                required String shuffledIdsJson,
+                Value<int> currentIndex = const Value.absent(),
+                required int createdAtMs,
+                Value<int> updatedAtMs = const Value.absent(),
+                Value<String> stateJson = const Value.absent(),
+              }) => ShuffleStateTableCompanion.insert(
+                id: id,
+                contextId: contextId,
+                configJson: configJson,
+                shuffledIdsJson: shuffledIdsJson,
+                currentIndex: currentIndex,
+                createdAtMs: createdAtMs,
+                updatedAtMs: updatedAtMs,
+                stateJson: stateJson,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ShuffleStateTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $ShuffleStateTableTable,
-    ShuffleStateRow,
-    $$ShuffleStateTableTableFilterComposer,
-    $$ShuffleStateTableTableOrderingComposer,
-    $$ShuffleStateTableTableAnnotationComposer,
-    $$ShuffleStateTableTableCreateCompanionBuilder,
-    $$ShuffleStateTableTableUpdateCompanionBuilder,
-    (
+typedef $$ShuffleStateTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ShuffleStateTableTable,
       ShuffleStateRow,
-      BaseReferences<_$AppDatabase, $ShuffleStateTableTable, ShuffleStateRow>
-    ),
-    ShuffleStateRow,
-    PrefetchHooks Function()>;
-typedef $$AudioFeaturesTableTableCreateCompanionBuilder
-    = AudioFeaturesTableCompanion Function({
-  required String trackId,
-  Value<double> tempo,
-  Value<double> energy,
-  Value<double> valence,
-  Value<double> danceability,
-  Value<double> loudness,
-  Value<double> acousticness,
-  Value<String?> fingerprintHash,
-  Value<int> rowid,
-});
-typedef $$AudioFeaturesTableTableUpdateCompanionBuilder
-    = AudioFeaturesTableCompanion Function({
-  Value<String> trackId,
-  Value<double> tempo,
-  Value<double> energy,
-  Value<double> valence,
-  Value<double> danceability,
-  Value<double> loudness,
-  Value<double> acousticness,
-  Value<String?> fingerprintHash,
-  Value<int> rowid,
-});
+      $$ShuffleStateTableTableFilterComposer,
+      $$ShuffleStateTableTableOrderingComposer,
+      $$ShuffleStateTableTableAnnotationComposer,
+      $$ShuffleStateTableTableCreateCompanionBuilder,
+      $$ShuffleStateTableTableUpdateCompanionBuilder,
+      (
+        ShuffleStateRow,
+        BaseReferences<_$AppDatabase, $ShuffleStateTableTable, ShuffleStateRow>,
+      ),
+      ShuffleStateRow,
+      PrefetchHooks Function()
+    >;
+typedef $$AudioFeaturesTableTableCreateCompanionBuilder =
+    AudioFeaturesTableCompanion Function({
+      required String trackId,
+      Value<double> tempo,
+      Value<double> energy,
+      Value<double> valence,
+      Value<double> danceability,
+      Value<double> loudness,
+      Value<double> acousticness,
+      Value<int> musicalKey,
+      Value<String> keyName,
+      Value<String?> fingerprintHash,
+      Value<int> rowid,
+    });
+typedef $$AudioFeaturesTableTableUpdateCompanionBuilder =
+    AudioFeaturesTableCompanion Function({
+      Value<String> trackId,
+      Value<double> tempo,
+      Value<double> energy,
+      Value<double> valence,
+      Value<double> danceability,
+      Value<double> loudness,
+      Value<double> acousticness,
+      Value<int> musicalKey,
+      Value<String> keyName,
+      Value<String?> fingerprintHash,
+      Value<int> rowid,
+    });
 
 class $$AudioFeaturesTableTableFilterComposer
     extends Composer<_$AppDatabase, $AudioFeaturesTableTable> {
@@ -5602,29 +7449,54 @@ class $$AudioFeaturesTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get trackId => $composableBuilder(
-      column: $table.trackId, builder: (column) => ColumnFilters(column));
+    column: $table.trackId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get tempo => $composableBuilder(
-      column: $table.tempo, builder: (column) => ColumnFilters(column));
+    column: $table.tempo,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get energy => $composableBuilder(
-      column: $table.energy, builder: (column) => ColumnFilters(column));
+    column: $table.energy,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get valence => $composableBuilder(
-      column: $table.valence, builder: (column) => ColumnFilters(column));
+    column: $table.valence,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get danceability => $composableBuilder(
-      column: $table.danceability, builder: (column) => ColumnFilters(column));
+    column: $table.danceability,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get loudness => $composableBuilder(
-      column: $table.loudness, builder: (column) => ColumnFilters(column));
+    column: $table.loudness,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get acousticness => $composableBuilder(
-      column: $table.acousticness, builder: (column) => ColumnFilters(column));
+    column: $table.acousticness,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get musicalKey => $composableBuilder(
+    column: $table.musicalKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get keyName => $composableBuilder(
+    column: $table.keyName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get fingerprintHash => $composableBuilder(
-      column: $table.fingerprintHash,
-      builder: (column) => ColumnFilters(column));
+    column: $table.fingerprintHash,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$AudioFeaturesTableTableOrderingComposer
@@ -5637,31 +7509,54 @@ class $$AudioFeaturesTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get trackId => $composableBuilder(
-      column: $table.trackId, builder: (column) => ColumnOrderings(column));
+    column: $table.trackId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get tempo => $composableBuilder(
-      column: $table.tempo, builder: (column) => ColumnOrderings(column));
+    column: $table.tempo,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get energy => $composableBuilder(
-      column: $table.energy, builder: (column) => ColumnOrderings(column));
+    column: $table.energy,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get valence => $composableBuilder(
-      column: $table.valence, builder: (column) => ColumnOrderings(column));
+    column: $table.valence,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get danceability => $composableBuilder(
-      column: $table.danceability,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.danceability,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get loudness => $composableBuilder(
-      column: $table.loudness, builder: (column) => ColumnOrderings(column));
+    column: $table.loudness,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get acousticness => $composableBuilder(
-      column: $table.acousticness,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.acousticness,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get musicalKey => $composableBuilder(
+    column: $table.musicalKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get keyName => $composableBuilder(
+    column: $table.keyName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get fingerprintHash => $composableBuilder(
-      column: $table.fingerprintHash,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.fingerprintHash,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AudioFeaturesTableTableAnnotationComposer
@@ -5686,36 +7581,59 @@ class $$AudioFeaturesTableTableAnnotationComposer
       $composableBuilder(column: $table.valence, builder: (column) => column);
 
   GeneratedColumn<double> get danceability => $composableBuilder(
-      column: $table.danceability, builder: (column) => column);
+    column: $table.danceability,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get loudness =>
       $composableBuilder(column: $table.loudness, builder: (column) => column);
 
   GeneratedColumn<double> get acousticness => $composableBuilder(
-      column: $table.acousticness, builder: (column) => column);
+    column: $table.acousticness,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get musicalKey => $composableBuilder(
+    column: $table.musicalKey,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get keyName =>
+      $composableBuilder(column: $table.keyName, builder: (column) => column);
 
   GeneratedColumn<String> get fingerprintHash => $composableBuilder(
-      column: $table.fingerprintHash, builder: (column) => column);
+    column: $table.fingerprintHash,
+    builder: (column) => column,
+  );
 }
 
-class $$AudioFeaturesTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $AudioFeaturesTableTable,
-    AudioFeaturesRow,
-    $$AudioFeaturesTableTableFilterComposer,
-    $$AudioFeaturesTableTableOrderingComposer,
-    $$AudioFeaturesTableTableAnnotationComposer,
-    $$AudioFeaturesTableTableCreateCompanionBuilder,
-    $$AudioFeaturesTableTableUpdateCompanionBuilder,
-    (
-      AudioFeaturesRow,
-      BaseReferences<_$AppDatabase, $AudioFeaturesTableTable, AudioFeaturesRow>
-    ),
-    AudioFeaturesRow,
-    PrefetchHooks Function()> {
+class $$AudioFeaturesTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AudioFeaturesTableTable,
+          AudioFeaturesRow,
+          $$AudioFeaturesTableTableFilterComposer,
+          $$AudioFeaturesTableTableOrderingComposer,
+          $$AudioFeaturesTableTableAnnotationComposer,
+          $$AudioFeaturesTableTableCreateCompanionBuilder,
+          $$AudioFeaturesTableTableUpdateCompanionBuilder,
+          (
+            AudioFeaturesRow,
+            BaseReferences<
+              _$AppDatabase,
+              $AudioFeaturesTableTable,
+              AudioFeaturesRow
+            >,
+          ),
+          AudioFeaturesRow,
+          PrefetchHooks Function()
+        > {
   $$AudioFeaturesTableTableTableManager(
-      _$AppDatabase db, $AudioFeaturesTableTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $AudioFeaturesTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5724,73 +7642,254 @@ class $$AudioFeaturesTableTableTableManager extends RootTableManager<
               $$AudioFeaturesTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$AudioFeaturesTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> trackId = const Value.absent(),
-            Value<double> tempo = const Value.absent(),
-            Value<double> energy = const Value.absent(),
-            Value<double> valence = const Value.absent(),
-            Value<double> danceability = const Value.absent(),
-            Value<double> loudness = const Value.absent(),
-            Value<double> acousticness = const Value.absent(),
-            Value<String?> fingerprintHash = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              AudioFeaturesTableCompanion(
-            trackId: trackId,
-            tempo: tempo,
-            energy: energy,
-            valence: valence,
-            danceability: danceability,
-            loudness: loudness,
-            acousticness: acousticness,
-            fingerprintHash: fingerprintHash,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String trackId,
-            Value<double> tempo = const Value.absent(),
-            Value<double> energy = const Value.absent(),
-            Value<double> valence = const Value.absent(),
-            Value<double> danceability = const Value.absent(),
-            Value<double> loudness = const Value.absent(),
-            Value<double> acousticness = const Value.absent(),
-            Value<String?> fingerprintHash = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              AudioFeaturesTableCompanion.insert(
-            trackId: trackId,
-            tempo: tempo,
-            energy: energy,
-            valence: valence,
-            danceability: danceability,
-            loudness: loudness,
-            acousticness: acousticness,
-            fingerprintHash: fingerprintHash,
-            rowid: rowid,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> trackId = const Value.absent(),
+                Value<double> tempo = const Value.absent(),
+                Value<double> energy = const Value.absent(),
+                Value<double> valence = const Value.absent(),
+                Value<double> danceability = const Value.absent(),
+                Value<double> loudness = const Value.absent(),
+                Value<double> acousticness = const Value.absent(),
+                Value<int> musicalKey = const Value.absent(),
+                Value<String> keyName = const Value.absent(),
+                Value<String?> fingerprintHash = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AudioFeaturesTableCompanion(
+                trackId: trackId,
+                tempo: tempo,
+                energy: energy,
+                valence: valence,
+                danceability: danceability,
+                loudness: loudness,
+                acousticness: acousticness,
+                musicalKey: musicalKey,
+                keyName: keyName,
+                fingerprintHash: fingerprintHash,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String trackId,
+                Value<double> tempo = const Value.absent(),
+                Value<double> energy = const Value.absent(),
+                Value<double> valence = const Value.absent(),
+                Value<double> danceability = const Value.absent(),
+                Value<double> loudness = const Value.absent(),
+                Value<double> acousticness = const Value.absent(),
+                Value<int> musicalKey = const Value.absent(),
+                Value<String> keyName = const Value.absent(),
+                Value<String?> fingerprintHash = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AudioFeaturesTableCompanion.insert(
+                trackId: trackId,
+                tempo: tempo,
+                energy: energy,
+                valence: valence,
+                danceability: danceability,
+                loudness: loudness,
+                acousticness: acousticness,
+                musicalKey: musicalKey,
+                keyName: keyName,
+                fingerprintHash: fingerprintHash,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$AudioFeaturesTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $AudioFeaturesTableTable,
-    AudioFeaturesRow,
-    $$AudioFeaturesTableTableFilterComposer,
-    $$AudioFeaturesTableTableOrderingComposer,
-    $$AudioFeaturesTableTableAnnotationComposer,
-    $$AudioFeaturesTableTableCreateCompanionBuilder,
-    $$AudioFeaturesTableTableUpdateCompanionBuilder,
-    (
+typedef $$AudioFeaturesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AudioFeaturesTableTable,
       AudioFeaturesRow,
-      BaseReferences<_$AppDatabase, $AudioFeaturesTableTable, AudioFeaturesRow>
-    ),
-    AudioFeaturesRow,
-    PrefetchHooks Function()>;
+      $$AudioFeaturesTableTableFilterComposer,
+      $$AudioFeaturesTableTableOrderingComposer,
+      $$AudioFeaturesTableTableAnnotationComposer,
+      $$AudioFeaturesTableTableCreateCompanionBuilder,
+      $$AudioFeaturesTableTableUpdateCompanionBuilder,
+      (
+        AudioFeaturesRow,
+        BaseReferences<
+          _$AppDatabase,
+          $AudioFeaturesTableTable,
+          AudioFeaturesRow
+        >,
+      ),
+      AudioFeaturesRow,
+      PrefetchHooks Function()
+    >;
+typedef $$SettingsTableTableCreateCompanionBuilder =
+    SettingsTableCompanion Function({
+      required String key,
+      required String value,
+      required int updatedAtMs,
+      Value<int> rowid,
+    });
+typedef $$SettingsTableTableUpdateCompanionBuilder =
+    SettingsTableCompanion Function({
+      Value<String> key,
+      Value<String> value,
+      Value<int> updatedAtMs,
+      Value<int> rowid,
+    });
+
+class $$SettingsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SettingsTableTable> {
+  $$SettingsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAtMs => $composableBuilder(
+    column: $table.updatedAtMs,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SettingsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SettingsTableTable> {
+  $$SettingsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAtMs => $composableBuilder(
+    column: $table.updatedAtMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SettingsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SettingsTableTable> {
+  $$SettingsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAtMs => $composableBuilder(
+    column: $table.updatedAtMs,
+    builder: (column) => column,
+  );
+}
+
+class $$SettingsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SettingsTableTable,
+          SettingRow,
+          $$SettingsTableTableFilterComposer,
+          $$SettingsTableTableOrderingComposer,
+          $$SettingsTableTableAnnotationComposer,
+          $$SettingsTableTableCreateCompanionBuilder,
+          $$SettingsTableTableUpdateCompanionBuilder,
+          (
+            SettingRow,
+            BaseReferences<_$AppDatabase, $SettingsTableTable, SettingRow>,
+          ),
+          SettingRow,
+          PrefetchHooks Function()
+        > {
+  $$SettingsTableTableTableManager(_$AppDatabase db, $SettingsTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SettingsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SettingsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SettingsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> key = const Value.absent(),
+                Value<String> value = const Value.absent(),
+                Value<int> updatedAtMs = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SettingsTableCompanion(
+                key: key,
+                value: value,
+                updatedAtMs: updatedAtMs,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String key,
+                required String value,
+                required int updatedAtMs,
+                Value<int> rowid = const Value.absent(),
+              }) => SettingsTableCompanion.insert(
+                key: key,
+                value: value,
+                updatedAtMs: updatedAtMs,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SettingsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SettingsTableTable,
+      SettingRow,
+      $$SettingsTableTableFilterComposer,
+      $$SettingsTableTableOrderingComposer,
+      $$SettingsTableTableAnnotationComposer,
+      $$SettingsTableTableCreateCompanionBuilder,
+      $$SettingsTableTableUpdateCompanionBuilder,
+      (
+        SettingRow,
+        BaseReferences<_$AppDatabase, $SettingsTableTable, SettingRow>,
+      ),
+      SettingRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5811,4 +7910,6 @@ class $AppDatabaseManager {
       $$ShuffleStateTableTableTableManager(_db, _db.shuffleStateTable);
   $$AudioFeaturesTableTableTableManager get audioFeaturesTable =>
       $$AudioFeaturesTableTableTableManager(_db, _db.audioFeaturesTable);
+  $$SettingsTableTableTableManager get settingsTable =>
+      $$SettingsTableTableTableManager(_db, _db.settingsTable);
 }

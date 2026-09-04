@@ -55,3 +55,5 @@ design.md
 DESIGN.md
 SCREENS AURA/
 
+# Build artifacts from the host C++ test build
+/cpp/audio_engine/build/

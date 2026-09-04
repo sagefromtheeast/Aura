@@ -31,6 +31,12 @@ class AudioFeaturesTable extends Table {
   RealColumn get acousticness => real().withDefault(const Constant(0.0))();
 
   /// Chromaprint fingerprint hash (hex string). Used by DuplicateDetector path 3.
+  /// Camelot/pitch-class key, 0-11 (C..B). -1 when not yet analysed.
+  IntColumn get musicalKey => integer().withDefault(const Constant(-1))();
+
+  /// Human-readable key, e.g. "A minor" / Camelot "8A". Empty when unknown.
+  TextColumn get keyName => text().withDefault(const Constant(''))();
+
   TextColumn get fingerprintHash => text().nullable()();
 
   @override
