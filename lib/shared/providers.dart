@@ -10,13 +10,15 @@ import '../data/database/database_provider.dart';
 import '../data/repositories/local_music_repository.dart';
 import '../data/repositories/local_behavior_repository.dart';
 import '../data/repositories/local_playlist_repository.dart';
+import '../data/repositories/local_audio_feature_repository.dart';
 import '../data/repositories/local_shuffle_state_repository.dart';
 import '../domain/repositories/music_repository.dart';
 import '../domain/repositories/behavior_repository.dart';
 import '../domain/repositories/playlist_repository.dart';
+import '../domain/repositories/audio_feature_repository.dart';
 import '../domain/repositories/shuffle_state_repository.dart';
 import '../domain/intelli_shuffle/intelli_shuffle_engine.dart';
-import '../domain/use_cases/smart_mix_generator.dart';
+import '../domain/smart_mix/smart_mix_generator.dart';
 import '../domain/use_cases/duplicate_detector.dart';
 import '../domain/use_cases/stats_calculator.dart';
 import '../domain/use_cases/playback_orchestrator.dart';
@@ -56,6 +58,10 @@ final shuffleStateRepositoryProvider = Provider<ShuffleStateRepository>((ref) {
   return LocalShuffleStateRepository(database: ref.watch(appDatabaseProvider));
 });
 
+final audioFeatureRepositoryProvider = Provider<AudioFeatureRepository>((ref) {
+  return LocalAudioFeatureRepository(database: ref.watch(appDatabaseProvider));
+});
+
 // ── Native Engine ─────────────────────────────────────────────────────────────
 
 /// The FFI audio engine singleton.
@@ -81,8 +87,9 @@ final intelliShuffleEngineProvider = Provider<IntelliShuffleEngine>((ref) {
 
 final smartMixGeneratorProvider = Provider<SmartMixGenerator>((ref) {
   return SmartMixGenerator(
-    musicRepository: ref.watch(musicRepositoryProvider),
+    trackRepository: ref.watch(musicRepositoryProvider),
     behaviorRepository: ref.watch(behaviorRepositoryProvider),
+    audioFeatureRepository: ref.watch(audioFeatureRepositoryProvider),
     playlistRepository: ref.watch(playlistRepositoryProvider),
   );
 });

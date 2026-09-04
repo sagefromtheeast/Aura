@@ -51,7 +51,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -95,6 +95,14 @@ class AppDatabase extends _$AppDatabase {
           if (from < 3) {
             // v3: full engine state blob for IntelliShuffle restore.
             await m.addColumn(shuffleStateTable, shuffleStateTable.stateJson);
+          }
+          if (from < 4) {
+            // v4: musical key for Camelot sequencing + smart-mix cover mosaics.
+            await m.addColumn(
+                audioFeaturesTable, audioFeaturesTable.musicalKey);
+            await m.addColumn(audioFeaturesTable, audioFeaturesTable.keyName);
+            await m.addColumn(
+                playlistsTable, playlistsTable.coverArtPathsJson);
           }
         },
         beforeOpen: (details) async {

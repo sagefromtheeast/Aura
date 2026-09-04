@@ -1,6 +1,8 @@
 // lib/data/repositories/local_playlist_repository.dart
 // Aura — LocalPlaylistRepository
 
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
@@ -70,6 +72,7 @@ class LocalPlaylistRepository implements PlaylistRepository {
           createdAtMs: Value(updated.createdAtMs),
           updatedAtMs: Value(DateTime.now().millisecondsSinceEpoch),
           coverArtPath: Value(updated.coverArtPath),
+          coverArtPathsJson: Value(jsonEncode(updated.coverArtPaths)),
           isPinned: Value(updated.isPinned),
         ),
       );
@@ -102,6 +105,8 @@ class LocalPlaylistRepository implements PlaylistRepository {
         mood: Value(playlist.mood?.name),
         createdAtMs: Value(playlist.createdAtMs),
         updatedAtMs: Value(now),
+        coverArtPath: Value(playlist.coverArtPath),
+        coverArtPathsJson: Value(jsonEncode(playlist.coverArtPaths)),
       ),
     );
     await _db.playlistDao.reorderTracks(playlist.id, playlist.trackIds);
@@ -125,7 +130,21 @@ class LocalPlaylistRepository implements PlaylistRepository {
       createdAtMs: row.createdAtMs,
       updatedAtMs: row.updatedAtMs,
       coverArtPath: row.coverArtPath,
+      coverArtPaths: _decodeCoverPaths(row.coverArtPathsJson),
       isPinned: row.isPinned,
     );
+  }
+
+  /// Cover paths are stored as a JSON array; a malformed value degrades to
+  /// "no mosaic" rather than failing the whole playlist load.
+  static List<String> _decodeCoverPaths(String json) {
+    if (json.isEmpty) return const [];
+    try {
+      final decoded = jsonDecode(json);
+      if (decoded is List) return decoded.map((e) => e.toString()).toList();
+    } catch (_) {
+      // fall through
+    }
+    return const [];
   }
 }

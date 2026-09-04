@@ -137,6 +137,18 @@ class TrackDao extends DatabaseAccessor<AppDatabase> with _$TrackDaoMixin {
             ..where((f) => f.trackId.equals(trackId)))
           .getSingleOrNull();
 
+  /// All analysed features, keyed by track id.
+  Future<List<AudioFeaturesRow>> getAllAudioFeatures() =>
+      select(audioFeaturesTable).get();
+
+  /// Features for a specific set of tracks (single query).
+  Future<List<AudioFeaturesRow>> getAudioFeaturesFor(List<String> trackIds) {
+    if (trackIds.isEmpty) return Future.value(const []);
+    return (select(audioFeaturesTable)
+          ..where((f) => f.trackId.isIn(trackIds)))
+        .get();
+  }
+
   Future<void> upsertAudioFeatures(AudioFeaturesTableCompanion features) =>
       into(audioFeaturesTable).insertOnConflictUpdate(features);
 }

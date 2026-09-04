@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import MediaPlayer
+import BackgroundTasks
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -20,6 +21,35 @@ import MediaPlayer
         result(FlutterMethodNotImplemented)
       }
     })
+
+    // ── Daily Mix background regeneration (BGProcessingTask) ──────────────
+    // Must match kDailyMixTaskName in lib/domain/smart_mix/mix_scheduler.dart
+    // and BGTaskSchedulerPermittedIdentifiers in Info.plist.
+    let mixChannel = FlutterMethodChannel(name: "com.aura/mix_scheduler",
+                                          binaryMessenger: controller.binaryMessenger)
+    self.mixSchedulerChannel = mixChannel
+    mixChannel.setMethodCallHandler({ [weak self] (call, result) -> Void in
+      if call.method == "scheduleDailyMixTask" {
+        var hour = 5
+        if let args = call.arguments as? [String: Any],
+           let h = args["hour"] as? Int {
+          hour = h
+        }
+        self?.scheduleDailyMixTask(hour: hour)
+        result(nil)
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+    })
+
+    if #available(iOS 13.0, *) {
+      BGTaskScheduler.shared.register(
+        forTaskWithIdentifier: AppDelegate.dailyMixTaskIdentifier,
+        using: nil
+      ) { task in
+        self.handleDailyMixTask(task: task)
+      }
+    }
 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -68,5 +98,66 @@ import MediaPlayer
                             details: nil))
       }
     }
+  }
+
+  // ── Daily Mix scheduling ─────────────────────────────────────────────────
+
+  static let dailyMixTaskIdentifier = "com.aura.dailyMixRegeneration"
+
+  private var mixSchedulerChannel: FlutterMethodChannel?
+
+  /// Submits a BGProcessingTask for roughly [hour] o'clock local time.
+  /// iOS decides the exact moment; this is the earliest we want it to run.
+  private func scheduleDailyMixTask(hour: Int) {
+    guard #available(iOS 13.0, *) else { return }
+
+    let request = BGProcessingTaskRequest(identifier: AppDelegate.dailyMixTaskIdentifier)
+    // Everything is on-device, so no network is required.
+    request.requiresNetworkConnectivity = false
+    request.requiresExternalPower = false
+    request.earliestBeginDate = AppDelegate.nextOccurrence(ofHour: hour)
+
+    do {
+      // Replace any pending copy so repeated launches don't stack requests.
+      BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: AppDelegate.dailyMixTaskIdentifier)
+      try BGTaskScheduler.shared.submit(request)
+    } catch {
+      NSLog("[Aura] Could not schedule daily mix task: \(error)")
+    }
+  }
+
+  @available(iOS 13.0, *)
+  private func handleDailyMixTask(task: BGTask) {
+    // Always queue the next one first, so a crash here doesn't end the chain.
+    scheduleDailyMixTask(hour: 5)
+
+    task.expirationHandler = {
+      task.setTaskCompleted(success: false)
+    }
+
+    guard let channel = mixSchedulerChannel else {
+      task.setTaskCompleted(success: false)
+      return
+    }
+
+    channel.invokeMethod("regenerateMixes", arguments: nil) { result in
+      let ok = (result as? Bool) ?? false
+      task.setTaskCompleted(success: ok)
+    }
+  }
+
+  private static func nextOccurrence(ofHour hour: Int) -> Date {
+    let calendar = Calendar.current
+    let now = Date()
+    var components = calendar.dateComponents([.year, .month, .day], from: now)
+    components.hour = hour
+    components.minute = 0
+
+    guard let candidate = calendar.date(from: components) else {
+      return now.addingTimeInterval(24 * 60 * 60)
+    }
+    return candidate > now
+      ? candidate
+      : calendar.date(byAdding: .day, value: 1, to: candidate) ?? candidate
   }
 }
