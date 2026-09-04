@@ -1,3 +1,35 @@
+# [1.16.0](https://github.com/sagefromtheeast/Aura/compare/v1.15.1...v1.16.0) (2026-09-04)
+
+
+### Bug Fixes
+
+* get the project actually building and green under a real SDK ([13eced1](https://github.com/sagefromtheeast/Aura/commit/13eced188b88130cddb3b97305bc8513f04bda31))
+
+
+### Features
+
+* **backup:** full backup and restore of playlists, favourites, stats, settings ([209f83e](https://github.com/sagefromtheeast/Aura/commit/209f83efab30e32b4df7b1d9658d3eba61e03621))
+* **db:** add ShuffleStateDao, DAO queries, DB provider & tests ([767fce4](https://github.com/sagefromtheeast/Aura/commit/767fce49175fec9a8e90fddcb46a86de3d2f2f5e))
+* **dedup:** three-layer duplicate detector with vendored Chromaprint ([15a2502](https://github.com/sagefromtheeast/Aura/commit/15a2502d1cdf21b9c158c0bf4cabe8d0c9de1566))
+* **engine:** handle-based C++ audio engine with real DSP + FFI bindings ([df0d8ee](https://github.com/sagefromtheeast/Aura/commit/df0d8ee1774dc553fba2920f2f6ebc8ae601658e))
+* **library:** favourites, add-to-playlist, track menu, system playlists, genres ([938bb95](https://github.com/sagefromtheeast/Aura/commit/938bb959854083b33e24199264594987072297af)), closes [#1](https://github.com/sagefromtheeast/Aura/issues/1) [#2](https://github.com/sagefromtheeast/Aura/issues/2) [#4](https://github.com/sagefromtheeast/Aura/issues/4) [#5](https://github.com/sagefromtheeast/Aura/issues/5) [#6](https://github.com/sagefromtheeast/Aura/issues/6)
+* **mixes:** rewrite Smart Mix Generator with Camelot sequencing + scheduling ([800d747](https://github.com/sagefromtheeast/Aura/commit/800d747ea1102ea9f66fcedd34abc0ae791b0816))
+* **notifications:** add preview, quiet hours & sound picker screens ([9cfdc2f](https://github.com/sagefromtheeast/Aura/commit/9cfdc2fda58d39cb4cb023d61d47e219a99bab61))
+* **playback:** media session for lock-screen, Bluetooth and Android Auto ([b60133a](https://github.com/sagefromtheeast/Aura/commit/b60133ad0d11ba40e4f8d38b615fd1a9814d93cc))
+* **playlists:** full CRUD, duplicate handling and M3U import/export ([c1afb1a](https://github.com/sagefromtheeast/Aura/commit/c1afb1a246aa39e2cd0f1a3124273bbc504f890f)), closes [#EXTM3](https://github.com/sagefromtheeast/Aura/issues/EXTM3)
+* **queue:** multiple named queues + real queue actions ([936c194](https://github.com/sagefromtheeast/Aura/commit/936c194aad203cf807c60a74fae9ab96375edd34))
+* **scanner:** add library scanner (MediaStore/MPMediaQuery + folder fallback) ([d339b02](https://github.com/sagefromtheeast/Aura/commit/d339b02bd61f88e29f25b170d1a5263643fb3e79))
+* **search:** add global Search screen with three states + search provider ([bd6b992](https://github.com/sagefromtheeast/Aura/commit/bd6b99264f4914957cb9bb0f9ceecd9faf8c7866))
+* **search:** wire Library search button to the new Search screen ([fed1cf8](https://github.com/sagefromtheeast/Aura/commit/fed1cf807dfcb611c19d4e69577506a8771b8c99))
+* **services:** widget data bridge, local notifications and update scheduler ([1699d81](https://github.com/sagefromtheeast/Aura/commit/1699d81ed19c8fee9532e34ecf8dc0ee75e50ae0))
+* **settings:** add full Settings suite (6 screens + stub providers) ([805e003](https://github.com/sagefromtheeast/Aura/commit/805e0038efd23c4b8effa2070f0172a0283c2622))
+* **settings:** persist settings across restarts, from one source of truth ([7b3c223](https://github.com/sagefromtheeast/Aura/commit/7b3c2230f79159d5e28894244e65cc2768f93ab8))
+* **shuffle:** rewrite IntelliShuffle engine with weighted draws + persistence ([82df76c](https://github.com/sagefromtheeast/Aura/commit/82df76cf459476feb4d9eb154982290b6e6eb4b3))
+* **sleep-timer:** wire the orphaned sleep timer to real playback ([6fad0cb](https://github.com/sagefromtheeast/Aura/commit/6fad0cbeeae03e26f5eefb9654faddfa2fa307a4))
+* **stats:** add Stats Dashboard & Monthly Wrapped screens ([15e18a1](https://github.com/sagefromtheeast/Aura/commit/15e18a1dfa822253affea5ee7043ac9a46b3770e))
+* **stats:** statistics engine over real play history ([806a03c](https://github.com/sagefromtheeast/Aura/commit/806a03c3058eb6349d90bd495a62f64c898554fe))
+* **widgets:** add Widget Gallery, Customization sheet, Tutorial + stub service ([80d07d9](https://github.com/sagefromtheeast/Aura/commit/80d07d91928b56a9853e27d4b58d6377e6ddcd68))
+
 # Changelog
 
 All notable changes to the **Aura** music player project are documented in this file.
