@@ -82,6 +82,16 @@ class _FakeBehaviorRepo implements BehaviorRepository {
   Future<List<PlayEvent>> getPlayHistory(String trackId, {int limit = 100}) async => [];
   @override
   Future<void> pruneHistory(Duration retainDuration) async {}
+
+  @override
+  Future<List<PlayEvent>> getEventsInRange(int startMs, int endMs) async =>
+      const [];
+
+  @override
+  Future<Map<String, int>> getFirstPlayMsPerTrack() async => const {};
+
+  @override
+  Future<int?> getFirstEventMs() async => null;
 }
 
 class _FakeFeatureRepo implements AudioFeatureRepository {

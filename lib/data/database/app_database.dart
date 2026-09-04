@@ -51,7 +51,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -103,6 +103,18 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(audioFeaturesTable, audioFeaturesTable.keyName);
             await m.addColumn(
                 playlistsTable, playlistsTable.coverArtPathsJson);
+          }
+          if (from < 5) {
+            // v5: statistics engine needs completion, which `skipped` cannot
+            // express — a play can be neither skipped nor completed.
+            await m.addColumn(
+                playbackHistoryTable, playbackHistoryTable.completed);
+            // Backfill: before this column existed the orchestrator only ever
+            // wrote skipped=false for plays past the completion ratio, so for
+            // historic rows the two really were inverses.
+            await customStatement(
+              'UPDATE playback_history SET completed = 1 WHERE skipped = 0',
+            );
           }
         },
         beforeOpen: (details) async {

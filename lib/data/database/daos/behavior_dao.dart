@@ -23,6 +23,7 @@ class BehaviorDao extends DatabaseAccessor<AppDatabase>
   Future<void> recordPlay(
     String trackId, {
     required int durationPlayedMs,
+    bool completed = true,
     String contextType = 'library',
     int? playedAtMs,
   }) =>
@@ -31,6 +32,7 @@ class BehaviorDao extends DatabaseAccessor<AppDatabase>
         playedAtMs: playedAtMs ?? DateTime.now().millisecondsSinceEpoch,
         durationPlayedMs: durationPlayedMs,
         skipped: const Value(false),
+        completed: Value(completed),
         contextType: Value(contextType),
       ));
 
@@ -46,6 +48,7 @@ class BehaviorDao extends DatabaseAccessor<AppDatabase>
         playedAtMs: playedAtMs ?? DateTime.now().millisecondsSinceEpoch,
         durationPlayedMs: durationPlayedMs,
         skipped: const Value(true),
+        completed: const Value(false),
         contextType: Value(contextType),
       ));
 
@@ -62,6 +65,48 @@ class BehaviorDao extends DatabaseAccessor<AppDatabase>
       getAggregatedStats(trackIds);
 
   // ── History Queries ────────────────────────────────────────────────────────
+
+  /// Every event in `[startMs, endMs)`, oldest first.
+  ///
+  /// The statistics engine aggregates in Dart rather than SQL: the same rows
+  /// feed a dozen different breakdowns (hour of day, day of week, streaks, top
+  /// artists), and one scan plus in-memory grouping beats a dozen round trips.
+  /// `idx_history_played_at` keeps the range scan cheap.
+  Future<List<PlaybackHistoryRow>> getEventsInRange(
+    int startMs,
+    int endMs,
+  ) =>
+      (select(playbackHistoryTable)
+            ..where((h) =>
+                h.playedAtMs.isBiggerOrEqualValue(startMs) &
+                h.playedAtMs.isSmallerThanValue(endMs))
+            ..orderBy([(h) => OrderingTerm.asc(h.playedAtMs)]))
+          .get();
+
+  /// Epoch ms of each track's first ever play, keyed by track id.
+  ///
+  /// Backs "new discoveries": a track discovered in a period is one whose
+  /// first play falls inside it. Aggregating in SQL keeps this one small
+  /// result set rather than every historic row.
+  Future<Map<String, int>> getFirstPlayMsPerTrack() async {
+    final rows = await customSelect(
+      'SELECT track_id, MIN(played_at_ms) AS first_ms '
+      'FROM playback_history GROUP BY track_id',
+      readsFrom: {playbackHistoryTable},
+    ).get();
+    return {
+      for (final r in rows) r.read<String>('track_id'): r.read<int>('first_ms'),
+    };
+  }
+
+  /// Epoch ms of the very first recorded event, or null when there is none.
+  Future<int?> getFirstEventMs() async {
+    final row = await customSelect(
+      'SELECT MIN(played_at_ms) AS first_ms FROM playback_history',
+      readsFrom: {playbackHistoryTable},
+    ).getSingleOrNull();
+    return row?.readNullable<int>('first_ms');
+  }
 
   /// Returns history for a specific track, newest first.
   Future<List<PlaybackHistoryRow>> getHistoryForTrack(

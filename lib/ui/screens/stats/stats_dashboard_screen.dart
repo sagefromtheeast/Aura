@@ -1,7 +1,7 @@
 // lib/ui/screens/stats/stats_dashboard_screen.dart
 // Aura — "Your Week in Music" stats dashboard.
 //
-// Renders weekly listening aggregates from [statsProvider]:
+// Renders weekly listening aggregates from [weeklyStatsViewProvider]:
 //   • Header + date range
 //   • Frosted hero card (total time, animated gradient border, glowing chart)
 //   • 2×2 stats grid (top artist / song / album / streak)
@@ -26,13 +26,22 @@ class StatsDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stats = ref.watch(statsProvider);
+    final stats = ref.watch(weeklyStatsViewProvider);
 
     return Scaffold(
       body: SafeArea(
-        child: stats.hasData
-            ? _DashboardContent(stats: stats)
-            : const _EmptyState(),
+        child: stats.when(
+          data: (data) =>
+              data.hasData ? _DashboardContent(stats: data) : const _EmptyState(),
+          // A first aggregation reads a week of history; show the empty state's
+          // shell rather than a bare spinner on an already-dark screen.
+          loading: () => const Center(
+            child: CircularProgressIndicator(
+              color: DesignTokens.primarySeed,
+            ),
+          ),
+          error: (error, _) => _StatsError(error: error),
+        ),
       ),
     );
   }
@@ -43,7 +52,7 @@ class StatsDashboardScreen extends ConsumerWidget {
 class _DashboardContent extends StatelessWidget {
   const _DashboardContent({required this.stats});
 
-  final WeeklyStats stats;
+  final WeeklyStatsView stats;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +155,7 @@ class _DashboardContent extends StatelessWidget {
 class _HeroCard extends StatefulWidget {
   const _HeroCard({required this.stats});
 
-  final WeeklyStats stats;
+  final WeeklyStatsView stats;
 
   @override
   State<_HeroCard> createState() => _HeroCardState();
@@ -630,6 +639,36 @@ class _CircleAvatarArt extends StatelessWidget {
 }
 
 // ── Empty state ───────────────────────────────────────────────────────────────
+
+/// Shown when aggregation itself fails — a corrupt row, a closed database.
+class _StatsError extends StatelessWidget {
+  const _StatsError({required this.error});
+
+  final Object error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(DesignTokens.spacing32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline_rounded,
+                size: 56, color: Color(0xFFFFB020)),
+            const SizedBox(height: DesignTokens.spacing16),
+            Text(
+              "Couldn't work out your stats: $error",
+              textAlign: TextAlign.center,
+              style: DesignTokens.bodyLarge
+                  .copyWith(color: _secondaryColor(context)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class _EmptyState extends StatelessWidget {
   const _EmptyState();

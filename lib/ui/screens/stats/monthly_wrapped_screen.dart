@@ -7,7 +7,7 @@
 // `screenshot` package and shared through the local OS share sheet
 // (share_plus) — no network calls.
 //
-// Data comes from [wrappedProvider] (stub aggregates, computed locally).
+// Data comes from [wrappedProvider], aggregated locally from play history.
 
 import 'dart:io';
 import 'dart:math' as math;
@@ -66,7 +66,11 @@ class _MonthlyWrappedScreenState extends ConsumerState<MonthlyWrappedScreen>
 
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(wrappedProvider);
+    final wrapped = ref.watch(wrappedProvider);
+    // The story cards animate and page; rather than thread an AsyncValue
+    // through all seven, resolve it once here and fall back to an empty month
+    // while the aggregation runs.
+    final data = wrapped.valueOrNull ?? MonthlyWrapped.empty(DateTime.now());
 
     final pages = <Widget>[
       _IntroCard(data: data),

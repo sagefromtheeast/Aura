@@ -20,7 +20,7 @@ import '../domain/repositories/shuffle_state_repository.dart';
 import '../domain/intelli_shuffle/intelli_shuffle_engine.dart';
 import '../domain/smart_mix/smart_mix_generator.dart';
 import '../domain/duplicate_detector/duplicate_detector.dart';
-import '../domain/use_cases/stats_calculator.dart';
+import '../domain/stats/stats_calculator.dart';
 import '../domain/use_cases/playback_orchestrator.dart';
 import '../domain/entities/playback_state.dart';
 import '../domain/entities/track.dart';
@@ -109,8 +109,8 @@ final duplicateDetectorProvider = Provider<DuplicateDetector>((ref) {
 
 final statsCalculatorProvider = Provider<StatsCalculator>((ref) {
   return StatsCalculator(
-    behaviorRepository: ref.watch(behaviorRepositoryProvider),
-    musicRepository: ref.watch(musicRepositoryProvider),
+    historyRepository: ref.watch(behaviorRepositoryProvider),
+    trackRepository: ref.watch(musicRepositoryProvider),
   );
 });
 

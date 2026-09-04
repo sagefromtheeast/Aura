@@ -114,6 +114,7 @@ class PlaybackOrchestrator {
         playedAtMs: DateTime.now().millisecondsSinceEpoch,
         durationPlayedMs: _state.positionMs,
         skipped: true,
+        completed: false,
         contextType: 'shuffle',
       ));
       _shuffleEngine.skip(track);
@@ -132,6 +133,7 @@ class PlaybackOrchestrator {
         playedAtMs: DateTime.now().millisecondsSinceEpoch,
         durationPlayedMs: played,
         skipped: !isComplete,
+        completed: isComplete,
         contextType: 'shuffle',
       ));
       if (isComplete) {
