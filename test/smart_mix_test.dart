@@ -136,11 +136,31 @@ class _FakePlaylistRepo implements PlaylistRepository {
   @override
   Future<void> deletePlaylist(String id) async {}
   @override
-  Future<void> addTrack(String playlistId, String trackId) async {}
+  Future<void> renamePlaylist(String id, String newName) async {}
+  @override
+  Future<bool> addTrack(String playlistId, String trackId) async => true;
+  @override
+  Future<int> addTracks(String playlistId, List<String> trackIds) async =>
+      trackIds.length;
   @override
   Future<void> removeTrack(String playlistId, String trackId) async {}
   @override
+  Future<void> removeTracks(String playlistId, List<String> trackIds) async {}
+  @override
   Future<void> reorderTracks(String playlistId, List<String> ids) async {}
+  @override
+  Future<List<Track>> getPlaylistTracks(String playlistId) async => const [];
+  @override
+  Future<int> getPlaylistTrackCount(String playlistId) async => 0;
+  @override
+  Future<List<Track>> getDuplicateTracks(String playlistId) async => const [];
+  @override
+  Future<int> removeDuplicates(String playlistId) async => 0;
+  @override
+  Future<M3uImportResult> importM3u(String filePath, {String? playlistName}) =>
+      throw UnimplementedError();
+  @override
+  Future<void> exportM3u(String playlistId, String outputPath) async {}
 }
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────

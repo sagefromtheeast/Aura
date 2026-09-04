@@ -49,6 +49,13 @@ class TrackDao extends DatabaseAccessor<AppDatabase> with _$TrackDaoMixin {
   Future<TrackRow?> getTrackById(String id) =>
       (select(tracksTable)..where((t) => t.id.equals(id))).getSingleOrNull();
 
+  /// Tracks for a set of ids, in one query. Order is unspecified — callers
+  /// that care (playlist order) reindex the result themselves.
+  Future<List<TrackRow>> getTracksByIds(List<String> ids) {
+    if (ids.isEmpty) return Future.value(const <TrackRow>[]);
+    return (select(tracksTable)..where((t) => t.id.isIn(ids))).get();
+  }
+
   /// All tracks with a given file path (used by scanner for upsert detection).
   Future<TrackRow?> getTrackByPath(String filePath) =>
       (select(tracksTable)..where((t) => t.filePath.equals(filePath)))
