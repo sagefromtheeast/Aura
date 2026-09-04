@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../widgets/mini_player.dart';
 import '../library/library_screen.dart';
-import '../stats/stats_screen.dart';
+import '../stats/stats_dashboard_screen.dart';
 import '../settings/equalizer_screen.dart';
-import '../settings/settings_screen.dart';
+import '../settings/settings_main_screen.dart';
 
 /// Main container scaffold managing bottom tab navigation and the floating MiniPlayer.
 /// Uses an IndexedStack to retain scroll positions across all four primary views.
@@ -19,9 +19,9 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   final List<Widget> _pages = const [
     LibraryScreen(),
-    StatsScreen(),
+    StatsDashboardScreen(),
     EqualizerScreen(),
-    SettingsScreen(),
+    SettingsMainScreen(),
   ];
 
   @override

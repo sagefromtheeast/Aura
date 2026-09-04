@@ -1,263 +1,508 @@
 // lib/native/audio_engine_ffi.dart
 // Aura — AudioEngineFfi
-// Architecture §4.1 / CLAUDE.md §4: Dart FFI wrapper for the C++ audio engine.
+// Architecture §4.1: Dart FFI wrapper for the C++ audio engine.
 //
-// ═══════════════════════════════════════════════════════════════════════════════
-// SPRINT 1 STUB STRATEGY
-// ═══════════════════════════════════════════════════════════════════════════════
+// Binds the handle-based C API in cpp/audio_engine/audio_engine.h. Every call
+// goes through an opaque engine pointer returned by aura_engine_create(), so
+// multiple engines could coexist; this class owns one process-wide instance.
 //
-// The C++ shared library (libaura_engine.so / libaura_engine.dylib) is not yet
-// compiled. This class uses a "stub mode" that:
-//   1. Attempts to load the native library at runtime.
-//   2. If the library is absent (Sprint 1), falls back to no-op stubs.
-//   3. The callback port infrastructure is wired up now so Sprint 2 only needs
-//      to compile the C++ library and call aura_set_callback().
+// GRACEFUL DEGRADATION
+//   If libaura_engine is not present (engine not compiled for this platform),
+//   [isAvailable] stays false and every method is a safe no-op. main.dart logs
+//   this and the app falls back to the just_audio backend — see
+//   lib/native/playback_backend.dart.
 //
-// CALLBACK ARCHITECTURE (AGENTS.md: "use NativeCallable callback ports"):
-//   The C++ engine emits position ticks and state changes asynchronously.
-//   We use dart:ffi NativeCallable<...>.listener() which:
-//     - Runs the Dart callback on the Dart isolate (no UI thread blocking).
-//     - Is safe to call from C++ native threads (async port mechanism).
-//
-// FFI FUNCTION SIGNATURES (matches native/include/audio_engine.h):
-//   int32_t  aura_init(void);
-//   int32_t  aura_load_track(const char* path);
-//   void     aura_play(void);
-//   void     aura_pause(void);
-//   void     aura_seek(int64_t position_ms);
-//   void     aura_set_eq_band(int32_t band, double gain_db, double q);
-//   void     aura_set_volume(double volume);
-//   void     aura_set_callback(AuraCallback callback, void* user_data);
-//   int64_t  aura_get_duration(void);
-//   void     aura_destroy(void);
-//
-//   typedef void (*AuraCallback)(int32_t event_type, int64_t value, void* user_data);
-//   // event_type: 0=position, 1=stateChange, 2=error
-//
-// ═══════════════════════════════════════════════════════════════════════════════
+// CALLBACKS (AGENTS.md: "use NativeCallable callback ports")
+//   The engine reports position/state/error from a native worker thread.
+//   NativeCallable.listener() marshals those onto the Dart event loop, so the
+//   UI thread is never blocked. Each is also republished as a broadcast stream.
 
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io' show Platform;
+
 import 'package:ffi/ffi.dart';
 
-// ── Native type aliases ────────────────────────────────────────────────────────
+import '../domain/duplicate_detector/fingerprint_math.dart';
 
-/// C: void (*AuraCallback)(int32_t event_type, int64_t value, void* user_data)
-typedef AuraCallbackNative = Void Function(
-  Int32 eventType,
-  Int64 value,
-  Pointer<Void> userData,
-);
-typedef AuraCallbackDart = void Function(int eventType, int value, Pointer<Void> userData);
+// ── Engine states (mirrors AuraPlaybackState and domain EngineStatus) ─────────
 
-/// Event types emitted by the C++ engine via callback.
-abstract final class EngineEvent {
-  static const int position = 0;    // value = positionMs
-  static const int stateChange = 1; // value = EngineStatus index
-  static const int error = 2;       // value = error code
+enum EngineState {
+  idle,
+  ready,
+  playing,
+  paused,
+  loading,
+  completed,
+  error;
+
+  static EngineState fromIndex(int index) =>
+      (index >= 0 && index < EngineState.values.length)
+          ? EngineState.values[index]
+          : EngineState.idle;
 }
 
-// ── FFI function typedefs ──────────────────────────────────────────────────────
+/// Built-in EQ presets (mirrors AuraEqPreset and kEqPresetOrder in Dart).
+enum EqPreset {
+  flat,
+  rock,
+  pop,
+  jazz,
+  classical,
+  custom;
 
-typedef _AuraInitNative = Int32 Function();
-typedef _AuraInitDart = int Function();
+  static EqPreset fromName(String name) {
+    switch (name.toLowerCase()) {
+      case 'rock':
+        return EqPreset.rock;
+      case 'pop':
+        return EqPreset.pop;
+      case 'jazz':
+        return EqPreset.jazz;
+      case 'classical':
+        return EqPreset.classical;
+      case 'custom':
+        return EqPreset.custom;
+      default:
+        return EqPreset.flat;
+    }
+  }
+}
 
-typedef _AuraLoadTrackNative = Int32 Function(Pointer<Utf8> path);
-typedef _AuraLoadTrackDart = int Function(Pointer<Utf8> path);
+/// Legacy event discriminators kept for `onEngineEvent` consumers.
+abstract final class EngineEvent {
+  static const int position = 0;
+  static const int stateChange = 1;
+  static const int error = 2;
+}
 
-typedef _AuraPlayNative = Void Function();
-typedef _AuraPlayDart = void Function();
+// ── Native typedefs ───────────────────────────────────────────────────────────
 
-typedef _AuraPauseNative = Void Function();
-typedef _AuraPauseDart = void Function();
+typedef _CreateNative = Pointer<Void> Function();
+typedef _CreateDart = Pointer<Void> Function();
 
-typedef _AuraSeekNative = Void Function(Int64 positionMs);
-typedef _AuraSeekDart = void Function(int positionMs);
+typedef _DestroyNative = Void Function(Pointer<Void>);
+typedef _DestroyDart = void Function(Pointer<Void>);
 
-typedef _AuraSetEqBandNative = Void Function(Int32 band, Double gainDb, Double q);
-typedef _AuraSetEqBandDart = void Function(int band, double gainDb, double q);
+typedef _LoadTrackNative = Bool Function(Pointer<Void>, Pointer<Utf8>);
+typedef _LoadTrackDart = bool Function(Pointer<Void>, Pointer<Utf8>);
 
-typedef _AuraSetVolumeNative = Void Function(Double volume);
-typedef _AuraSetVolumeDart = void Function(double volume);
+typedef _VoidBoolNative = Bool Function(Pointer<Void>);
+typedef _VoidBoolDart = bool Function(Pointer<Void>);
 
-typedef _AuraSetCallbackNative = Void Function(
-  Pointer<NativeFunction<AuraCallbackNative>> callback,
-  Pointer<Void> userData,
-);
-typedef _AuraSetCallbackDart = void Function(
-  Pointer<NativeFunction<AuraCallbackNative>> callback,
-  Pointer<Void> userData,
-);
+typedef _SeekNative = Bool Function(Pointer<Void>, Int64);
+typedef _SeekDart = bool Function(Pointer<Void>, int);
 
-typedef _AuraGetDurationNative = Int64 Function();
-typedef _AuraGetDurationDart = int Function();
+typedef _GetI64Native = Int64 Function(Pointer<Void>);
+typedef _GetI64Dart = int Function(Pointer<Void>);
 
-typedef _AuraDestroyNative = Void Function();
-typedef _AuraDestroyDart = void Function();
+typedef _GetI32Native = Int32 Function(Pointer<Void>);
+typedef _GetI32Dart = int Function(Pointer<Void>);
 
-typedef _AuraFingerprintNative = Int32 Function(Pointer<Utf8> path, Pointer<Utf8> outHash, Int32 outSize);
-typedef _AuraFingerprintDart = int Function(Pointer<Utf8> path, Pointer<Utf8> outHash, int outSize);
+typedef _SetEqBandNative = Void Function(Pointer<Void>, Int32, Float, Float);
+typedef _SetEqBandDart = void Function(Pointer<Void>, int, double, double);
 
-typedef _AuraAnalyzeFeaturesNative = Int32 Function(Pointer<Utf8> path, Pointer<Float> outFeatures, Int32 featureCount);
-typedef _AuraAnalyzeFeaturesDart = int Function(Pointer<Utf8> path, Pointer<Float> outFeatures, int featureCount);
+typedef _SetIntNative = Void Function(Pointer<Void>, Int32);
+typedef _SetIntDart = void Function(Pointer<Void>, int);
+
+typedef _SetFloatNative = Void Function(Pointer<Void>, Float);
+typedef _SetFloatDart = void Function(Pointer<Void>, double);
+
+typedef _SetBoolNative = Void Function(Pointer<Void>, Bool);
+typedef _SetBoolDart = void Function(Pointer<Void>, bool);
+
+typedef _VoidNative = Void Function(Pointer<Void>);
+typedef _VoidDart = void Function(Pointer<Void>);
+
+// Callback signatures.
+typedef _PositionCbNative = Void Function(Int64, Pointer<Void>);
+typedef _StateCbNative = Void Function(Int32, Pointer<Void>);
+typedef _ErrorCbNative = Void Function(Pointer<Utf8>, Pointer<Void>);
+
+typedef _SetPositionCbNative = Void Function(
+    Pointer<Void>, Pointer<NativeFunction<_PositionCbNative>>, Pointer<Void>);
+typedef _SetPositionCbDart = void Function(
+    Pointer<Void>, Pointer<NativeFunction<_PositionCbNative>>, Pointer<Void>);
+
+typedef _SetStateCbNative = Void Function(
+    Pointer<Void>, Pointer<NativeFunction<_StateCbNative>>, Pointer<Void>);
+typedef _SetStateCbDart = void Function(
+    Pointer<Void>, Pointer<NativeFunction<_StateCbNative>>, Pointer<Void>);
+
+typedef _SetErrorCbNative = Void Function(
+    Pointer<Void>, Pointer<NativeFunction<_ErrorCbNative>>, Pointer<Void>);
+typedef _SetErrorCbDart = void Function(
+    Pointer<Void>, Pointer<NativeFunction<_ErrorCbNative>>, Pointer<Void>);
+
+// Analysis (engine-independent).
+typedef _AnalyzeNative = Bool Function(Pointer<Utf8>, Pointer<Float>, Int32);
+typedef _AnalyzeDart = bool Function(Pointer<Utf8>, Pointer<Float>, int);
+
+typedef _FingerprintNative = Bool Function(
+    Pointer<Utf8>, Pointer<Uint32>, Pointer<Int32>);
+typedef _FingerprintDart = bool Function(
+    Pointer<Utf8>, Pointer<Uint32>, Pointer<Int32>);
+
+typedef _BerNative = Double Function(
+    Pointer<Uint32>, Int32, Pointer<Uint32>, Int32);
+typedef _BerDart = double Function(
+    Pointer<Uint32>, int, Pointer<Uint32>, int);
+
+typedef _VersionNative = Pointer<Utf8> Function();
+typedef _VersionDart = Pointer<Utf8> Function();
+
+typedef _HasFfmpegNative = Bool Function();
+typedef _HasFfmpegDart = bool Function();
 
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dart wrapper around the C++ audio engine shared library.
-///
-/// In Sprint 1, the library may not be present; all calls are no-ops.
-/// In Sprint 2, compile libaura_engine and drop it into the platform dirs.
 class AudioEngineFfi {
   AudioEngineFfi._();
 
   static AudioEngineFfi? _instance;
 
-  /// Returns the singleton instance.
-  /// Initialises the FFI bindings on first call.
+  /// Singleton; binds the native library on first access.
   static AudioEngineFfi get instance {
     _instance ??= AudioEngineFfi._().._bindNative();
     return _instance!;
   }
 
+  /// Test seam: drops the cached singleton so a fresh bind can be attempted.
+  static void resetForTesting() {
+    _instance?.destroy();
+    _instance = null;
+  }
+
   bool _isAvailable = false;
+
+  /// True when the shared library loaded and every symbol resolved.
   bool get isAvailable => _isAvailable;
 
-  // ── Bound native functions (null when library absent) ─────────────────────
-  _AuraInitDart? _init;
-  _AuraLoadTrackDart? _loadTrack;
-  _AuraPlayDart? _play;
-  _AuraPauseDart? _pause;
-  _AuraSeekDart? _seek;
-  _AuraSetEqBandDart? _setEqBand;
-  _AuraSetVolumeDart? _setVolume;
-  _AuraSetCallbackDart? _setCallback;
-  _AuraGetDurationDart? _getDuration;
-  _AuraDestroyDart? _destroy;
-  _AuraFingerprintDart? _fingerprint;
-  _AuraAnalyzeFeaturesDart? _analyzeFeatures;
+  /// Opaque `AuraEngine*`. `nullptr` until [init] succeeds.
+  Pointer<Void> _engine = nullptr;
 
-  /// Callback invoked when the engine emits a position or state event.
-  /// Set by [PlaybackOrchestrator] after constructing this instance.
+  bool get _ready => _isAvailable && _engine != nullptr;
+
+  // Bound symbols (null when the library is absent).
+  _CreateDart? _create;
+  _DestroyDart? _destroyEngine;
+  _LoadTrackDart? _loadTrackFn;
+  _VoidBoolDart? _playFn;
+  _VoidBoolDart? _pauseFn;
+  _VoidBoolDart? _stopFn;
+  _SeekDart? _seekFn;
+  _GetI64Dart? _getPositionFn;
+  _GetI64Dart? _getDurationFn;
+  _VoidBoolDart? _isPlayingFn;
+  _GetI32Dart? _getStateFn;
+  _SetEqBandDart? _setEqBandFn;
+  _SetIntDart? _setEqPresetFn;
+  _VoidDart? _resetEqFn;
+  _SetBoolDart? _setEqEnabledFn;
+  _SetFloatDart? _setReplayGainFn;
+  _SetIntDart? _setCrossfadeFn;
+  _SetFloatDart? _setVolumeFn;
+  _SetFloatDart? _setSpeedFn;
+  _SetPositionCbDart? _setPositionCb;
+  _SetStateCbDart? _setStateCb;
+  _SetErrorCbDart? _setErrorCb;
+  _AnalyzeDart? _analyzeFn;
+  _FingerprintDart? _fingerprintFn;
+  _BerDart? _berFn;
+  _VersionDart? _versionFn;
+  _HasFfmpegDart? _hasFfmpegFn;
+
+  // ── Event surfaces ─────────────────────────────────────────────────────────
+
+  /// Legacy unified callback: `(eventType, value)` using [EngineEvent].
+  /// Retained so existing wiring in shared/providers.dart keeps working.
   void Function(int eventType, int valueMs)? onEngineEvent;
+
+  final _positionController = StreamController<Duration>.broadcast();
+  final _stateController = StreamController<EngineState>.broadcast();
+  final _errorController = StreamController<String>.broadcast();
+
+  /// Playback position ticks (~5/second while playing).
+  Stream<Duration> get positionStream => _positionController.stream;
+
+  /// Engine state transitions.
+  Stream<EngineState> get stateStream => _stateController.stream;
+
+  /// Fatal and non-fatal engine errors.
+  Stream<String> get errorStream => _errorController.stream;
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
-  /// Initialises the audio engine.
-  ///
-  /// Returns true on success, false if the library is unavailable (Sprint 1).
+  /// Creates the native engine and registers callbacks.
+  /// Returns false when the library is unavailable.
   bool init() {
     if (!_isAvailable) return false;
-    final result = _init!();
-    if (result == 0) _registerCallback();
-    return result == 0;
+    if (_engine != nullptr) return true;
+
+    _engine = _create!();
+    if (_engine == nullptr) return false;
+
+    _registerCallbacks();
+    return true;
   }
 
-  /// Destroys the engine and frees native resources.
+  /// Destroys the native engine and releases callback ports.
   void destroy() {
-    if (!_isAvailable) return;
-    _destroy!();
-    _nativeCallable?.close();
-    _nativeCallable = null;
+    if (_engine != nullptr) {
+      _destroyEngine?.call(_engine);
+      _engine = nullptr;
+    }
+    _positionCallable?.close();
+    _stateCallable?.close();
+    _errorCallable?.close();
+    _positionCallable = null;
+    _stateCallable = null;
+    _errorCallable = null;
   }
 
-  // ── Playback Controls ──────────────────────────────────────────────────────
+  // ── Playback ───────────────────────────────────────────────────────────────
 
-  /// Loads a track by absolute file [path].
-  /// Returns false if the library is unavailable or the file cannot be loaded.
+  /// Loads an absolute file [path]. Returns false when unavailable or undecodable.
   bool loadTrack(String path) {
-    if (!_isAvailable) return false;
-    final pathPtr = path.toNativeUtf8();
-    final result = _loadTrack!(pathPtr);
-    calloc.free(pathPtr);
-    return result == 0;
-  }
-
-  void play() => _play?.call();
-  void pause() => _pause?.call();
-  void seek(int positionMs) => _seek?.call(positionMs);
-
-  /// Returns the duration of the loaded track in milliseconds.
-  int getDurationMs() => _isAvailable ? _getDuration!() : 0;
-
-  // ── EQ & Volume ───────────────────────────────────────────────────────────
-
-  /// Sets EQ band [band] (0–9) gain to [gainDb] dB with quality factor [q].
-  void setEqBand(int band, double gainDb, double q) =>
-      _setEqBand?.call(band, gainDb, q);
-
-  void setVolume(double volume) => _setVolume?.call(volume);
-
-  // ── Fingerprint & Analysis ───────────────────────────────────────────────
-  
-  String? getFingerprint(String path) {
-    if (!_isAvailable || _fingerprint == null) return null;
-    final pathPtr = path.toNativeUtf8();
-    final outHash = calloc<Int8>(256).cast<Utf8>();
-    final result = _fingerprint!(pathPtr, outHash, 256);
-    String? hash;
-    if (result == 0) {
-      hash = outHash.toDartString();
+    if (!_ready) return false;
+    final ptr = path.toNativeUtf8();
+    try {
+      return _loadTrackFn!(_engine, ptr);
+    } finally {
+      calloc.free(ptr);
     }
-    calloc.free(pathPtr);
-    calloc.free(outHash);
-    return hash;
   }
 
+  void play() {
+    if (_ready) _playFn?.call(_engine);
+  }
+
+  void pause() {
+    if (_ready) _pauseFn?.call(_engine);
+  }
+
+  void stop() {
+    if (_ready) _stopFn?.call(_engine);
+  }
+
+  void seek(int positionMs) {
+    if (_ready) _seekFn?.call(_engine, positionMs);
+  }
+
+  /// Current position in milliseconds.
+  int getPositionMs() => _ready ? _getPositionFn!(_engine) : 0;
+
+  /// Duration of the loaded track in milliseconds.
+  int getDurationMs() => _ready ? _getDurationFn!(_engine) : 0;
+
+  bool get isPlaying => _ready && _isPlayingFn!(_engine);
+
+  EngineState get state =>
+      _ready ? EngineState.fromIndex(_getStateFn!(_engine)) : EngineState.idle;
+
+  // ── DSP ────────────────────────────────────────────────────────────────────
+
+  /// Sets EQ band [band] (0-9) to [gainDb] dB with quality factor [q].
+  void setEqBand(int band, double gainDb, double q) {
+    if (_ready) _setEqBandFn?.call(_engine, band, gainDb, q);
+  }
+
+  void setEqPreset(EqPreset preset) {
+    if (_ready) _setEqPresetFn?.call(_engine, preset.index);
+  }
+
+  void resetEq() {
+    if (_ready) _resetEqFn?.call(_engine);
+  }
+
+  void setEqEnabled(bool enabled) {
+    if (_ready) _setEqEnabledFn?.call(_engine, enabled);
+  }
+
+  /// ReplayGain adjustment for the current track, in dB.
+  void setReplayGain(double gainDb) {
+    if (_ready) _setReplayGainFn?.call(_engine, gainDb);
+  }
+
+  /// Crossfade length in milliseconds (0-12000; 0 disables).
+  void setCrossfade(int fadeMs) {
+    if (_ready) _setCrossfadeFn?.call(_engine, fadeMs);
+  }
+
+  void setVolume(double volume) {
+    if (_ready) _setVolumeFn?.call(_engine, volume);
+  }
+
+  void setSpeed(double speed) {
+    if (_ready) _setSpeedFn?.call(_engine, speed);
+  }
+
+  // ── Analysis ───────────────────────────────────────────────────────────────
+
+  /// Extracts the 6-dimension feature vector for [path], or null on failure.
+  /// Layout: [tempo, energy, valence, danceability, loudness, acousticness].
   List<double>? analyzeFeatures(String path) {
-    if (!_isAvailable || _analyzeFeatures == null) return null;
+    if (!_isAvailable || _analyzeFn == null) return null;
     final pathPtr = path.toNativeUtf8();
-    final outFeatures = calloc<Float>(6);
-    final result = _analyzeFeatures!(pathPtr, outFeatures, 6);
-    List<double>? features;
-    if (result == 0) {
-      features = [
-        outFeatures[0].toDouble(),
-        outFeatures[1].toDouble(),
-        outFeatures[2].toDouble(),
-        outFeatures[3].toDouble(),
-        outFeatures[4].toDouble(),
-        outFeatures[5].toDouble(),
-      ];
+    final out = calloc<Float>(6);
+    try {
+      if (!_analyzeFn!(pathPtr, out, 6)) return null;
+      return List<double>.generate(6, (i) => out[i].toDouble(), growable: false);
+    } finally {
+      calloc.free(pathPtr);
+      calloc.free(out);
     }
-    calloc.free(pathPtr);
-    calloc.free(outFeatures);
-    return features;
   }
 
-  // ── Private: Library Loading ───────────────────────────────────────────────
+  /// Async wrapper matching the spec's `analyzeTrack` name.
+  Future<List<double>?> analyzeTrack(String path) async => analyzeFeatures(path);
+
+  /// Raw Chromaprint sub-fingerprints for [path], or null on failure.
+  ///
+  /// The engine fingerprints the first 30 seconds at 11025 Hz, emitting one
+  /// 32-bit value per ~0.124 s frame — roughly 220 values. [capacity] is sized
+  /// to hold all of them; a smaller value simply truncates the comparison
+  /// window rather than failing.
+  List<int>? getFingerprintValues(String path, {int capacity = 256}) {
+    if (!_isAvailable || _fingerprintFn == null) return null;
+    final pathPtr = path.toNativeUtf8();
+    final out = calloc<Uint32>(capacity);
+    final sizePtr = calloc<Int32>()..value = capacity;
+    try {
+      if (!_fingerprintFn!(pathPtr, out, sizePtr)) return null;
+      final count = sizePtr.value;
+      if (count <= 0) return null;
+      return List<int>.generate(count, (i) => out[i], growable: false);
+    } finally {
+      calloc.free(pathPtr);
+      calloc.free(out);
+      calloc.free(sizePtr);
+    }
+  }
+
+  /// Bit error rate between two raw fingerprints: the fraction of differing
+  /// bits over their overlapping prefix, in [0, 1].
+  ///
+  /// Identical encodes score near 0; unrelated recordings sit near 0.5, since
+  /// independent bits disagree half the time. [kFingerprintBerThreshold] is the
+  /// cut-off Aura's duplicate detector uses.
+  ///
+  /// Falls back to a pure-Dart computation when the native library is absent,
+  /// so duplicate detection still works in tests and on unsupported platforms.
+  double fingerprintBitErrorRate(List<int> a, List<int> b) {
+    if (a.isEmpty || b.isEmpty) return 1.0;
+
+    if (_isAvailable && _berFn != null) {
+      final aPtr = calloc<Uint32>(a.length);
+      final bPtr = calloc<Uint32>(b.length);
+      try {
+        for (var i = 0; i < a.length; i++) {
+          aPtr[i] = a[i];
+        }
+        for (var i = 0; i < b.length; i++) {
+          bPtr[i] = b[i];
+        }
+        return _berFn!(aPtr, a.length, bPtr, b.length);
+      } finally {
+        calloc.free(aPtr);
+        calloc.free(bPtr);
+      }
+    }
+
+    return fingerprintBitErrorRateDart(a, b);
+  }
+
+  /// Hex fingerprint string. Retained for callers that want an opaque,
+  /// storable form; duplicate detection compares raw values instead, because
+  /// two encodes of one recording differ in a few bits and so can never match
+  /// as strings.
+  String? getFingerprint(String path) {
+    final values = getFingerprintValues(path);
+    if (values == null || values.isEmpty) return null;
+    return values
+        .map((v) => v.toRadixString(16).padLeft(8, '0'))
+        .join();
+  }
+
+  // ── Build info ─────────────────────────────────────────────────────────────
+
+  String get version {
+    if (!_isAvailable || _versionFn == null) return 'unavailable';
+    return _versionFn!().toDartString();
+  }
+
+  bool get hasFfmpeg => _isAvailable && (_hasFfmpegFn?.call() ?? false);
+
+  // ── Private: binding ───────────────────────────────────────────────────────
 
   void _bindNative() {
     try {
       final lib = _loadLibrary();
-      if (lib == null) return; // Library not yet compiled.
+      if (lib == null) return;
 
-      _init = lib.lookupFunction<_AuraInitNative, _AuraInitDart>('aura_init');
-      _loadTrack = lib.lookupFunction<_AuraLoadTrackNative, _AuraLoadTrackDart>(
-          'aura_load_track');
-      _play = lib.lookupFunction<_AuraPlayNative, _AuraPlayDart>('aura_play');
-      _pause =
-          lib.lookupFunction<_AuraPauseNative, _AuraPauseDart>('aura_pause');
-      _seek = lib.lookupFunction<_AuraSeekNative, _AuraSeekDart>('aura_seek');
-      _setEqBand = lib.lookupFunction<_AuraSetEqBandNative, _AuraSetEqBandDart>(
-          'aura_set_eq_band');
-      _setVolume = lib.lookupFunction<_AuraSetVolumeNative, _AuraSetVolumeDart>(
-          'aura_set_volume');
-      _setCallback =
-          lib.lookupFunction<_AuraSetCallbackNative, _AuraSetCallbackDart>(
-              'aura_set_callback');
-      _getDuration =
-          lib.lookupFunction<_AuraGetDurationNative, _AuraGetDurationDart>(
-              'aura_get_duration');
-      _destroy =
-          lib.lookupFunction<_AuraDestroyNative, _AuraDestroyDart>('aura_destroy');
-      _fingerprint = 
-          lib.lookupFunction<_AuraFingerprintNative, _AuraFingerprintDart>('aura_fingerprint');
-      _analyzeFeatures = 
-          lib.lookupFunction<_AuraAnalyzeFeaturesNative, _AuraAnalyzeFeaturesDart>('aura_analyze_features');
+      _create = lib.lookupFunction<_CreateNative, _CreateDart>('aura_engine_create');
+      _destroyEngine =
+          lib.lookupFunction<_DestroyNative, _DestroyDart>('aura_engine_destroy');
+      _loadTrackFn = lib
+          .lookupFunction<_LoadTrackNative, _LoadTrackDart>('aura_engine_load_track');
+      _playFn = lib.lookupFunction<_VoidBoolNative, _VoidBoolDart>('aura_engine_play');
+      _pauseFn = lib.lookupFunction<_VoidBoolNative, _VoidBoolDart>('aura_engine_pause');
+      _stopFn = lib.lookupFunction<_VoidBoolNative, _VoidBoolDart>('aura_engine_stop');
+      _seekFn = lib.lookupFunction<_SeekNative, _SeekDart>('aura_engine_seek');
+      _getPositionFn = lib
+          .lookupFunction<_GetI64Native, _GetI64Dart>('aura_engine_get_position');
+      _getDurationFn = lib
+          .lookupFunction<_GetI64Native, _GetI64Dart>('aura_engine_get_duration');
+      _isPlayingFn =
+          lib.lookupFunction<_VoidBoolNative, _VoidBoolDart>('aura_engine_is_playing');
+      _getStateFn =
+          lib.lookupFunction<_GetI32Native, _GetI32Dart>('aura_engine_get_state');
+
+      _setEqBandFn = lib
+          .lookupFunction<_SetEqBandNative, _SetEqBandDart>('aura_engine_set_eq_band');
+      _setEqPresetFn = lib
+          .lookupFunction<_SetIntNative, _SetIntDart>('aura_engine_set_eq_preset');
+      _resetEqFn = lib.lookupFunction<_VoidNative, _VoidDart>('aura_engine_reset_eq');
+      _setEqEnabledFn = lib
+          .lookupFunction<_SetBoolNative, _SetBoolDart>('aura_engine_set_eq_enabled');
+      _setReplayGainFn = lib.lookupFunction<_SetFloatNative, _SetFloatDart>(
+          'aura_engine_set_replay_gain');
+      _setCrossfadeFn = lib
+          .lookupFunction<_SetIntNative, _SetIntDart>('aura_engine_set_crossfade');
+      _setVolumeFn =
+          lib.lookupFunction<_SetFloatNative, _SetFloatDart>('aura_engine_set_volume');
+      _setSpeedFn =
+          lib.lookupFunction<_SetFloatNative, _SetFloatDart>('aura_engine_set_speed');
+
+      _setPositionCb = lib.lookupFunction<_SetPositionCbNative, _SetPositionCbDart>(
+          'aura_engine_set_position_callback');
+      _setStateCb = lib.lookupFunction<_SetStateCbNative, _SetStateCbDart>(
+          'aura_engine_set_state_callback');
+      _setErrorCb = lib.lookupFunction<_SetErrorCbNative, _SetErrorCbDart>(
+          'aura_engine_set_error_callback');
+
+      _analyzeFn =
+          lib.lookupFunction<_AnalyzeNative, _AnalyzeDart>('aura_analyze_track');
+      _fingerprintFn = lib
+          .lookupFunction<_FingerprintNative, _FingerprintDart>('aura_get_fingerprint');
+      try {
+        _berFn = lib.lookupFunction<_BerNative, _BerDart>(
+            'aura_fingerprint_bit_error_rate');
+      } catch (_) {
+        // Added alongside Chromaprint; an older engine binary lacks it and
+        // falls back to the Dart implementation rather than failing to bind
+        // the whole library.
+        _berFn = null;
+      }
+      _versionFn =
+          lib.lookupFunction<_VersionNative, _VersionDart>('aura_engine_version');
+      _hasFfmpegFn =
+          lib.lookupFunction<_HasFfmpegNative, _HasFfmpegDart>('aura_engine_has_ffmpeg');
 
       _isAvailable = true;
     } catch (_) {
-      // Library not present in Sprint 1 — silent fallback.
+      // Library missing or a symbol failed to resolve — stay in fallback mode.
       _isAvailable = false;
     }
   }
@@ -266,40 +511,68 @@ class AudioEngineFfi {
     try {
       if (Platform.isAndroid) {
         return DynamicLibrary.open('libaura_engine.so');
-      } else if (Platform.isIOS) {
-        return DynamicLibrary.process(); // Statically linked on iOS.
+      }
+      if (Platform.isIOS || Platform.isMacOS) {
+        // Linked statically into the app binary via the CocoaPods spec.
+        return DynamicLibrary.process();
+      }
+      if (Platform.isLinux) {
+        return DynamicLibrary.open('libaura_engine.so');
+      }
+      if (Platform.isWindows) {
+        return DynamicLibrary.open('aura_engine.dll');
       }
     } catch (_) {
-      // Library not compiled yet.
+      // Not compiled for this platform.
     }
     return null;
   }
 
-  // ── Private: Callback Registration ────────────────────────────────────────
+  // ── Private: callbacks ─────────────────────────────────────────────────────
 
-  NativeCallable<AuraCallbackNative>? _nativeCallable;
+  NativeCallable<_PositionCbNative>? _positionCallable;
+  NativeCallable<_StateCbNative>? _stateCallable;
+  NativeCallable<_ErrorCbNative>? _errorCallable;
 
-  /// Registers a [NativeCallable] with the C++ engine.
-  ///
-  /// AGENTS.md: "use NativeCallable callback ports to prevent blocking UI thread."
-  /// The callback runs on the Dart event loop asynchronously.
-  void _registerCallback() {
-    if (!_isAvailable || _setCallback == null) return;
+  void _registerCallbacks() {
+    if (!_ready) return;
 
-    _nativeCallable = NativeCallable<AuraCallbackNative>.listener(
-      _onEngineCallback,
-    );
+    _positionCallable = NativeCallable<_PositionCbNative>.listener(_onPosition);
+    _stateCallable = NativeCallable<_StateCbNative>.listener(_onState);
+    _errorCallable = NativeCallable<_ErrorCbNative>.listener(_onError);
 
-    _setCallback!(
-      _nativeCallable!.nativeFunction,
-      Pointer.fromAddress(0), // user_data = null
-    );
+    _setPositionCb?.call(_engine, _positionCallable!.nativeFunction, nullptr);
+    _setStateCb?.call(_engine, _stateCallable!.nativeFunction, nullptr);
+    _setErrorCb?.call(_engine, _errorCallable!.nativeFunction, nullptr);
   }
 
-  /// Static callback invoked by the C++ engine on position/state changes.
-  /// Runs on Dart isolate via the NativeCallable port.
-  static void _onEngineCallback(
-      int eventType, int value, Pointer<Void> userData) {
-    _instance?.onEngineEvent?.call(eventType, value);
+  // These run on the Dart event loop via the NativeCallable ports, so touching
+  // controllers and Dart state here is safe.
+  static void _onPosition(int positionMs, Pointer<Void> _) {
+    final self = _instance;
+    if (self == null) return;
+    if (!self._positionController.isClosed) {
+      self._positionController.add(Duration(milliseconds: positionMs));
+    }
+    self.onEngineEvent?.call(EngineEvent.position, positionMs);
+  }
+
+  static void _onState(int stateIndex, Pointer<Void> _) {
+    final self = _instance;
+    if (self == null) return;
+    if (!self._stateController.isClosed) {
+      self._stateController.add(EngineState.fromIndex(stateIndex));
+    }
+    self.onEngineEvent?.call(EngineEvent.stateChange, stateIndex);
+  }
+
+  static void _onError(Pointer<Utf8> message, Pointer<Void> _) {
+    final self = _instance;
+    if (self == null) return;
+    final text = message == nullptr ? 'Unknown engine error' : message.toDartString();
+    if (!self._errorController.isClosed) {
+      self._errorController.add(text);
+    }
+    self.onEngineEvent?.call(EngineEvent.error, 0);
   }
 }

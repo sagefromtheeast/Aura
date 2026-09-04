@@ -11,24 +11,37 @@ part 'shuffle_config.g.dart';
 @freezed
 class ShuffleConfig with _$ShuffleConfig {
   const factory ShuffleConfig({
+    /// How much to boost tracks the user rates highly or plays often.
+    /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
+    @Default(0.4) double favouriteBias,
+
+    /// How aggressively to push recently-played tracks toward the end.
+    /// 0.0 = no avoidance, 1.0 = maximum avoidance.
+    @Default(0.5) double recencyAvoidance,
+
+    /// Probability of drawing from the least-played tracks, so unplayed music
+    /// eventually gets heard. 0.0 = never, 1.0 = always.
+    @Default(0.3) double discovery,
+
     /// Minimum number of tracks between plays of the same artist.
-    /// Range: 0–10. PRD §6.3: "Artist spacing (0‑5 tracks)" — extended to 10
-    /// for large libraries.
+    /// Range 0–5 in the UI; larger values are accepted for big libraries.
     @Default(kDefaultArtistSpacing) int artistSpacing,
 
-    /// How aggressively to avoid recently-played tracks.
-    /// 0.0 = no avoidance, 1.0 = maximum recency bias (λ in scoring formula).
-    @Default(0.5) double recencyStrength,
+    /// Minimum number of tracks between plays from the same album.
+    @Default(5) int albumSpacing,
 
-    /// How much to boost tracks the user explicitly rated or frequently plays.
-    /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
-    @Default(0.5) double favoriteBias,
+    /// Bias the queue toward tracks with a similar mood to the seed track.
+    /// Requires audio features (populated by the C++ analyzer).
+    @Default(false) bool moodMatching,
 
-    /// Fraction of the queue dedicated to tracks played <3 times (discovery).
-    /// 0.0 = no discovery, 1.0 = all discovery tracks.
-    @Default(0.15) double discoveryFraction,
+    /// How strongly [moodMatching] applies. 0.0 = off, 1.0 = dominant.
+    @Default(0.5) double moodStrength,
 
-    /// Optional seed for deterministic shuffle (used in tests; null = random).
+    /// Order adjacent tracks so tempo/energy flow smoothly.
+    /// Reserved — not yet applied to ordering (see IntelliShuffleEngine).
+    @Default(false) bool smoothTransitions,
+
+    /// Optional seed for deterministic shuffles (tests; null = random).
     int? seed,
   }) = _ShuffleConfig;
 

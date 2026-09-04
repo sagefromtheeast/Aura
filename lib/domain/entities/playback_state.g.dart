@@ -8,7 +8,8 @@ part of 'playback_state.dart';
 
 _$PlaybackStateImpl _$$PlaybackStateImplFromJson(Map<String, dynamic> json) =>
     _$PlaybackStateImpl(
-      status: $enumDecodeNullable(_$EngineStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$EngineStatusEnumMap, json['status']) ??
           EngineStatus.idle,
       currentTrack: json['currentTrack'] == null
           ? null
@@ -18,10 +19,11 @@ _$PlaybackStateImpl _$$PlaybackStateImplFromJson(Map<String, dynamic> json) =>
       isShuffleEnabled: json['isShuffleEnabled'] as bool? ?? false,
       repeatMode:
           $enumDecodeNullable(_$RepeatModeEnumMap, json['repeatMode']) ??
-              RepeatMode.none,
+          RepeatMode.none,
       playbackSpeed: (json['playbackSpeed'] as num?)?.toDouble() ?? 1.0,
       volume: (json['volume'] as num?)?.toDouble() ?? 1.0,
-      eqBandGains: (json['eqBandGains'] as List<dynamic>?)
+      eqBandGains:
+          (json['eqBandGains'] as List<dynamic>?)
               ?.map((e) => (e as num).toInt())
               .toList() ??
           const [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

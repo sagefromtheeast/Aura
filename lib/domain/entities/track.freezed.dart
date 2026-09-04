@@ -12,7 +12,8 @@ part of 'track.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Track _$TrackFromJson(Map<String, dynamic> json) {
   return _Track.fromJson(json);
@@ -104,30 +105,31 @@ abstract class $TrackCopyWith<$Res> {
   factory $TrackCopyWith(Track value, $Res Function(Track) then) =
       _$TrackCopyWithImpl<$Res, Track>;
   @useResult
-  $Res call(
-      {String id,
-      String title,
-      String artistName,
-      String albumTitle,
-      String artistId,
-      String albumId,
-      int durationMs,
-      String filePath,
-      int fileSizeBytes,
-      AudioFormat format,
-      int bitRateKbps,
-      int sampleRateHz,
-      int playCount,
-      int skipCount,
-      int rating,
-      int dateAddedMs,
-      int? lastPlayedMs,
-      bool isDeleted,
-      String? coverArtPath,
-      int trackNumber,
-      int discNumber,
-      String genre,
-      int year});
+  $Res call({
+    String id,
+    String title,
+    String artistName,
+    String albumTitle,
+    String artistId,
+    String albumId,
+    int durationMs,
+    String filePath,
+    int fileSizeBytes,
+    AudioFormat format,
+    int bitRateKbps,
+    int sampleRateHz,
+    int playCount,
+    int skipCount,
+    int rating,
+    int dateAddedMs,
+    int? lastPlayedMs,
+    bool isDeleted,
+    String? coverArtPath,
+    int trackNumber,
+    int discNumber,
+    String genre,
+    int year,
+  });
 }
 
 /// @nodoc
@@ -169,134 +171,139 @@ class _$TrackCopyWithImpl<$Res, $Val extends Track>
     Object? genre = null,
     Object? year = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      artistName: null == artistName
-          ? _value.artistName
-          : artistName // ignore: cast_nullable_to_non_nullable
-              as String,
-      albumTitle: null == albumTitle
-          ? _value.albumTitle
-          : albumTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      artistId: null == artistId
-          ? _value.artistId
-          : artistId // ignore: cast_nullable_to_non_nullable
-              as String,
-      albumId: null == albumId
-          ? _value.albumId
-          : albumId // ignore: cast_nullable_to_non_nullable
-              as String,
-      durationMs: null == durationMs
-          ? _value.durationMs
-          : durationMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      filePath: null == filePath
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String,
-      fileSizeBytes: null == fileSizeBytes
-          ? _value.fileSizeBytes
-          : fileSizeBytes // ignore: cast_nullable_to_non_nullable
-              as int,
-      format: null == format
-          ? _value.format
-          : format // ignore: cast_nullable_to_non_nullable
-              as AudioFormat,
-      bitRateKbps: null == bitRateKbps
-          ? _value.bitRateKbps
-          : bitRateKbps // ignore: cast_nullable_to_non_nullable
-              as int,
-      sampleRateHz: null == sampleRateHz
-          ? _value.sampleRateHz
-          : sampleRateHz // ignore: cast_nullable_to_non_nullable
-              as int,
-      playCount: null == playCount
-          ? _value.playCount
-          : playCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      skipCount: null == skipCount
-          ? _value.skipCount
-          : skipCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as int,
-      dateAddedMs: null == dateAddedMs
-          ? _value.dateAddedMs
-          : dateAddedMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      lastPlayedMs: freezed == lastPlayedMs
-          ? _value.lastPlayedMs
-          : lastPlayedMs // ignore: cast_nullable_to_non_nullable
-              as int?,
-      isDeleted: null == isDeleted
-          ? _value.isDeleted
-          : isDeleted // ignore: cast_nullable_to_non_nullable
-              as bool,
-      coverArtPath: freezed == coverArtPath
-          ? _value.coverArtPath
-          : coverArtPath // ignore: cast_nullable_to_non_nullable
-              as String?,
-      trackNumber: null == trackNumber
-          ? _value.trackNumber
-          : trackNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      discNumber: null == discNumber
-          ? _value.discNumber
-          : discNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      genre: null == genre
-          ? _value.genre
-          : genre // ignore: cast_nullable_to_non_nullable
-              as String,
-      year: null == year
-          ? _value.year
-          : year // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            artistName: null == artistName
+                ? _value.artistName
+                : artistName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            albumTitle: null == albumTitle
+                ? _value.albumTitle
+                : albumTitle // ignore: cast_nullable_to_non_nullable
+                      as String,
+            artistId: null == artistId
+                ? _value.artistId
+                : artistId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            albumId: null == albumId
+                ? _value.albumId
+                : albumId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            durationMs: null == durationMs
+                ? _value.durationMs
+                : durationMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+            filePath: null == filePath
+                ? _value.filePath
+                : filePath // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fileSizeBytes: null == fileSizeBytes
+                ? _value.fileSizeBytes
+                : fileSizeBytes // ignore: cast_nullable_to_non_nullable
+                      as int,
+            format: null == format
+                ? _value.format
+                : format // ignore: cast_nullable_to_non_nullable
+                      as AudioFormat,
+            bitRateKbps: null == bitRateKbps
+                ? _value.bitRateKbps
+                : bitRateKbps // ignore: cast_nullable_to_non_nullable
+                      as int,
+            sampleRateHz: null == sampleRateHz
+                ? _value.sampleRateHz
+                : sampleRateHz // ignore: cast_nullable_to_non_nullable
+                      as int,
+            playCount: null == playCount
+                ? _value.playCount
+                : playCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            skipCount: null == skipCount
+                ? _value.skipCount
+                : skipCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            rating: null == rating
+                ? _value.rating
+                : rating // ignore: cast_nullable_to_non_nullable
+                      as int,
+            dateAddedMs: null == dateAddedMs
+                ? _value.dateAddedMs
+                : dateAddedMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+            lastPlayedMs: freezed == lastPlayedMs
+                ? _value.lastPlayedMs
+                : lastPlayedMs // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            isDeleted: null == isDeleted
+                ? _value.isDeleted
+                : isDeleted // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            coverArtPath: freezed == coverArtPath
+                ? _value.coverArtPath
+                : coverArtPath // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            trackNumber: null == trackNumber
+                ? _value.trackNumber
+                : trackNumber // ignore: cast_nullable_to_non_nullable
+                      as int,
+            discNumber: null == discNumber
+                ? _value.discNumber
+                : discNumber // ignore: cast_nullable_to_non_nullable
+                      as int,
+            genre: null == genre
+                ? _value.genre
+                : genre // ignore: cast_nullable_to_non_nullable
+                      as String,
+            year: null == year
+                ? _value.year
+                : year // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TrackImplCopyWith<$Res> implements $TrackCopyWith<$Res> {
   factory _$$TrackImplCopyWith(
-          _$TrackImpl value, $Res Function(_$TrackImpl) then) =
-      __$$TrackImplCopyWithImpl<$Res>;
+    _$TrackImpl value,
+    $Res Function(_$TrackImpl) then,
+  ) = __$$TrackImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String title,
-      String artistName,
-      String albumTitle,
-      String artistId,
-      String albumId,
-      int durationMs,
-      String filePath,
-      int fileSizeBytes,
-      AudioFormat format,
-      int bitRateKbps,
-      int sampleRateHz,
-      int playCount,
-      int skipCount,
-      int rating,
-      int dateAddedMs,
-      int? lastPlayedMs,
-      bool isDeleted,
-      String? coverArtPath,
-      int trackNumber,
-      int discNumber,
-      String genre,
-      int year});
+  $Res call({
+    String id,
+    String title,
+    String artistName,
+    String albumTitle,
+    String artistId,
+    String albumId,
+    int durationMs,
+    String filePath,
+    int fileSizeBytes,
+    AudioFormat format,
+    int bitRateKbps,
+    int sampleRateHz,
+    int playCount,
+    int skipCount,
+    int rating,
+    int dateAddedMs,
+    int? lastPlayedMs,
+    bool isDeleted,
+    String? coverArtPath,
+    int trackNumber,
+    int discNumber,
+    String genre,
+    int year,
+  });
 }
 
 /// @nodoc
@@ -304,8 +311,9 @@ class __$$TrackImplCopyWithImpl<$Res>
     extends _$TrackCopyWithImpl<$Res, _$TrackImpl>
     implements _$$TrackImplCopyWith<$Res> {
   __$$TrackImplCopyWithImpl(
-      _$TrackImpl _value, $Res Function(_$TrackImpl) _then)
-      : super(_value, _then);
+    _$TrackImpl _value,
+    $Res Function(_$TrackImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Track
   /// with the given fields replaced by the non-null parameter values.
@@ -336,130 +344,133 @@ class __$$TrackImplCopyWithImpl<$Res>
     Object? genre = null,
     Object? year = null,
   }) {
-    return _then(_$TrackImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      artistName: null == artistName
-          ? _value.artistName
-          : artistName // ignore: cast_nullable_to_non_nullable
-              as String,
-      albumTitle: null == albumTitle
-          ? _value.albumTitle
-          : albumTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      artistId: null == artistId
-          ? _value.artistId
-          : artistId // ignore: cast_nullable_to_non_nullable
-              as String,
-      albumId: null == albumId
-          ? _value.albumId
-          : albumId // ignore: cast_nullable_to_non_nullable
-              as String,
-      durationMs: null == durationMs
-          ? _value.durationMs
-          : durationMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      filePath: null == filePath
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String,
-      fileSizeBytes: null == fileSizeBytes
-          ? _value.fileSizeBytes
-          : fileSizeBytes // ignore: cast_nullable_to_non_nullable
-              as int,
-      format: null == format
-          ? _value.format
-          : format // ignore: cast_nullable_to_non_nullable
-              as AudioFormat,
-      bitRateKbps: null == bitRateKbps
-          ? _value.bitRateKbps
-          : bitRateKbps // ignore: cast_nullable_to_non_nullable
-              as int,
-      sampleRateHz: null == sampleRateHz
-          ? _value.sampleRateHz
-          : sampleRateHz // ignore: cast_nullable_to_non_nullable
-              as int,
-      playCount: null == playCount
-          ? _value.playCount
-          : playCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      skipCount: null == skipCount
-          ? _value.skipCount
-          : skipCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as int,
-      dateAddedMs: null == dateAddedMs
-          ? _value.dateAddedMs
-          : dateAddedMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      lastPlayedMs: freezed == lastPlayedMs
-          ? _value.lastPlayedMs
-          : lastPlayedMs // ignore: cast_nullable_to_non_nullable
-              as int?,
-      isDeleted: null == isDeleted
-          ? _value.isDeleted
-          : isDeleted // ignore: cast_nullable_to_non_nullable
-              as bool,
-      coverArtPath: freezed == coverArtPath
-          ? _value.coverArtPath
-          : coverArtPath // ignore: cast_nullable_to_non_nullable
-              as String?,
-      trackNumber: null == trackNumber
-          ? _value.trackNumber
-          : trackNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      discNumber: null == discNumber
-          ? _value.discNumber
-          : discNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      genre: null == genre
-          ? _value.genre
-          : genre // ignore: cast_nullable_to_non_nullable
-              as String,
-      year: null == year
-          ? _value.year
-          : year // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$TrackImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        artistName: null == artistName
+            ? _value.artistName
+            : artistName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        albumTitle: null == albumTitle
+            ? _value.albumTitle
+            : albumTitle // ignore: cast_nullable_to_non_nullable
+                  as String,
+        artistId: null == artistId
+            ? _value.artistId
+            : artistId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        albumId: null == albumId
+            ? _value.albumId
+            : albumId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        durationMs: null == durationMs
+            ? _value.durationMs
+            : durationMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+        filePath: null == filePath
+            ? _value.filePath
+            : filePath // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fileSizeBytes: null == fileSizeBytes
+            ? _value.fileSizeBytes
+            : fileSizeBytes // ignore: cast_nullable_to_non_nullable
+                  as int,
+        format: null == format
+            ? _value.format
+            : format // ignore: cast_nullable_to_non_nullable
+                  as AudioFormat,
+        bitRateKbps: null == bitRateKbps
+            ? _value.bitRateKbps
+            : bitRateKbps // ignore: cast_nullable_to_non_nullable
+                  as int,
+        sampleRateHz: null == sampleRateHz
+            ? _value.sampleRateHz
+            : sampleRateHz // ignore: cast_nullable_to_non_nullable
+                  as int,
+        playCount: null == playCount
+            ? _value.playCount
+            : playCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        skipCount: null == skipCount
+            ? _value.skipCount
+            : skipCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        rating: null == rating
+            ? _value.rating
+            : rating // ignore: cast_nullable_to_non_nullable
+                  as int,
+        dateAddedMs: null == dateAddedMs
+            ? _value.dateAddedMs
+            : dateAddedMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+        lastPlayedMs: freezed == lastPlayedMs
+            ? _value.lastPlayedMs
+            : lastPlayedMs // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        isDeleted: null == isDeleted
+            ? _value.isDeleted
+            : isDeleted // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        coverArtPath: freezed == coverArtPath
+            ? _value.coverArtPath
+            : coverArtPath // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        trackNumber: null == trackNumber
+            ? _value.trackNumber
+            : trackNumber // ignore: cast_nullable_to_non_nullable
+                  as int,
+        discNumber: null == discNumber
+            ? _value.discNumber
+            : discNumber // ignore: cast_nullable_to_non_nullable
+                  as int,
+        genre: null == genre
+            ? _value.genre
+            : genre // ignore: cast_nullable_to_non_nullable
+                  as String,
+        year: null == year
+            ? _value.year
+            : year // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$TrackImpl implements _Track {
-  const _$TrackImpl(
-      {required this.id,
-      required this.title,
-      required this.artistName,
-      required this.albumTitle,
-      required this.artistId,
-      required this.albumId,
-      required this.durationMs,
-      required this.filePath,
-      required this.fileSizeBytes,
-      this.format = AudioFormat.unknown,
-      this.bitRateKbps = 0,
-      this.sampleRateHz = 44100,
-      this.playCount = 0,
-      this.skipCount = 0,
-      this.rating = 0,
-      required this.dateAddedMs,
-      this.lastPlayedMs,
-      this.isDeleted = false,
-      this.coverArtPath,
-      this.trackNumber = 0,
-      this.discNumber = 1,
-      this.genre = '',
-      this.year = 0});
+  const _$TrackImpl({
+    required this.id,
+    required this.title,
+    required this.artistName,
+    required this.albumTitle,
+    required this.artistId,
+    required this.albumId,
+    required this.durationMs,
+    required this.filePath,
+    required this.fileSizeBytes,
+    this.format = AudioFormat.unknown,
+    this.bitRateKbps = 0,
+    this.sampleRateHz = 44100,
+    this.playCount = 0,
+    this.skipCount = 0,
+    this.rating = 0,
+    required this.dateAddedMs,
+    this.lastPlayedMs,
+    this.isDeleted = false,
+    this.coverArtPath,
+    this.trackNumber = 0,
+    this.discNumber = 1,
+    this.genre = '',
+    this.year = 0,
+  });
 
   factory _$TrackImpl.fromJson(Map<String, dynamic> json) =>
       _$$TrackImplFromJson(json);
@@ -622,31 +633,31 @@ class _$TrackImpl implements _Track {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
-        runtimeType,
-        id,
-        title,
-        artistName,
-        albumTitle,
-        artistId,
-        albumId,
-        durationMs,
-        filePath,
-        fileSizeBytes,
-        format,
-        bitRateKbps,
-        sampleRateHz,
-        playCount,
-        skipCount,
-        rating,
-        dateAddedMs,
-        lastPlayedMs,
-        isDeleted,
-        coverArtPath,
-        trackNumber,
-        discNumber,
-        genre,
-        year
-      ]);
+    runtimeType,
+    id,
+    title,
+    artistName,
+    albumTitle,
+    artistId,
+    albumId,
+    durationMs,
+    filePath,
+    fileSizeBytes,
+    format,
+    bitRateKbps,
+    sampleRateHz,
+    playCount,
+    skipCount,
+    rating,
+    dateAddedMs,
+    lastPlayedMs,
+    isDeleted,
+    coverArtPath,
+    trackNumber,
+    discNumber,
+    genre,
+    year,
+  ]);
 
   /// Create a copy of Track
   /// with the given fields replaced by the non-null parameter values.
@@ -658,37 +669,36 @@ class _$TrackImpl implements _Track {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TrackImplToJson(
-      this,
-    );
+    return _$$TrackImplToJson(this);
   }
 }
 
 abstract class _Track implements Track {
-  const factory _Track(
-      {required final String id,
-      required final String title,
-      required final String artistName,
-      required final String albumTitle,
-      required final String artistId,
-      required final String albumId,
-      required final int durationMs,
-      required final String filePath,
-      required final int fileSizeBytes,
-      final AudioFormat format,
-      final int bitRateKbps,
-      final int sampleRateHz,
-      final int playCount,
-      final int skipCount,
-      final int rating,
-      required final int dateAddedMs,
-      final int? lastPlayedMs,
-      final bool isDeleted,
-      final String? coverArtPath,
-      final int trackNumber,
-      final int discNumber,
-      final String genre,
-      final int year}) = _$TrackImpl;
+  const factory _Track({
+    required final String id,
+    required final String title,
+    required final String artistName,
+    required final String albumTitle,
+    required final String artistId,
+    required final String albumId,
+    required final int durationMs,
+    required final String filePath,
+    required final int fileSizeBytes,
+    final AudioFormat format,
+    final int bitRateKbps,
+    final int sampleRateHz,
+    final int playCount,
+    final int skipCount,
+    final int rating,
+    required final int dateAddedMs,
+    final int? lastPlayedMs,
+    final bool isDeleted,
+    final String? coverArtPath,
+    final int trackNumber,
+    final int discNumber,
+    final String genre,
+    final int year,
+  }) = _$TrackImpl;
 
   factory _Track.fromJson(Map<String, dynamic> json) = _$TrackImpl.fromJson;
 

@@ -3,7 +3,8 @@
 // Architecture §4.2: queries MediaStore (Android) / MPMediaQuery (iOS) via
 // platform channel; populates Drift DB.
 
-import 'package:flutter/services.dart';
+import 'dart:async';
+
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/track.dart';
@@ -14,6 +15,8 @@ import '../../core/constants.dart';
 import '../../core/errors.dart';
 import '../../native/audio_engine_ffi.dart';
 import '../database/app_database.dart';
+import 'track_mapper.dart';
+import '../scanner/library_scanner.dart';
 import 'package:drift/drift.dart';
 
 class LocalMusicRepository implements MusicRepository {
@@ -23,8 +26,6 @@ class LocalMusicRepository implements MusicRepository {
   final AppDatabase _db;
   final _uuid = const Uuid();
 
-  /// Platform channel to the native file scanner (Android MediaStore / iOS MPMedia).
-  static const _channel = MethodChannel(kFileScannerChannel);
 
   // ── MusicRepository Interface ──────────────────────────────────────────────
 
@@ -68,71 +69,23 @@ class LocalMusicRepository implements MusicRepository {
 
   @override
   Stream<int> scanLibrary() async* {
-    // Invoke the native scanner.
-    // The platform channel returns a List<Map> of raw track metadata.
-    // Each map matches the keys produced by MediaStore/MPMediaQuery.
-    List<dynamic> rawTracks;
-    try {
-      rawTracks = await _channel.invokeMethod<List<dynamic>>(
-            kScanAllAudioMethod,
-          ) ??
-          [];
-    } on PlatformException catch (e) {
-      throw FileScanError(e.message ?? 'Platform scan failed', cause: e);
-    }
+    // Delegates to the canonical LibraryScanner (data/scanner/) so there is a
+    // single scan implementation. Emits the running processed-track count to
+    // satisfy the MusicRepository contract.
+    final controller = StreamController<int>();
+    final scanner = LibraryScanner(database: _db);
 
-    int count = 0;
-    final artistCache = <String, String>{}; // name → id
-    final albumCache = <String, String>{}; // "title|artistId" → id
+    unawaited(
+      scanner
+          .scanLibrary(onProgress: (found, _) => controller.add(found))
+          .then((_) => controller.close())
+          .catchError((Object e, StackTrace st) {
+        controller.addError(FileScanError('Library scan failed', cause: e), st);
+        controller.close();
+      }),
+    );
 
-    for (final raw in rawTracks) {
-      final map = Map<String, dynamic>.from(raw as Map);
-
-      // Resolve / create artist.
-      final artistName = (map['artist'] as String? ?? 'Unknown Artist').trim();
-      final artistId = await _resolveArtist(artistName, artistCache);
-
-      // Resolve / create album.
-      final albumTitle = (map['album'] as String? ?? 'Unknown Album').trim();
-      final albumId =
-          await _resolveAlbum(albumTitle, artistId, artistName, albumCache);
-
-      // Upsert track.
-      final trackId = _uuid.v4();
-      final filePath = map['path'] as String;
-
-      // Check if already in DB by path.
-      final existing = await _db.trackDao.getTrackByPath(filePath);
-      final id = existing?.id ?? trackId;
-
-      await _db.trackDao.upsertTrack(
-        TracksTableCompanion(
-          id: Value(id),
-          title: Value((map['title'] as String? ?? 'Unknown').trim()),
-          artistName: Value(artistName),
-          albumTitle: Value(albumTitle),
-          artistId: Value(artistId),
-          albumId: Value(albumId),
-          durationMs: Value((map['duration'] as int?) ?? 0),
-          filePath: Value(filePath),
-          fileSizeBytes: Value((map['size'] as int?) ?? 0),
-          format: Value(_detectFormat(filePath)),
-          bitRateKbps: Value((map['bitrate'] as int?) ?? 0),
-          sampleRateHz: Value((map['sampleRate'] as int?) ?? 44100),
-          dateAddedMs:
-              Value((map['dateAdded'] as int?) ??
-                  DateTime.now().millisecondsSinceEpoch),
-          trackNumber: Value((map['trackNumber'] as int?) ?? 0),
-          discNumber: Value((map['discNumber'] as int?) ?? 1),
-          genre: Value((map['genre'] as String?) ?? ''),
-          year: Value((map['year'] as int?) ?? 0),
-          coverArtPath: Value(map['coverArtPath'] as String?),
-        ),
-      );
-
-      count++;
-      yield count; // Emit progress.
-    }
+    yield* controller.stream;
   }
 
   @override
@@ -156,6 +109,74 @@ class LocalMusicRepository implements MusicRepository {
   @override
   Future<void> setRating(String trackId, int rating) =>
       _db.trackDao.setRating(trackId, rating);
+
+  @override
+  Future<List<Track>> getFavouriteTracks() async {
+    final rows = await _db.trackDao.getFavourites(kFavouriteRating);
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<Track>> getTracksByIds(List<String> ids) async {
+    if (ids.isEmpty) return const [];
+    final rows = await _db.trackDao.getByIds(ids);
+    // Preserve the caller's requested order.
+    final byId = {for (final r in rows) r.id: _rowToTrack(r)};
+    return [for (final id in ids) if (byId.containsKey(id)) byId[id]!];
+  }
+
+  @override
+  Future<List<Track>> findTracksByGenre(String genre) async {
+    final rows = await _db.trackDao.findByGenre(genre);
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<Track>> getRecentlyAddedTracks({int limit = 200}) async {
+    final rows = await _db.trackDao.getRecentlyAdded(limit: limit);
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<Track>> getNeverPlayedTracks() async {
+    final rows = await _db.trackDao.getNeverPlayed();
+    return rows.map(_rowToTrack).toList();
+  }
+
+  @override
+  Future<List<GenreSummary>> getGenres() async {
+    final rows = await _db.trackDao.getGenreCounts();
+    return [
+      for (final r in rows)
+        GenreSummary(name: r.genre, trackCount: r.trackCount),
+    ];
+  }
+
+  @override
+  Future<void> setFavourite(String trackId, bool favourite) =>
+      _db.trackDao.setRating(trackId, favourite ? kFavouriteRating : 0);
+
+  @override
+  Future<Track?> getTrackByPath(String filePath) async {
+    final row = await _db.trackDao.getTrackByPath(filePath);
+    return row == null ? null : _rowToTrack(row);
+  }
+
+  @override
+  Future<void> applyBackupStats(
+    String trackId, {
+    int? rating,
+    int? playCount,
+    int? skipCount,
+    int? lastPlayedMs,
+  }) =>
+      _db.trackDao.applyStats(
+        trackId,
+        rating: rating,
+        playCount: playCount,
+        skipCount: skipCount,
+        lastPlayedMs: lastPlayedMs,
+      );
 
   @override
   Future<List<double>?> getAudioFeatures(String trackId) async {
@@ -200,93 +221,9 @@ class LocalMusicRepository implements MusicRepository {
 
   // ── Private Helpers ────────────────────────────────────────────────────────
 
-  Future<String> _resolveArtist(
-      String name, Map<String, String> cache) async {
-    if (cache.containsKey(name)) return cache[name]!;
-
-    final existing = await _db.trackDao.getArtistByName(name);
-    if (existing != null) {
-      cache[name] = existing.id;
-      return existing.id;
-    }
-
-    final id = _uuid.v4();
-    await _db.trackDao.upsertArtist(
-      ArtistsTableCompanion(
-        id: Value(id),
-        name: Value(name),
-      ),
-    );
-    cache[name] = id;
-    return id;
-  }
-
-  Future<String> _resolveAlbum(
-    String title,
-    String artistId,
-    String artistName,
-    Map<String, String> cache,
-  ) async {
-    final cacheKey = '$title|$artistId';
-    if (cache.containsKey(cacheKey)) return cache[cacheKey]!;
-
-    final id = _uuid.v4();
-    await _db.trackDao.upsertAlbum(
-      AlbumsTableCompanion(
-        id: Value(id),
-        title: Value(title),
-        artistId: Value(artistId),
-        artistName: Value(artistName),
-        dateAddedMs: Value(DateTime.now().millisecondsSinceEpoch),
-      ),
-    );
-    cache[cacheKey] = id;
-    return id;
-  }
-
-  String _detectFormat(String path) {
-    final ext = path.split('.').last.toLowerCase();
-    return switch (ext) {
-      'mp3' => 'mp3',
-      'aac' || 'm4a' => 'aac',
-      'flac' => 'flac',
-      'alac' => 'alac',
-      'dsd' || 'dsf' || 'dff' => 'dsd',
-      'wav' => 'wav',
-      'ogg' => 'ogg',
-      'opus' => 'opus',
-      _ => 'unknown',
-    };
-  }
-
   // ── Row ↔ Entity Mappers ───────────────────────────────────────────────────
 
-  Track _rowToTrack(TrackRow r) => Track(
-        id: r.id,
-        title: r.title,
-        artistName: r.artistName,
-        albumTitle: r.albumTitle,
-        artistId: r.artistId,
-        albumId: r.albumId,
-        durationMs: r.durationMs,
-        filePath: r.filePath,
-        fileSizeBytes: r.fileSizeBytes,
-        format: AudioFormat.values
-            .firstWhere((f) => f.name == r.format, orElse: () => AudioFormat.unknown),
-        bitRateKbps: r.bitRateKbps,
-        sampleRateHz: r.sampleRateHz,
-        playCount: r.playCount,
-        skipCount: r.skipCount,
-        rating: r.rating,
-        dateAddedMs: r.dateAddedMs,
-        lastPlayedMs: r.lastPlayedMs,
-        isDeleted: r.isDeleted,
-        coverArtPath: r.coverArtPath,
-        trackNumber: r.trackNumber,
-        discNumber: r.discNumber,
-        genre: r.genre,
-        year: r.year,
-      );
+  Track _rowToTrack(TrackRow r) => trackFromRow(r);
 
   Album _rowToAlbum(AlbumRow r) => Album(
         id: r.id,

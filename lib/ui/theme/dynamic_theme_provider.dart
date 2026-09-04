@@ -61,6 +61,11 @@ class DynamicThemeController extends StateNotifier<DynamicThemeState> {
     }
   }
 
+  /// Explicitly set the accent color (e.g. from the theme picker).
+  void setAccent(Color color) {
+    state = state.copyWith(accentColor: color);
+  }
+
   /// Reset accent color back to default seed.
   void resetAccent() {
     state = state.copyWith(accentColor: DesignTokens.primarySeed);

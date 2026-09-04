@@ -15,6 +15,10 @@ class PlaylistsTable extends Table {
   IntColumn get createdAtMs => integer()();
   IntColumn get updatedAtMs => integer()();
   TextColumn get coverArtPath => text().nullable()();
+
+  /// JSON array of up to 4 album-art paths; the UI draws them as a 2x2 mosaic.
+  TextColumn get coverArtPathsJson =>
+      text().withDefault(const Constant('[]'))();
   BoolColumn get isPinned => boolean().withDefault(const Constant(false))();
 
   @override

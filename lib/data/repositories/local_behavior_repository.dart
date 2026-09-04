@@ -18,6 +18,7 @@ class LocalBehaviorRepository implements BehaviorRepository {
           playedAtMs: Value(event.playedAtMs),
           durationPlayedMs: Value(event.durationPlayedMs),
           skipped: Value(event.skipped),
+          completed: Value(event.completed),
           contextType: Value(event.contextType),
         ),
       );
@@ -56,10 +57,37 @@ class LocalBehaviorRepository implements BehaviorRepository {
               playedAtMs: r.playedAtMs,
               durationPlayedMs: r.durationPlayedMs,
               skipped: r.skipped,
+              completed: r.completed,
               contextType: r.contextType,
             ))
         .toList();
   }
+
+  @override
+  Future<List<PlayEvent>> getEventsInRange(int startMs, int endMs) async {
+    final rows = await _db.behaviorDao.getEventsInRange(startMs, endMs);
+    return rows
+        .map((r) => PlayEvent(
+              trackId: r.trackId,
+              playedAtMs: r.playedAtMs,
+              durationPlayedMs: r.durationPlayedMs,
+              skipped: r.skipped,
+              completed: r.completed,
+              contextType: r.contextType,
+            ))
+        .toList();
+  }
+
+  @override
+  Future<Map<String, int>> getFirstPlayMsPerTrack() =>
+      _db.behaviorDao.getFirstPlayMsPerTrack();
+
+  @override
+  Future<int?> getFirstEventMs() => _db.behaviorDao.getFirstEventMs();
+
+  @override
+  Future<List<String>> getRecentlyPlayedTrackIds({int limit = 200}) =>
+      _db.behaviorDao.getRecentlyPlayedTrackIds(limit: limit);
 
   @override
   Future<List<String>> getTopPlayedTrackIds({

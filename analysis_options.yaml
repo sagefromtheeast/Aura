@@ -9,6 +9,10 @@ analyzer:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - "lib/native/audio_engine_bindings.dart"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
   errors:
     invalid_annotation_target: ignore
   language:

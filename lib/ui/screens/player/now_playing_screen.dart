@@ -12,6 +12,8 @@ import 'lyrics_sheet.dart';
 import 'audio_dsp_sheet.dart';
 import 'cast_device_sheet.dart';
 import 'track_info_sheet.dart';
+import 'sleep_timer_sheet.dart';
+import '../../../services/sleep_timer_service.dart';
 
 /// Full-screen Now Playing immersive view.
 /// Implements Liquid Glass design with a SINGLE BackdropFilter layer for peak graphics performance.
@@ -26,7 +28,6 @@ class NowPlayingScreen extends ConsumerStatefulWidget {
 class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     with TickerProviderStateMixin {
 
-  bool _isFavorite = false;
   bool _showWaveform = false;
 
   late AnimationController _playPauseController;
@@ -70,10 +71,12 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     _playPauseController.dispose();
     _entranceController.dispose();
     super.dispose();
-  }  void _toggleFavorite() {
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
+  }
+
+  Future<void> _toggleFavorite() async {
+    final track = ref.read(playbackStateProvider).currentTrack;
+    if (track == null) return;
+    await ref.read(favouriteIdsProvider.notifier).toggle(track.id);
   }
 
   String _formatDuration(int ms) {
@@ -89,6 +92,8 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     final playback = ref.watch(playbackStateProvider);
     final themeState = ref.watch(dynamicThemeProvider);
     final track = playback.currentTrack;
+    final isFavorite =
+        track != null && ref.watch(favouriteIdsProvider).contains(track.id);
 
     final accent = themeState.accentColor;
     final isPlaying = playback.status == EngineStatus.playing;
@@ -279,7 +284,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                       const SizedBox(width: 12),
                       // Favorite button with spring micro-interaction
                       SparkleLikeButton(
-                        isFavorite: _isFavorite,
+                        isFavorite: isFavorite,
                         onToggle: _toggleFavorite,
                         accent: accent,
                       ),
@@ -452,6 +457,20 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (_) => const AudioDspSheet(),
+                          );
+                        },
+                      ),
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final active =
+                              ref.watch(sleepTimerProvider).isActive;
+                          return IconButton(
+                            icon: Icon(active
+                                ? Icons.bedtime_rounded
+                                : Icons.bedtime_outlined),
+                            color: active ? DesignTokens.primarySeed : null,
+                            tooltip: 'Sleep Timer',
+                            onPressed: () => SleepTimerSheet.show(context),
                           );
                         },
                       ),

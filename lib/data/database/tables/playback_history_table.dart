@@ -16,7 +16,16 @@ class PlaybackHistoryTable extends Table {
   /// How many ms were actually played.
   IntColumn get durationPlayedMs => integer()();
 
+  /// True when the user abandoned the track before [kListenCompletionRatio].
   BoolColumn get skipped => boolean().withDefault(const Constant(false))();
+
+  /// True when the track was listened to past [kListenCompletionRatio].
+  ///
+  /// Not simply `!skipped`: a track can be neither, when playback stopped
+  /// partway without the user skipping (the app was closed, the queue ended,
+  /// a call came in). Only completed rows count toward listening totals, so
+  /// the statistics engine needs the distinction the skip flag cannot make.
+  BoolColumn get completed => boolean().withDefault(const Constant(false))();
 
   /// 'library', 'playlist', 'shuffle', 'mix'
   TextColumn get contextType =>
