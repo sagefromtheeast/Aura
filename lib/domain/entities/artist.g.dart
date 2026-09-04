@@ -7,12 +7,12 @@ part of 'artist.dart';
 // **************************************************************************
 
 _$ArtistImpl _$$ArtistImplFromJson(Map<String, dynamic> json) => _$ArtistImpl(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      trackCount: (json['trackCount'] as num?)?.toInt() ?? 0,
-      albumCount: (json['albumCount'] as num?)?.toInt() ?? 0,
-      imagePath: json['imagePath'] as String?,
-    );
+  id: json['id'] as String,
+  name: json['name'] as String,
+  trackCount: (json['trackCount'] as num?)?.toInt() ?? 0,
+  albumCount: (json['albumCount'] as num?)?.toInt() ?? 0,
+  imagePath: json['imagePath'] as String?,
+);
 
 Map<String, dynamic> _$$ArtistImplToJson(_$ArtistImpl instance) =>
     <String, dynamic>{

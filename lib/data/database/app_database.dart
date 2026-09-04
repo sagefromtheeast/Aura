@@ -15,10 +15,12 @@ import 'tables/playlists_table.dart';
 import 'tables/playback_history_table.dart';
 import 'tables/shuffle_state_table.dart';
 import 'tables/audio_features_table.dart';
+import 'tables/settings_table.dart';
 import 'daos/track_dao.dart';
 import 'daos/behavior_dao.dart';
 import 'daos/playlist_dao.dart';
 import 'daos/shuffle_state_dao.dart';
+import 'daos/settings_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -36,12 +38,14 @@ part 'app_database.g.dart';
     PlaybackHistoryTable,
     ShuffleStateTable,
     AudioFeaturesTable,
+    SettingsTable,
   ],
   daos: [
     TrackDao,
     BehaviorDao,
     PlaylistDao,
     ShuffleStateDao,
+    SettingsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -51,7 +55,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -115,6 +119,10 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
               'UPDATE playback_history SET completed = 1 WHERE skipped = 0',
             );
+          }
+          if (from < 6) {
+            // v6: settings values too large for shared_preferences.
+            await m.createTable(settingsTable);
           }
         },
         beforeOpen: (details) async {

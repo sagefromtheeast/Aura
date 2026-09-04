@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_database.dart';
 import 'daos/behavior_dao.dart';
 import 'daos/playlist_dao.dart';
+import 'daos/settings_dao.dart';
 import 'daos/shuffle_state_dao.dart';
 import 'daos/track_dao.dart';
 
@@ -35,3 +36,7 @@ final playlistDaoProvider = Provider<PlaylistDao>(
 
 final shuffleStateDaoProvider = Provider<ShuffleStateDao>(
     (ref) => ref.watch(appDatabaseProvider).shuffleStateDao);
+
+final settingsDaoProvider = Provider<SettingsDao>(
+  (ref) => ref.watch(appDatabaseProvider).settingsDao,
+);

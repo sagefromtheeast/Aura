@@ -25,6 +25,7 @@ import '../domain/use_cases/playback_orchestrator.dart';
 import '../domain/entities/playback_state.dart';
 import '../domain/entities/track.dart';
 import '../domain/entities/shuffle_config.dart';
+import '../data/repositories/settings_repository.dart';
 import '../native/audio_engine_ffi.dart';
 
 // ── Database ──────────────────────────────────────────────────────────────────
@@ -48,6 +49,10 @@ final musicRepositoryProvider = Provider<MusicRepository>((ref) {
 
 final behaviorRepositoryProvider = Provider<BehaviorRepository>((ref) {
   return LocalBehaviorRepository(database: ref.watch(appDatabaseProvider));
+});
+
+final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
+  return SettingsRepository(database: ref.watch(appDatabaseProvider));
 });
 
 final playlistRepositoryProvider = Provider<PlaylistRepository>((ref) {

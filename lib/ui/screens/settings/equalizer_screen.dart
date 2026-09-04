@@ -52,7 +52,7 @@ class _EqualizerScreenState extends ConsumerState<EqualizerScreen>
   @override
   Widget build(BuildContext context) {
     final eq = ref.watch(equalizerProvider);
-    final controller = ref.read(equalizerProvider.notifier);
+    final controller = ref.read(equalizerControllerProvider);
 
     return Scaffold(
       backgroundColor: DesignTokens.darkBackground,
@@ -64,7 +64,7 @@ class _EqualizerScreenState extends ConsumerState<EqualizerScreen>
           Switch(
             value: eq.enabled,
             activeThumbColor: DesignTokens.primarySeed,
-            onChanged: controller.setEnabled,
+            onChanged: (v) => controller.setEnabled(v),
           ),
           const SizedBox(width: DesignTokens.spacing8),
         ],

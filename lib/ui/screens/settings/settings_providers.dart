@@ -1,14 +1,25 @@
 // lib/ui/screens/settings/settings_providers.dart
-// Aura — Stub providers backing the Settings screens.
+// Aura — Providers backing the Settings screens.
 //
-//   • settingsProvider     → AppSettings (all user preferences)
-//   • equalizerProvider    → EqualizerState (EQ band values + presets)
+//   • settingsProvider   → AppSettings, persisted by SettingsRepository
+//   • equalizerProvider  → EqualizerState, a projection of the same settings
 //
-// The shuffle screens reuse the existing `shuffleConfigProvider`
-// (lib/shared/providers.dart). All state is local; nothing leaves the device.
+// The model itself lives in lib/data/settings/app_settings.dart; this file is
+// the UI's view of it, plus the presets and labels the screens render. All
+// state is local; nothing leaves the device.
+
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../data/repositories/settings_repository.dart';
+import '../../../data/settings/app_settings.dart';
+import '../../../domain/entities/shuffle_config.dart';
+import '../../../shared/providers.dart';
+
+export '../../../data/settings/app_settings.dart'
+    show AppSettings, AuraThemeMode, NotificationKind;
 
 
 // ── Theme presets ─────────────────────────────────────────────────────────────
@@ -47,129 +58,239 @@ enum ThemePreset {
   Color get accent => swatch.first;
 }
 
-// ── App settings model ────────────────────────────────────────────────────────
+// ── Theme preset ↔ settings ───────────────────────────────────────────────────
 
-@immutable
-class AppSettings {
-  const AppSettings({
-    this.outputDevice = 'Phone Speaker',
-    this.normalizationEnabled = true,
-    this.crossfadeSeconds = 4,
-    this.dailyMixBalance = 0.5, // 0 = favourites … 1 = discovery
-    this.themePreset = ThemePreset.albumArt,
-    this.glassIntensity = 70, // 0–100
-    // Notifications — Playback
-    this.nowPlayingNotification = true,
-    this.lockScreenControls = true,
-    // Notifications — Discover
-    this.dailyMixReady = true,
-    this.weeklyRecap = true,
-    this.milestones = false,
-    // Notifications — Library
-    this.scanComplete = true,
-    this.newMusicAdded = false,
-    // Notifications — Reminders
-    this.inactiveReminder = false,
-    this.quietHoursEnabled = true,
-    this.quietStart = const TimeOfDay(hour: 22, minute: 0),
-    this.quietEnd = const TimeOfDay(hour: 7, minute: 0),
-  });
+/// The stored [AuraThemeMode] a preset implies. Presets that are just an
+/// accent colour all map to [AuraThemeMode.custom] and differ by their accent.
+extension ThemePresetSettings on ThemePreset {
+  AuraThemeMode get themeMode => switch (this) {
+        ThemePreset.dynamicColor => AuraThemeMode.dynamicColor,
+        ThemePreset.albumArt => AuraThemeMode.albumArt,
+        _ => AuraThemeMode.custom,
+      };
 
-  final String outputDevice;
-  final bool normalizationEnabled;
-  final double crossfadeSeconds;
-  final double dailyMixBalance;
-  final ThemePreset themePreset;
-  final double glassIntensity;
+  String get accentHex =>
+      '#${accent.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
+}
 
-  final bool nowPlayingNotification;
-  final bool lockScreenControls;
-  final bool dailyMixReady;
-  final bool weeklyRecap;
-  final bool milestones;
-  final bool scanComplete;
-  final bool newMusicAdded;
-  final bool inactiveReminder;
-  final bool quietHoursEnabled;
-  final TimeOfDay quietStart;
-  final TimeOfDay quietEnd;
-
-  AppSettings copyWith({
-    String? outputDevice,
-    bool? normalizationEnabled,
-    double? crossfadeSeconds,
-    double? dailyMixBalance,
-    ThemePreset? themePreset,
-    double? glassIntensity,
-    bool? nowPlayingNotification,
-    bool? lockScreenControls,
-    bool? dailyMixReady,
-    bool? weeklyRecap,
-    bool? milestones,
-    bool? scanComplete,
-    bool? newMusicAdded,
-    bool? inactiveReminder,
-    bool? quietHoursEnabled,
-    TimeOfDay? quietStart,
-    TimeOfDay? quietEnd,
-  }) {
-    return AppSettings(
-      outputDevice: outputDevice ?? this.outputDevice,
-      normalizationEnabled: normalizationEnabled ?? this.normalizationEnabled,
-      crossfadeSeconds: crossfadeSeconds ?? this.crossfadeSeconds,
-      dailyMixBalance: dailyMixBalance ?? this.dailyMixBalance,
-      themePreset: themePreset ?? this.themePreset,
-      glassIntensity: glassIntensity ?? this.glassIntensity,
-      nowPlayingNotification:
-          nowPlayingNotification ?? this.nowPlayingNotification,
-      lockScreenControls: lockScreenControls ?? this.lockScreenControls,
-      dailyMixReady: dailyMixReady ?? this.dailyMixReady,
-      weeklyRecap: weeklyRecap ?? this.weeklyRecap,
-      milestones: milestones ?? this.milestones,
-      scanComplete: scanComplete ?? this.scanComplete,
-      newMusicAdded: newMusicAdded ?? this.newMusicAdded,
-      inactiveReminder: inactiveReminder ?? this.inactiveReminder,
-      quietHoursEnabled: quietHoursEnabled ?? this.quietHoursEnabled,
-      quietStart: quietStart ?? this.quietStart,
-      quietEnd: quietEnd ?? this.quietEnd,
-    );
+/// The preset a stored [AppSettings] corresponds to, for the picker's
+/// selected state.
+ThemePreset presetFor(AppSettings settings) {
+  switch (settings.themeMode) {
+    case AuraThemeMode.dynamicColor:
+      return ThemePreset.dynamicColor;
+    case AuraThemeMode.albumArt:
+      return ThemePreset.albumArt;
+    case AuraThemeMode.system:
+    case AuraThemeMode.custom:
+      for (final preset in ThemePreset.values) {
+        if (preset.accentHex == settings.accentColorHex) return preset;
+      }
+      return ThemePreset.sunsetWarm;
   }
 }
 
-class SettingsController extends StateNotifier<AppSettings> {
-  SettingsController() : super(const AppSettings());
+// ── Settings notifier ─────────────────────────────────────────────────────────
 
-  void setOutputDevice(String device) =>
-      state = state.copyWith(outputDevice: device);
-  void setNormalization(bool v) =>
-      state = state.copyWith(normalizationEnabled: v);
-  void setCrossfade(double seconds) =>
-      state = state.copyWith(crossfadeSeconds: seconds);
-  void setDailyMixBalance(double v) =>
-      state = state.copyWith(dailyMixBalance: v);
-  void setThemePreset(ThemePreset p) => state = state.copyWith(themePreset: p);
-  void setGlassIntensity(double v) => state = state.copyWith(glassIntensity: v);
+/// Holds [AppSettings] and writes every change through to disk.
+///
+/// Starts from [AppSettings.defaults] and replaces them once the stored values
+/// load, so the first frame renders immediately rather than waiting on I/O.
+class SettingsNotifier extends StateNotifier<AppSettings> {
+  SettingsNotifier(this._repository) : super(AppSettings.defaults) {
+    _loaded = _loadFromDisk();
+  }
 
-  // Notification setters
-  void setNowPlaying(bool v) => state = state.copyWith(nowPlayingNotification: v);
-  void setLockScreen(bool v) => state = state.copyWith(lockScreenControls: v);
-  void setDailyMixReady(bool v) => state = state.copyWith(dailyMixReady: v);
-  void setWeeklyRecap(bool v) => state = state.copyWith(weeklyRecap: v);
-  void setMilestones(bool v) => state = state.copyWith(milestones: v);
-  void setScanComplete(bool v) => state = state.copyWith(scanComplete: v);
-  void setNewMusicAdded(bool v) => state = state.copyWith(newMusicAdded: v);
-  void setInactiveReminder(bool v) =>
-      state = state.copyWith(inactiveReminder: v);
-  void setQuietHoursEnabled(bool v) =>
-      state = state.copyWith(quietHoursEnabled: v);
-  void setQuietStart(TimeOfDay t) => state = state.copyWith(quietStart: t);
-  void setQuietEnd(TimeOfDay t) => state = state.copyWith(quietEnd: t);
+  final SettingsRepository _repository;
+
+  /// Completes when the initial load has finished. Tests await it; the UI does
+  /// not need to, because the defaults are already a valid state.
+  late final Future<void> _loaded;
+  Future<void> get whenLoaded => _loaded;
+
+  Future<void> _loadFromDisk() async {
+    try {
+      final stored = await _repository.load();
+      if (mounted) state = stored;
+    } catch (_) {
+      // Unreadable storage must not stop the app booting; the user sees
+      // defaults and can set them again.
+    }
+  }
+
+  /// Applies [next] and persists it.
+  Future<void> _update(AppSettings next) async {
+    state = next;
+    await _repository.save(next);
+  }
+
+  // ── Appearance ──
+
+  Future<void> updateThemeMode(AuraThemeMode mode) =>
+      _update(state.copyWith(themeMode: mode));
+
+  Future<void> setThemePreset(ThemePreset preset) => _update(state.copyWith(
+        themeMode: preset.themeMode,
+        accentColorHex: preset.accentHex,
+      ));
+
+  /// Screens work in percent (0–100); storage is a 0–1 fraction.
+  Future<void> setGlassIntensity(double percent) =>
+      _update(state.copyWith(glassIntensity: (percent / 100).clamp(0.0, 1.0)));
+
+  Future<void> setAccentColorHex(String hex) =>
+      _update(state.copyWith(accentColorHex: hex));
+
+  // ── Shuffle ──
+
+  Future<void> updateShuffleConfig(ShuffleConfig config) =>
+      _update(state.copyWith(shuffleConfig: config));
+
+  // ── Notifications ──
+
+  Future<void> setNotificationsEnabled(bool v) =>
+      _update(state.copyWith(notificationsEnabled: v));
+
+  /// Toggles one category by [kind], per the spec's `toggleNotification`.
+  Future<void> toggleNotification(NotificationKind kind, bool enabled) {
+    return _update(switch (kind) {
+      NotificationKind.nowPlaying =>
+        state.copyWith(nowPlayingNotification: enabled),
+      NotificationKind.dailyMix =>
+        state.copyWith(dailyMixNotifications: enabled),
+      NotificationKind.weeklyRecap =>
+        state.copyWith(weeklyRecapNotifications: enabled),
+      NotificationKind.milestones =>
+        state.copyWith(milestoneNotifications: enabled),
+      NotificationKind.libraryScan =>
+        state.copyWith(libraryNotifications: enabled),
+      NotificationKind.newMusic =>
+        state.copyWith(newMusicNotifications: enabled),
+      NotificationKind.inactivity =>
+        state.copyWith(inactivityReminders: enabled),
+    });
+  }
+
+  Future<void> setNowPlaying(bool v) =>
+      toggleNotification(NotificationKind.nowPlaying, v);
+  Future<void> setLockScreen(bool v) =>
+      _update(state.copyWith(lockScreenControls: v));
+  Future<void> setDailyMixReady(bool v) =>
+      toggleNotification(NotificationKind.dailyMix, v);
+  Future<void> setWeeklyRecap(bool v) =>
+      toggleNotification(NotificationKind.weeklyRecap, v);
+  Future<void> setMilestones(bool v) =>
+      toggleNotification(NotificationKind.milestones, v);
+  Future<void> setScanComplete(bool v) =>
+      toggleNotification(NotificationKind.libraryScan, v);
+  Future<void> setNewMusicAdded(bool v) =>
+      toggleNotification(NotificationKind.newMusic, v);
+  Future<void> setInactiveReminder(bool v) =>
+      toggleNotification(NotificationKind.inactivity, v);
+
+  Future<void> setNotificationSound(String soundId) =>
+      _update(state.copyWith(notificationSound: soundId));
+
+  // ── Quiet hours ──
+
+  Future<void> setQuietHours({
+    required bool enabled,
+    TimeOfDay? start,
+    TimeOfDay? end,
+    Set<NotificationKind>? bypass,
+  }) =>
+      _update(state.copyWith(
+        quietHoursEnabled: enabled,
+        quietHoursStart: start,
+        quietHoursEnd: end,
+        quietHoursBypass: bypass,
+      ));
+
+  Future<void> setQuietHoursEnabled(bool v) =>
+      _update(state.copyWith(quietHoursEnabled: v));
+  Future<void> setQuietStart(TimeOfDay t) =>
+      _update(state.copyWith(quietHoursStart: t));
+  Future<void> setQuietEnd(TimeOfDay t) =>
+      _update(state.copyWith(quietHoursEnd: t));
+
+  Future<void> setQuietHoursBypass(NotificationKind kind, bool bypass) {
+    final next = Set<NotificationKind>.of(state.quietHoursBypass);
+    bypass ? next.add(kind) : next.remove(kind);
+    return _update(state.copyWith(quietHoursBypass: next));
+  }
+
+  // ── Audio ──
+
+  Future<void> setNormalization(bool v) =>
+      _update(state.copyWith(replayGainEnabled: v));
+
+  /// The main settings screen's slider is in seconds; the engine takes ms.
+  Future<void> setCrossfade(double seconds) => updateCrossfade(
+        enabled: seconds > 0,
+        ms: (seconds * 1000).round(),
+      );
+
+  Future<void> updateCrossfade({required bool enabled, required int ms}) =>
+      _update(state.copyWith(
+        crossfadeEnabled: enabled,
+        crossfadeMs: ms.clamp(0, 12000),
+      ));
+
+  Future<void> updateEqualizerPreset(String preset) {
+    final curve = kEqPresets[preset];
+    return _update(state.copyWith(
+      eqPreset: preset,
+      eqBands: curve == null ? null : List<double>.from(curve),
+    ));
+  }
+
+  Future<void> setEqBand(int index, double gain) {
+    final next = List<double>.from(state.eqBands);
+    if (index < 0 || index >= next.length) return Future.value();
+    next[index] = gain.clamp(-12.0, 12.0);
+    // A manual edit is no longer any named preset.
+    return _update(state.copyWith(eqBands: next, eqPreset: 'Custom'));
+  }
+
+  Future<void> setEqEnabled(bool v) => _update(state.copyWith(eqEnabled: v));
+  Future<void> setBassBoost(bool v) => _update(state.copyWith(bassBoost: v));
+  Future<void> setVirtualizer(bool v) =>
+      _update(state.copyWith(virtualizer: v));
+
+  Future<void> setOutputDevice(String device) =>
+      _update(state.copyWith(outputDevice: device));
+
+  // ── Mixes ──
+
+  Future<void> setDailyMixBalance(double v) =>
+      _update(state.copyWith(dailyMixBalance: v));
+
+  // ── Backup ──
+
+  Future<void> setAutoBackup({required bool enabled, String? path}) =>
+      _update(state.copyWith(autoBackupEnabled: enabled, backupPath: path));
+
+  // ── Whole-object operations ──
+
+  Future<void> exportSettings(String path) =>
+      _repository.exportSettings(path, state);
+
+  Future<void> importSettings(String path) async {
+    final imported = await _repository.importSettings(path);
+    if (mounted) state = imported;
+  }
+
+  /// Back to shipped defaults, on disk as well as in memory.
+  Future<void> resetToDefaults() async {
+    await _repository.clear();
+    if (mounted) state = AppSettings.defaults;
+  }
 }
 
-/// All user preferences (stub-backed, in-memory).
+/// All user preferences, persisted.
 final settingsProvider =
-    StateNotifierProvider<SettingsController, AppSettings>((ref) {
-  return SettingsController();
+    StateNotifierProvider<SettingsNotifier, AppSettings>((ref) {
+  return SettingsNotifier(ref.watch(settingsRepositoryProvider));
 });
 
 // ── Equalizer model ───────────────────────────────────────────────────────────
@@ -224,56 +345,42 @@ class EqualizerState {
   final bool virtualizer;
   final bool enabled;
 
-  factory EqualizerState.initial() =>
-      EqualizerState(bands: List<double>.from(kEqPresets['Flat']!));
-
-  EqualizerState copyWith({
-    List<double>? bands,
-    String? preset,
-    bool? bassBoost,
-    bool? virtualizer,
-    bool? enabled,
-  }) {
-    return EqualizerState(
-      bands: bands ?? this.bands,
-      preset: preset ?? this.preset,
-      bassBoost: bassBoost ?? this.bassBoost,
-      virtualizer: virtualizer ?? this.virtualizer,
-      enabled: enabled ?? this.enabled,
-    );
-  }
+  /// The equaliser slice of the persisted settings.
+  factory EqualizerState.from(AppSettings settings) => EqualizerState(
+        bands: settings.eqBands,
+        preset: settings.eqPreset,
+        bassBoost: settings.bassBoost,
+        virtualizer: settings.virtualizer,
+        enabled: settings.eqEnabled,
+      );
 }
 
-class EqualizerController extends StateNotifier<EqualizerState> {
-  EqualizerController() : super(EqualizerState.initial());
+/// Writes straight through to [settingsProvider], which owns the storage.
+class EqualizerController {
+  const EqualizerController(this._settings);
+
+  final SettingsNotifier _settings;
 
   static const double minGain = -12;
   static const double maxGain = 12;
 
-  void setBand(int index, double gain) {
-    final next = List<double>.from(state.bands);
-    next[index] = gain;
-    // Manual edits flip the active preset to "Custom".
-    state = state.copyWith(bands: next, preset: 'Custom');
-  }
+  Future<void> setBand(int index, double gain) =>
+      _settings.setEqBand(index, gain);
 
-  void applyPreset(String name) {
-    if (name == 'Custom') {
-      state = state.copyWith(preset: 'Custom');
-      return;
-    }
-    final curve = kEqPresets[name];
-    if (curve == null) return;
-    state = state.copyWith(bands: List<double>.from(curve), preset: name);
-  }
+  Future<void> applyPreset(String name) =>
+      _settings.updateEqualizerPreset(name);
 
-  void setBassBoost(bool v) => state = state.copyWith(bassBoost: v);
-  void setVirtualizer(bool v) => state = state.copyWith(virtualizer: v);
-  void setEnabled(bool v) => state = state.copyWith(enabled: v);
+  Future<void> setBassBoost(bool v) => _settings.setBassBoost(v);
+  Future<void> setVirtualizer(bool v) => _settings.setVirtualizer(v);
+  Future<void> setEnabled(bool v) => _settings.setEqEnabled(v);
 }
 
-/// EQ band values and presets (stub-backed, in-memory).
-final equalizerProvider =
-    StateNotifierProvider<EqualizerController, EqualizerState>((ref) {
-  return EqualizerController();
+/// EQ band values and presets, projected from the persisted settings.
+final equalizerProvider = Provider<EqualizerState>((ref) {
+  return EqualizerState.from(ref.watch(settingsProvider));
+});
+
+/// Mutations for the equaliser screen.
+final equalizerControllerProvider = Provider<EqualizerController>((ref) {
+  return EqualizerController(ref.watch(settingsProvider.notifier));
 });

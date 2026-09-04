@@ -12,7 +12,8 @@ part of 'artist.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Artist _$ArtistFromJson(Map<String, dynamic> json) {
   return _Artist.fromJson(json);
@@ -49,12 +50,13 @@ abstract class $ArtistCopyWith<$Res> {
   factory $ArtistCopyWith(Artist value, $Res Function(Artist) then) =
       _$ArtistCopyWithImpl<$Res, Artist>;
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      int trackCount,
-      int albumCount,
-      String? imagePath});
+  $Res call({
+    String id,
+    String name,
+    int trackCount,
+    int albumCount,
+    String? imagePath,
+  });
 }
 
 /// @nodoc
@@ -78,44 +80,49 @@ class _$ArtistCopyWithImpl<$Res, $Val extends Artist>
     Object? albumCount = null,
     Object? imagePath = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      trackCount: null == trackCount
-          ? _value.trackCount
-          : trackCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      albumCount: null == albumCount
-          ? _value.albumCount
-          : albumCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      imagePath: freezed == imagePath
-          ? _value.imagePath
-          : imagePath // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            trackCount: null == trackCount
+                ? _value.trackCount
+                : trackCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            albumCount: null == albumCount
+                ? _value.albumCount
+                : albumCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            imagePath: freezed == imagePath
+                ? _value.imagePath
+                : imagePath // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$ArtistImplCopyWith<$Res> implements $ArtistCopyWith<$Res> {
   factory _$$ArtistImplCopyWith(
-          _$ArtistImpl value, $Res Function(_$ArtistImpl) then) =
-      __$$ArtistImplCopyWithImpl<$Res>;
+    _$ArtistImpl value,
+    $Res Function(_$ArtistImpl) then,
+  ) = __$$ArtistImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      int trackCount,
-      int albumCount,
-      String? imagePath});
+  $Res call({
+    String id,
+    String name,
+    int trackCount,
+    int albumCount,
+    String? imagePath,
+  });
 }
 
 /// @nodoc
@@ -123,8 +130,9 @@ class __$$ArtistImplCopyWithImpl<$Res>
     extends _$ArtistCopyWithImpl<$Res, _$ArtistImpl>
     implements _$$ArtistImplCopyWith<$Res> {
   __$$ArtistImplCopyWithImpl(
-      _$ArtistImpl _value, $Res Function(_$ArtistImpl) _then)
-      : super(_value, _then);
+    _$ArtistImpl _value,
+    $Res Function(_$ArtistImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Artist
   /// with the given fields replaced by the non-null parameter values.
@@ -137,40 +145,43 @@ class __$$ArtistImplCopyWithImpl<$Res>
     Object? albumCount = null,
     Object? imagePath = freezed,
   }) {
-    return _then(_$ArtistImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      trackCount: null == trackCount
-          ? _value.trackCount
-          : trackCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      albumCount: null == albumCount
-          ? _value.albumCount
-          : albumCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      imagePath: freezed == imagePath
-          ? _value.imagePath
-          : imagePath // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ArtistImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        trackCount: null == trackCount
+            ? _value.trackCount
+            : trackCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        albumCount: null == albumCount
+            ? _value.albumCount
+            : albumCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        imagePath: freezed == imagePath
+            ? _value.imagePath
+            : imagePath // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ArtistImpl implements _Artist {
-  const _$ArtistImpl(
-      {required this.id,
-      required this.name,
-      this.trackCount = 0,
-      this.albumCount = 0,
-      this.imagePath});
+  const _$ArtistImpl({
+    required this.id,
+    required this.name,
+    this.trackCount = 0,
+    this.albumCount = 0,
+    this.imagePath,
+  });
 
   factory _$ArtistImpl.fromJson(Map<String, dynamic> json) =>
       _$$ArtistImplFromJson(json);
@@ -232,19 +243,18 @@ class _$ArtistImpl implements _Artist {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ArtistImplToJson(
-      this,
-    );
+    return _$$ArtistImplToJson(this);
   }
 }
 
 abstract class _Artist implements Artist {
-  const factory _Artist(
-      {required final String id,
-      required final String name,
-      final int trackCount,
-      final int albumCount,
-      final String? imagePath}) = _$ArtistImpl;
+  const factory _Artist({
+    required final String id,
+    required final String name,
+    final int trackCount,
+    final int albumCount,
+    final String? imagePath,
+  }) = _$ArtistImpl;
 
   factory _Artist.fromJson(Map<String, dynamic> json) = _$ArtistImpl.fromJson;
 

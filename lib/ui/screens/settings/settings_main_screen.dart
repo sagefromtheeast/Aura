@@ -61,14 +61,15 @@ class SettingsMainScreen extends ConsumerWidget {
                     title: 'Normalization',
                     subtitle: 'ReplayGain volume levelling',
                     trailing: Switch(
-                      value: settings.normalizationEnabled,
+                      value: settings.replayGainEnabled,
                       activeThumbColor: DesignTokens.primarySeed,
                       onChanged: controller.setNormalization,
                     ),
                   ),
                   const _RowDivider(),
                   _CrossfadeRow(
-                    seconds: settings.crossfadeSeconds,
+                    // The slider is in seconds; storage is in milliseconds.
+                    seconds: settings.crossfadeMs / 1000,
                     onChanged: controller.setCrossfade,
                   ),
                 ],

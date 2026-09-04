@@ -38,13 +38,13 @@ class NotificationSettingsScreen extends ConsumerWidget {
                 icon: Icons.play_circle_outline_rounded,
                 title: 'Now Playing notification',
                 value: s.nowPlayingNotification,
-                onChanged: c.setNowPlaying,
+                onChanged: (v) => c.setNowPlaying(v),
               ),
               _ToggleRow(
                 icon: Icons.lock_outline_rounded,
                 title: 'Lock screen controls',
                 value: s.lockScreenControls,
-                onChanged: c.setLockScreen,
+                onChanged: (v) => c.setLockScreen(v),
               ),
             ]),
 
@@ -52,20 +52,20 @@ class NotificationSettingsScreen extends ConsumerWidget {
               _ToggleRow(
                 icon: Icons.auto_awesome_rounded,
                 title: 'Daily Mix Ready',
-                value: s.dailyMixReady,
-                onChanged: c.setDailyMixReady,
+                value: s.dailyMixNotifications,
+                onChanged: (v) => c.setDailyMixReady(v),
               ),
               _ToggleRow(
                 icon: Icons.calendar_view_week_rounded,
                 title: 'Weekly Recap',
-                value: s.weeklyRecap,
-                onChanged: c.setWeeklyRecap,
+                value: s.weeklyRecapNotifications,
+                onChanged: (v) => c.setWeeklyRecap(v),
               ),
               _ToggleRow(
                 icon: Icons.emoji_events_rounded,
                 title: 'Milestones',
-                value: s.milestones,
-                onChanged: c.setMilestones,
+                value: s.milestoneNotifications,
+                onChanged: (v) => c.setMilestones(v),
               ),
             ]),
 
@@ -73,14 +73,14 @@ class NotificationSettingsScreen extends ConsumerWidget {
               _ToggleRow(
                 icon: Icons.check_circle_outline_rounded,
                 title: 'Scan Complete',
-                value: s.scanComplete,
-                onChanged: c.setScanComplete,
+                value: s.libraryNotifications,
+                onChanged: (v) => c.setScanComplete(v),
               ),
               _ToggleRow(
                 icon: Icons.library_add_check_outlined,
                 title: 'New Music Added',
-                value: s.newMusicAdded,
-                onChanged: c.setNewMusicAdded,
+                value: s.newMusicNotifications,
+                onChanged: (v) => c.setNewMusicAdded(v),
               ),
             ]),
 
@@ -88,21 +88,21 @@ class NotificationSettingsScreen extends ConsumerWidget {
               _ToggleRow(
                 icon: Icons.notifications_paused_rounded,
                 title: 'Inactive for 3 days',
-                value: s.inactiveReminder,
-                onChanged: c.setInactiveReminder,
+                value: s.inactivityReminders,
+                onChanged: (v) => c.setInactiveReminder(v),
               ),
               _ToggleRow(
                 icon: Icons.nightlight_round,
                 title: 'Quiet Hours',
                 value: s.quietHoursEnabled,
-                onChanged: c.setQuietHoursEnabled,
+                onChanged: (v) => c.setQuietHoursEnabled(v),
               ),
               if (s.quietHoursEnabled)
                 _QuietHoursRow(
-                  start: s.quietStart,
-                  end: s.quietEnd,
-                  onStart: c.setQuietStart,
-                  onEnd: c.setQuietEnd,
+                  start: s.quietHoursStart,
+                  end: s.quietHoursEnd,
+                  onStart: (v) => c.setQuietStart(v),
+                  onEnd: (v) => c.setQuietEnd(v),
                 ),
             ]),
 

@@ -12,7 +12,8 @@ part of 'playback_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PlaybackState _$PlaybackStateFromJson(Map<String, dynamic> json) {
   return _PlaybackState.fromJson(json);
@@ -66,21 +67,23 @@ mixin _$PlaybackState {
 /// @nodoc
 abstract class $PlaybackStateCopyWith<$Res> {
   factory $PlaybackStateCopyWith(
-          PlaybackState value, $Res Function(PlaybackState) then) =
-      _$PlaybackStateCopyWithImpl<$Res, PlaybackState>;
+    PlaybackState value,
+    $Res Function(PlaybackState) then,
+  ) = _$PlaybackStateCopyWithImpl<$Res, PlaybackState>;
   @useResult
-  $Res call(
-      {EngineStatus status,
-      Track? currentTrack,
-      int positionMs,
-      int bufferedMs,
-      bool isShuffleEnabled,
-      RepeatMode repeatMode,
-      double playbackSpeed,
-      double volume,
-      List<int> eqBandGains,
-      String? errorMessage,
-      int timestampMs});
+  $Res call({
+    EngineStatus status,
+    Track? currentTrack,
+    int positionMs,
+    int bufferedMs,
+    bool isShuffleEnabled,
+    RepeatMode repeatMode,
+    double playbackSpeed,
+    double volume,
+    List<int> eqBandGains,
+    String? errorMessage,
+    int timestampMs,
+  });
 
   $TrackCopyWith<$Res>? get currentTrack;
 }
@@ -112,52 +115,55 @@ class _$PlaybackStateCopyWithImpl<$Res, $Val extends PlaybackState>
     Object? errorMessage = freezed,
     Object? timestampMs = null,
   }) {
-    return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as EngineStatus,
-      currentTrack: freezed == currentTrack
-          ? _value.currentTrack
-          : currentTrack // ignore: cast_nullable_to_non_nullable
-              as Track?,
-      positionMs: null == positionMs
-          ? _value.positionMs
-          : positionMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      bufferedMs: null == bufferedMs
-          ? _value.bufferedMs
-          : bufferedMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      isShuffleEnabled: null == isShuffleEnabled
-          ? _value.isShuffleEnabled
-          : isShuffleEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      repeatMode: null == repeatMode
-          ? _value.repeatMode
-          : repeatMode // ignore: cast_nullable_to_non_nullable
-              as RepeatMode,
-      playbackSpeed: null == playbackSpeed
-          ? _value.playbackSpeed
-          : playbackSpeed // ignore: cast_nullable_to_non_nullable
-              as double,
-      volume: null == volume
-          ? _value.volume
-          : volume // ignore: cast_nullable_to_non_nullable
-              as double,
-      eqBandGains: null == eqBandGains
-          ? _value.eqBandGains
-          : eqBandGains // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timestampMs: null == timestampMs
-          ? _value.timestampMs
-          : timestampMs // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as EngineStatus,
+            currentTrack: freezed == currentTrack
+                ? _value.currentTrack
+                : currentTrack // ignore: cast_nullable_to_non_nullable
+                      as Track?,
+            positionMs: null == positionMs
+                ? _value.positionMs
+                : positionMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+            bufferedMs: null == bufferedMs
+                ? _value.bufferedMs
+                : bufferedMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+            isShuffleEnabled: null == isShuffleEnabled
+                ? _value.isShuffleEnabled
+                : isShuffleEnabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            repeatMode: null == repeatMode
+                ? _value.repeatMode
+                : repeatMode // ignore: cast_nullable_to_non_nullable
+                      as RepeatMode,
+            playbackSpeed: null == playbackSpeed
+                ? _value.playbackSpeed
+                : playbackSpeed // ignore: cast_nullable_to_non_nullable
+                      as double,
+            volume: null == volume
+                ? _value.volume
+                : volume // ignore: cast_nullable_to_non_nullable
+                      as double,
+            eqBandGains: null == eqBandGains
+                ? _value.eqBandGains
+                : eqBandGains // ignore: cast_nullable_to_non_nullable
+                      as List<int>,
+            errorMessage: freezed == errorMessage
+                ? _value.errorMessage
+                : errorMessage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            timestampMs: null == timestampMs
+                ? _value.timestampMs
+                : timestampMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of PlaybackState
@@ -179,22 +185,24 @@ class _$PlaybackStateCopyWithImpl<$Res, $Val extends PlaybackState>
 abstract class _$$PlaybackStateImplCopyWith<$Res>
     implements $PlaybackStateCopyWith<$Res> {
   factory _$$PlaybackStateImplCopyWith(
-          _$PlaybackStateImpl value, $Res Function(_$PlaybackStateImpl) then) =
-      __$$PlaybackStateImplCopyWithImpl<$Res>;
+    _$PlaybackStateImpl value,
+    $Res Function(_$PlaybackStateImpl) then,
+  ) = __$$PlaybackStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {EngineStatus status,
-      Track? currentTrack,
-      int positionMs,
-      int bufferedMs,
-      bool isShuffleEnabled,
-      RepeatMode repeatMode,
-      double playbackSpeed,
-      double volume,
-      List<int> eqBandGains,
-      String? errorMessage,
-      int timestampMs});
+  $Res call({
+    EngineStatus status,
+    Track? currentTrack,
+    int positionMs,
+    int bufferedMs,
+    bool isShuffleEnabled,
+    RepeatMode repeatMode,
+    double playbackSpeed,
+    double volume,
+    List<int> eqBandGains,
+    String? errorMessage,
+    int timestampMs,
+  });
 
   @override
   $TrackCopyWith<$Res>? get currentTrack;
@@ -205,8 +213,9 @@ class __$$PlaybackStateImplCopyWithImpl<$Res>
     extends _$PlaybackStateCopyWithImpl<$Res, _$PlaybackStateImpl>
     implements _$$PlaybackStateImplCopyWith<$Res> {
   __$$PlaybackStateImplCopyWithImpl(
-      _$PlaybackStateImpl _value, $Res Function(_$PlaybackStateImpl) _then)
-      : super(_value, _then);
+    _$PlaybackStateImpl _value,
+    $Res Function(_$PlaybackStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PlaybackState
   /// with the given fields replaced by the non-null parameter values.
@@ -225,71 +234,73 @@ class __$$PlaybackStateImplCopyWithImpl<$Res>
     Object? errorMessage = freezed,
     Object? timestampMs = null,
   }) {
-    return _then(_$PlaybackStateImpl(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as EngineStatus,
-      currentTrack: freezed == currentTrack
-          ? _value.currentTrack
-          : currentTrack // ignore: cast_nullable_to_non_nullable
-              as Track?,
-      positionMs: null == positionMs
-          ? _value.positionMs
-          : positionMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      bufferedMs: null == bufferedMs
-          ? _value.bufferedMs
-          : bufferedMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      isShuffleEnabled: null == isShuffleEnabled
-          ? _value.isShuffleEnabled
-          : isShuffleEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      repeatMode: null == repeatMode
-          ? _value.repeatMode
-          : repeatMode // ignore: cast_nullable_to_non_nullable
-              as RepeatMode,
-      playbackSpeed: null == playbackSpeed
-          ? _value.playbackSpeed
-          : playbackSpeed // ignore: cast_nullable_to_non_nullable
-              as double,
-      volume: null == volume
-          ? _value.volume
-          : volume // ignore: cast_nullable_to_non_nullable
-              as double,
-      eqBandGains: null == eqBandGains
-          ? _value._eqBandGains
-          : eqBandGains // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timestampMs: null == timestampMs
-          ? _value.timestampMs
-          : timestampMs // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$PlaybackStateImpl(
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as EngineStatus,
+        currentTrack: freezed == currentTrack
+            ? _value.currentTrack
+            : currentTrack // ignore: cast_nullable_to_non_nullable
+                  as Track?,
+        positionMs: null == positionMs
+            ? _value.positionMs
+            : positionMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+        bufferedMs: null == bufferedMs
+            ? _value.bufferedMs
+            : bufferedMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+        isShuffleEnabled: null == isShuffleEnabled
+            ? _value.isShuffleEnabled
+            : isShuffleEnabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        repeatMode: null == repeatMode
+            ? _value.repeatMode
+            : repeatMode // ignore: cast_nullable_to_non_nullable
+                  as RepeatMode,
+        playbackSpeed: null == playbackSpeed
+            ? _value.playbackSpeed
+            : playbackSpeed // ignore: cast_nullable_to_non_nullable
+                  as double,
+        volume: null == volume
+            ? _value.volume
+            : volume // ignore: cast_nullable_to_non_nullable
+                  as double,
+        eqBandGains: null == eqBandGains
+            ? _value._eqBandGains
+            : eqBandGains // ignore: cast_nullable_to_non_nullable
+                  as List<int>,
+        errorMessage: freezed == errorMessage
+            ? _value.errorMessage
+            : errorMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        timestampMs: null == timestampMs
+            ? _value.timestampMs
+            : timestampMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PlaybackStateImpl implements _PlaybackState {
-  const _$PlaybackStateImpl(
-      {this.status = EngineStatus.idle,
-      this.currentTrack,
-      this.positionMs = 0,
-      this.bufferedMs = 0,
-      this.isShuffleEnabled = false,
-      this.repeatMode = RepeatMode.none,
-      this.playbackSpeed = 1.0,
-      this.volume = 1.0,
-      final List<int> eqBandGains = const [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      this.errorMessage,
-      this.timestampMs = 0})
-      : _eqBandGains = eqBandGains;
+  const _$PlaybackStateImpl({
+    this.status = EngineStatus.idle,
+    this.currentTrack,
+    this.positionMs = 0,
+    this.bufferedMs = 0,
+    this.isShuffleEnabled = false,
+    this.repeatMode = RepeatMode.none,
+    this.playbackSpeed = 1.0,
+    this.volume = 1.0,
+    final List<int> eqBandGains = const [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    this.errorMessage,
+    this.timestampMs = 0,
+  }) : _eqBandGains = eqBandGains;
 
   factory _$PlaybackStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlaybackStateImplFromJson(json);
@@ -378,8 +389,10 @@ class _$PlaybackStateImpl implements _PlaybackState {
             (identical(other.playbackSpeed, playbackSpeed) ||
                 other.playbackSpeed == playbackSpeed) &&
             (identical(other.volume, volume) || other.volume == volume) &&
-            const DeepCollectionEquality()
-                .equals(other._eqBandGains, _eqBandGains) &&
+            const DeepCollectionEquality().equals(
+              other._eqBandGains,
+              _eqBandGains,
+            ) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage) &&
             (identical(other.timestampMs, timestampMs) ||
@@ -389,18 +402,19 @@ class _$PlaybackStateImpl implements _PlaybackState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      status,
-      currentTrack,
-      positionMs,
-      bufferedMs,
-      isShuffleEnabled,
-      repeatMode,
-      playbackSpeed,
-      volume,
-      const DeepCollectionEquality().hash(_eqBandGains),
-      errorMessage,
-      timestampMs);
+    runtimeType,
+    status,
+    currentTrack,
+    positionMs,
+    bufferedMs,
+    isShuffleEnabled,
+    repeatMode,
+    playbackSpeed,
+    volume,
+    const DeepCollectionEquality().hash(_eqBandGains),
+    errorMessage,
+    timestampMs,
+  );
 
   /// Create a copy of PlaybackState
   /// with the given fields replaced by the non-null parameter values.
@@ -412,25 +426,24 @@ class _$PlaybackStateImpl implements _PlaybackState {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PlaybackStateImplToJson(
-      this,
-    );
+    return _$$PlaybackStateImplToJson(this);
   }
 }
 
 abstract class _PlaybackState implements PlaybackState {
-  const factory _PlaybackState(
-      {final EngineStatus status,
-      final Track? currentTrack,
-      final int positionMs,
-      final int bufferedMs,
-      final bool isShuffleEnabled,
-      final RepeatMode repeatMode,
-      final double playbackSpeed,
-      final double volume,
-      final List<int> eqBandGains,
-      final String? errorMessage,
-      final int timestampMs}) = _$PlaybackStateImpl;
+  const factory _PlaybackState({
+    final EngineStatus status,
+    final Track? currentTrack,
+    final int positionMs,
+    final int bufferedMs,
+    final bool isShuffleEnabled,
+    final RepeatMode repeatMode,
+    final double playbackSpeed,
+    final double volume,
+    final List<int> eqBandGains,
+    final String? errorMessage,
+    final int timestampMs,
+  }) = _$PlaybackStateImpl;
 
   factory _PlaybackState.fromJson(Map<String, dynamic> json) =
       _$PlaybackStateImpl.fromJson;

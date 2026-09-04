@@ -1,11 +1,20 @@
 // lib/ui/screens/notifications/notification_providers.dart
-// Aura — Stub providers for the notification screens.
+// Aura — Notification screens' view of the persisted settings.
+//
 //   • notificationSettingsProvider — master switch, per-type toggles, sound
 //   • quietHoursProvider           — quiet-hours window + per-type bypass
-// All in-memory; nothing leaves the device.
+//
+// Both are projections of [settingsProvider], not stores of their own. They
+// used to hold independent in-memory state, which meant the quiet-hours window
+// and the notification toggles existed twice and could disagree — the settings
+// screen and the notifications screen would show different answers for the
+// same preference. Everything is local; nothing leaves the device.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../data/settings/app_settings.dart';
+import '../settings/settings_providers.dart';
 
 /// The notification categories Aura can send.
 enum NotifType {
@@ -20,6 +29,14 @@ enum NotifType {
 
   /// Locked types are always delivered and cannot be toggled/blocked.
   final bool locked;
+
+  /// The persisted category this screen-level type stores against.
+  NotificationKind get kind => switch (this) {
+        NotifType.nowPlaying => NotificationKind.nowPlaying,
+        NotifType.dailyMix => NotificationKind.dailyMix,
+        NotifType.weeklyRecap => NotificationKind.weeklyRecap,
+        NotifType.milestones => NotificationKind.milestones,
+      };
 }
 
 /// A selectable notification sound.
@@ -73,24 +90,47 @@ class NotificationSettings {
   }
 }
 
-class NotificationSettingsController
-    extends StateNotifier<NotificationSettings> {
-  NotificationSettingsController() : super(const NotificationSettings());
+/// The notification slice of the persisted settings.
+final notificationSettingsProvider = Provider<NotificationSettings>((ref) {
+  final settings = ref.watch(settingsProvider);
+  return NotificationSettings(
+    enabled: settings.notificationsEnabled,
+    types: {
+      for (final type in NotifType.values)
+        type: switch (type) {
+          NotifType.nowPlaying => settings.nowPlayingNotification,
+          NotifType.dailyMix => settings.dailyMixNotifications,
+          NotifType.weeklyRecap => settings.weeklyRecapNotifications,
+          NotifType.milestones => settings.milestoneNotifications,
+        },
+    },
+    soundId: settings.notificationSound,
+  );
+});
 
-  void setEnabled(bool v) => state = state.copyWith(enabled: v);
+/// Mutations for the notification screens, writing through to settings.
+class NotificationSettingsController {
+  const NotificationSettingsController(this._settings);
 
-  void setType(NotifType t, bool v) {
-    if (t.locked) return;
-    state = state.copyWith(types: {...state.types, t: v});
+  final SettingsNotifier _settings;
+
+  Future<void> setEnabled(bool v) => _settings.setNotificationsEnabled(v);
+
+  Future<void> setType(NotifType type, bool enabled) {
+    // A locked type is always delivered; the UI does not offer the switch, and
+    // this guards against it being called anyway.
+    if (type.locked) return Future.value();
+    return _settings.toggleNotification(type.kind, enabled);
   }
 
-  void setSound(String id) => state = state.copyWith(soundId: id);
+  Future<void> setSound(String soundId) =>
+      _settings.setNotificationSound(soundId);
 }
 
-/// All notification preferences (stub-backed).
-final notificationSettingsProvider =
-    StateNotifierProvider<NotificationSettingsController, NotificationSettings>(
-        (ref) => NotificationSettingsController());
+final notificationSettingsControllerProvider =
+    Provider<NotificationSettingsController>((ref) {
+  return NotificationSettingsController(ref.watch(settingsProvider.notifier));
+});
 
 // ── Quiet hours ───────────────────────────────────────────────────────────────
 
@@ -111,42 +151,42 @@ class QuietHoursConfig {
   final Set<NotifType> bypass;
 
   bool bypasses(NotifType t) => t.locked || bypass.contains(t);
+}
 
-  QuietHoursConfig copyWith({
-    bool? enabled,
-    TimeOfDay? start,
-    TimeOfDay? end,
-    Set<NotifType>? bypass,
-  }) {
-    return QuietHoursConfig(
-      enabled: enabled ?? this.enabled,
-      start: start ?? this.start,
-      end: end ?? this.end,
-      bypass: bypass ?? this.bypass,
-    );
+/// The quiet-hours slice of the persisted settings.
+final quietHoursProvider = Provider<QuietHoursConfig>((ref) {
+  final settings = ref.watch(settingsProvider);
+  return QuietHoursConfig(
+    enabled: settings.quietHoursEnabled,
+    start: settings.quietHoursStart,
+    end: settings.quietHoursEnd,
+    bypass: {
+      for (final type in NotifType.values)
+        if (settings.quietHoursBypass.contains(type.kind)) type,
+    },
+  );
+});
+
+/// Mutations for the quiet-hours screen, writing through to settings.
+class QuietHoursController {
+  const QuietHoursController(this._settings, this._config);
+
+  final SettingsNotifier _settings;
+  final QuietHoursConfig _config;
+
+  Future<void> setEnabled(bool v) => _settings.setQuietHoursEnabled(v);
+  Future<void> setStart(TimeOfDay t) => _settings.setQuietStart(t);
+  Future<void> setEnd(TimeOfDay t) => _settings.setQuietEnd(t);
+
+  Future<void> toggleBypass(NotifType t) {
+    if (t.locked) return Future.value(); // always allowed; cannot change
+    return _settings.setQuietHoursBypass(t.kind, !_config.bypass.contains(t));
   }
 }
 
-class QuietHoursController extends StateNotifier<QuietHoursConfig> {
-  QuietHoursController() : super(const QuietHoursConfig());
-
-  void setEnabled(bool v) => state = state.copyWith(enabled: v);
-  void setStart(TimeOfDay t) => state = state.copyWith(start: t);
-  void setEnd(TimeOfDay t) => state = state.copyWith(end: t);
-
-  void toggleBypass(NotifType t) {
-    if (t.locked) return; // always allowed; cannot change
-    final next = {...state.bypass};
-    if (next.contains(t)) {
-      next.remove(t);
-    } else {
-      next.add(t);
-    }
-    state = state.copyWith(bypass: next);
-  }
-}
-
-/// Quiet-hours configuration (stub-backed).
-final quietHoursProvider =
-    StateNotifierProvider<QuietHoursController, QuietHoursConfig>(
-        (ref) => QuietHoursController());
+final quietHoursControllerProvider = Provider<QuietHoursController>((ref) {
+  return QuietHoursController(
+    ref.watch(settingsProvider.notifier),
+    ref.watch(quietHoursProvider),
+  );
+});

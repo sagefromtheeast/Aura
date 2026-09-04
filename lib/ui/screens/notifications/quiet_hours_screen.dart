@@ -19,7 +19,7 @@ class QuietHoursScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cfg = ref.watch(quietHoursProvider);
-    final ctrl = ref.read(quietHoursProvider.notifier);
+    final ctrl = ref.read(quietHoursControllerProvider);
 
     return Scaffold(
       backgroundColor: _indigoDeep,
@@ -57,7 +57,7 @@ class QuietHoursScreen extends ConsumerWidget {
                   ),
                   value: cfg.enabled,
                   activeThumbColor: _gold,
-                  onChanged: ctrl.setEnabled,
+                  onChanged: (v) => ctrl.setEnabled(v),
                 ),
               ),
 

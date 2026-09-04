@@ -25,6 +25,9 @@ dependencies:
   # ── Immutable Data Classes ────────────────────────────────────
   freezed_annotation: ^2.4.4
 
+  # ── Settings & Storage ────────────────────────────────────────
+  shared_preferences: ^2.3.3  # Scalar settings, readable before the DB opens
+
   # ── File System & Permissions ─────────────────────────────────
   path_provider: ^2.1.5
   path: ^1.9.0

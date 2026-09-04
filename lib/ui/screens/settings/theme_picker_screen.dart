@@ -44,8 +44,9 @@ class ThemePickerScreen extends ConsumerWidget {
             flex: 40,
             child: _NowPlayingPreview(
               accent: theme.accentColor,
-              glassIntensity: settings.glassIntensity,
-              preset: settings.themePreset,
+              // Stored 0–1; this preview works in percent.
+              glassIntensity: settings.glassIntensity * 100,
+              preset: presetFor(settings),
             ),
           ),
           // ── Controls ─────────────────────────────────────────────────────
@@ -65,7 +66,7 @@ class ThemePickerScreen extends ConsumerWidget {
                     for (final p in ThemePreset.values)
                       _ThemeSwatch(
                         preset: p,
-                        selected: settings.themePreset == p,
+                        selected: presetFor(settings) == p,
                         onTap: () => selectPreset(p),
                       ),
                   ],

@@ -47,7 +47,7 @@ class _NotificationSoundPickerState
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(notificationSettingsProvider);
-    final ctrl = ref.read(notificationSettingsProvider.notifier);
+    final ctrl = ref.read(notificationSettingsControllerProvider);
     final selected = kAuraSounds.firstWhere(
       (s) => s.id == settings.soundId,
       orElse: () => kAuraSounds.first,

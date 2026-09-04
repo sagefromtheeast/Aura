@@ -12,7 +12,8 @@ part of 'shuffle_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ShuffleConfig _$ShuffleConfigFromJson(Map<String, dynamic> json) {
   return _ShuffleConfig.fromJson(json);
@@ -66,19 +67,21 @@ mixin _$ShuffleConfig {
 /// @nodoc
 abstract class $ShuffleConfigCopyWith<$Res> {
   factory $ShuffleConfigCopyWith(
-          ShuffleConfig value, $Res Function(ShuffleConfig) then) =
-      _$ShuffleConfigCopyWithImpl<$Res, ShuffleConfig>;
+    ShuffleConfig value,
+    $Res Function(ShuffleConfig) then,
+  ) = _$ShuffleConfigCopyWithImpl<$Res, ShuffleConfig>;
   @useResult
-  $Res call(
-      {double favouriteBias,
-      double recencyAvoidance,
-      double discovery,
-      int artistSpacing,
-      int albumSpacing,
-      bool moodMatching,
-      double moodStrength,
-      bool smoothTransitions,
-      int? seed});
+  $Res call({
+    double favouriteBias,
+    double recencyAvoidance,
+    double discovery,
+    int artistSpacing,
+    int albumSpacing,
+    bool moodMatching,
+    double moodStrength,
+    bool smoothTransitions,
+    int? seed,
+  });
 }
 
 /// @nodoc
@@ -106,44 +109,47 @@ class _$ShuffleConfigCopyWithImpl<$Res, $Val extends ShuffleConfig>
     Object? smoothTransitions = null,
     Object? seed = freezed,
   }) {
-    return _then(_value.copyWith(
-      favouriteBias: null == favouriteBias
-          ? _value.favouriteBias
-          : favouriteBias // ignore: cast_nullable_to_non_nullable
-              as double,
-      recencyAvoidance: null == recencyAvoidance
-          ? _value.recencyAvoidance
-          : recencyAvoidance // ignore: cast_nullable_to_non_nullable
-              as double,
-      discovery: null == discovery
-          ? _value.discovery
-          : discovery // ignore: cast_nullable_to_non_nullable
-              as double,
-      artistSpacing: null == artistSpacing
-          ? _value.artistSpacing
-          : artistSpacing // ignore: cast_nullable_to_non_nullable
-              as int,
-      albumSpacing: null == albumSpacing
-          ? _value.albumSpacing
-          : albumSpacing // ignore: cast_nullable_to_non_nullable
-              as int,
-      moodMatching: null == moodMatching
-          ? _value.moodMatching
-          : moodMatching // ignore: cast_nullable_to_non_nullable
-              as bool,
-      moodStrength: null == moodStrength
-          ? _value.moodStrength
-          : moodStrength // ignore: cast_nullable_to_non_nullable
-              as double,
-      smoothTransitions: null == smoothTransitions
-          ? _value.smoothTransitions
-          : smoothTransitions // ignore: cast_nullable_to_non_nullable
-              as bool,
-      seed: freezed == seed
-          ? _value.seed
-          : seed // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            favouriteBias: null == favouriteBias
+                ? _value.favouriteBias
+                : favouriteBias // ignore: cast_nullable_to_non_nullable
+                      as double,
+            recencyAvoidance: null == recencyAvoidance
+                ? _value.recencyAvoidance
+                : recencyAvoidance // ignore: cast_nullable_to_non_nullable
+                      as double,
+            discovery: null == discovery
+                ? _value.discovery
+                : discovery // ignore: cast_nullable_to_non_nullable
+                      as double,
+            artistSpacing: null == artistSpacing
+                ? _value.artistSpacing
+                : artistSpacing // ignore: cast_nullable_to_non_nullable
+                      as int,
+            albumSpacing: null == albumSpacing
+                ? _value.albumSpacing
+                : albumSpacing // ignore: cast_nullable_to_non_nullable
+                      as int,
+            moodMatching: null == moodMatching
+                ? _value.moodMatching
+                : moodMatching // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            moodStrength: null == moodStrength
+                ? _value.moodStrength
+                : moodStrength // ignore: cast_nullable_to_non_nullable
+                      as double,
+            smoothTransitions: null == smoothTransitions
+                ? _value.smoothTransitions
+                : smoothTransitions // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            seed: freezed == seed
+                ? _value.seed
+                : seed // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -151,20 +157,22 @@ class _$ShuffleConfigCopyWithImpl<$Res, $Val extends ShuffleConfig>
 abstract class _$$ShuffleConfigImplCopyWith<$Res>
     implements $ShuffleConfigCopyWith<$Res> {
   factory _$$ShuffleConfigImplCopyWith(
-          _$ShuffleConfigImpl value, $Res Function(_$ShuffleConfigImpl) then) =
-      __$$ShuffleConfigImplCopyWithImpl<$Res>;
+    _$ShuffleConfigImpl value,
+    $Res Function(_$ShuffleConfigImpl) then,
+  ) = __$$ShuffleConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {double favouriteBias,
-      double recencyAvoidance,
-      double discovery,
-      int artistSpacing,
-      int albumSpacing,
-      bool moodMatching,
-      double moodStrength,
-      bool smoothTransitions,
-      int? seed});
+  $Res call({
+    double favouriteBias,
+    double recencyAvoidance,
+    double discovery,
+    int artistSpacing,
+    int albumSpacing,
+    bool moodMatching,
+    double moodStrength,
+    bool smoothTransitions,
+    int? seed,
+  });
 }
 
 /// @nodoc
@@ -172,8 +180,9 @@ class __$$ShuffleConfigImplCopyWithImpl<$Res>
     extends _$ShuffleConfigCopyWithImpl<$Res, _$ShuffleConfigImpl>
     implements _$$ShuffleConfigImplCopyWith<$Res> {
   __$$ShuffleConfigImplCopyWithImpl(
-      _$ShuffleConfigImpl _value, $Res Function(_$ShuffleConfigImpl) _then)
-      : super(_value, _then);
+    _$ShuffleConfigImpl _value,
+    $Res Function(_$ShuffleConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ShuffleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -190,60 +199,63 @@ class __$$ShuffleConfigImplCopyWithImpl<$Res>
     Object? smoothTransitions = null,
     Object? seed = freezed,
   }) {
-    return _then(_$ShuffleConfigImpl(
-      favouriteBias: null == favouriteBias
-          ? _value.favouriteBias
-          : favouriteBias // ignore: cast_nullable_to_non_nullable
-              as double,
-      recencyAvoidance: null == recencyAvoidance
-          ? _value.recencyAvoidance
-          : recencyAvoidance // ignore: cast_nullable_to_non_nullable
-              as double,
-      discovery: null == discovery
-          ? _value.discovery
-          : discovery // ignore: cast_nullable_to_non_nullable
-              as double,
-      artistSpacing: null == artistSpacing
-          ? _value.artistSpacing
-          : artistSpacing // ignore: cast_nullable_to_non_nullable
-              as int,
-      albumSpacing: null == albumSpacing
-          ? _value.albumSpacing
-          : albumSpacing // ignore: cast_nullable_to_non_nullable
-              as int,
-      moodMatching: null == moodMatching
-          ? _value.moodMatching
-          : moodMatching // ignore: cast_nullable_to_non_nullable
-              as bool,
-      moodStrength: null == moodStrength
-          ? _value.moodStrength
-          : moodStrength // ignore: cast_nullable_to_non_nullable
-              as double,
-      smoothTransitions: null == smoothTransitions
-          ? _value.smoothTransitions
-          : smoothTransitions // ignore: cast_nullable_to_non_nullable
-              as bool,
-      seed: freezed == seed
-          ? _value.seed
-          : seed // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
+    return _then(
+      _$ShuffleConfigImpl(
+        favouriteBias: null == favouriteBias
+            ? _value.favouriteBias
+            : favouriteBias // ignore: cast_nullable_to_non_nullable
+                  as double,
+        recencyAvoidance: null == recencyAvoidance
+            ? _value.recencyAvoidance
+            : recencyAvoidance // ignore: cast_nullable_to_non_nullable
+                  as double,
+        discovery: null == discovery
+            ? _value.discovery
+            : discovery // ignore: cast_nullable_to_non_nullable
+                  as double,
+        artistSpacing: null == artistSpacing
+            ? _value.artistSpacing
+            : artistSpacing // ignore: cast_nullable_to_non_nullable
+                  as int,
+        albumSpacing: null == albumSpacing
+            ? _value.albumSpacing
+            : albumSpacing // ignore: cast_nullable_to_non_nullable
+                  as int,
+        moodMatching: null == moodMatching
+            ? _value.moodMatching
+            : moodMatching // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        moodStrength: null == moodStrength
+            ? _value.moodStrength
+            : moodStrength // ignore: cast_nullable_to_non_nullable
+                  as double,
+        smoothTransitions: null == smoothTransitions
+            ? _value.smoothTransitions
+            : smoothTransitions // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        seed: freezed == seed
+            ? _value.seed
+            : seed // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ShuffleConfigImpl implements _ShuffleConfig {
-  const _$ShuffleConfigImpl(
-      {this.favouriteBias = 0.4,
-      this.recencyAvoidance = 0.5,
-      this.discovery = 0.3,
-      this.artistSpacing = kDefaultArtistSpacing,
-      this.albumSpacing = 5,
-      this.moodMatching = false,
-      this.moodStrength = 0.5,
-      this.smoothTransitions = false,
-      this.seed});
+  const _$ShuffleConfigImpl({
+    this.favouriteBias = 0.4,
+    this.recencyAvoidance = 0.5,
+    this.discovery = 0.3,
+    this.artistSpacing = kDefaultArtistSpacing,
+    this.albumSpacing = 5,
+    this.moodMatching = false,
+    this.moodStrength = 0.5,
+    this.smoothTransitions = false,
+    this.seed,
+  });
 
   factory _$ShuffleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShuffleConfigImplFromJson(json);
@@ -330,16 +342,17 @@ class _$ShuffleConfigImpl implements _ShuffleConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      favouriteBias,
-      recencyAvoidance,
-      discovery,
-      artistSpacing,
-      albumSpacing,
-      moodMatching,
-      moodStrength,
-      smoothTransitions,
-      seed);
+    runtimeType,
+    favouriteBias,
+    recencyAvoidance,
+    discovery,
+    artistSpacing,
+    albumSpacing,
+    moodMatching,
+    moodStrength,
+    smoothTransitions,
+    seed,
+  );
 
   /// Create a copy of ShuffleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -351,23 +364,22 @@ class _$ShuffleConfigImpl implements _ShuffleConfig {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ShuffleConfigImplToJson(
-      this,
-    );
+    return _$$ShuffleConfigImplToJson(this);
   }
 }
 
 abstract class _ShuffleConfig implements ShuffleConfig {
-  const factory _ShuffleConfig(
-      {final double favouriteBias,
-      final double recencyAvoidance,
-      final double discovery,
-      final int artistSpacing,
-      final int albumSpacing,
-      final bool moodMatching,
-      final double moodStrength,
-      final bool smoothTransitions,
-      final int? seed}) = _$ShuffleConfigImpl;
+  const factory _ShuffleConfig({
+    final double favouriteBias,
+    final double recencyAvoidance,
+    final double discovery,
+    final int artistSpacing,
+    final int albumSpacing,
+    final bool moodMatching,
+    final double moodStrength,
+    final bool smoothTransitions,
+    final int? seed,
+  }) = _$ShuffleConfigImpl;
 
   factory _ShuffleConfig.fromJson(Map<String, dynamic> json) =
       _$ShuffleConfigImpl.fromJson;

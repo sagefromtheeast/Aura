@@ -12,7 +12,8 @@ part of 'playlist.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Playlist _$PlaylistFromJson(Map<String, dynamic> json) {
   return _Playlist.fromJson(json);
@@ -68,18 +69,19 @@ abstract class $PlaylistCopyWith<$Res> {
   factory $PlaylistCopyWith(Playlist value, $Res Function(Playlist) then) =
       _$PlaylistCopyWithImpl<$Res, Playlist>;
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      String description,
-      PlaylistType type,
-      MixMood? mood,
-      List<String> trackIds,
-      int createdAtMs,
-      int updatedAtMs,
-      String? coverArtPath,
-      List<String> coverArtPaths,
-      bool isPinned});
+  $Res call({
+    String id,
+    String name,
+    String description,
+    PlaylistType type,
+    MixMood? mood,
+    List<String> trackIds,
+    int createdAtMs,
+    int updatedAtMs,
+    String? coverArtPath,
+    List<String> coverArtPaths,
+    bool isPinned,
+  });
 }
 
 /// @nodoc
@@ -109,52 +111,55 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
     Object? coverArtPaths = null,
     Object? isPinned = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as PlaylistType,
-      mood: freezed == mood
-          ? _value.mood
-          : mood // ignore: cast_nullable_to_non_nullable
-              as MixMood?,
-      trackIds: null == trackIds
-          ? _value.trackIds
-          : trackIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAtMs: null == createdAtMs
-          ? _value.createdAtMs
-          : createdAtMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      updatedAtMs: null == updatedAtMs
-          ? _value.updatedAtMs
-          : updatedAtMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      coverArtPath: freezed == coverArtPath
-          ? _value.coverArtPath
-          : coverArtPath // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coverArtPaths: null == coverArtPaths
-          ? _value.coverArtPaths
-          : coverArtPaths // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      isPinned: null == isPinned
-          ? _value.isPinned
-          : isPinned // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            description: null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as PlaylistType,
+            mood: freezed == mood
+                ? _value.mood
+                : mood // ignore: cast_nullable_to_non_nullable
+                      as MixMood?,
+            trackIds: null == trackIds
+                ? _value.trackIds
+                : trackIds // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            createdAtMs: null == createdAtMs
+                ? _value.createdAtMs
+                : createdAtMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+            updatedAtMs: null == updatedAtMs
+                ? _value.updatedAtMs
+                : updatedAtMs // ignore: cast_nullable_to_non_nullable
+                      as int,
+            coverArtPath: freezed == coverArtPath
+                ? _value.coverArtPath
+                : coverArtPath // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            coverArtPaths: null == coverArtPaths
+                ? _value.coverArtPaths
+                : coverArtPaths // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            isPinned: null == isPinned
+                ? _value.isPinned
+                : isPinned // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -162,22 +167,24 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
 abstract class _$$PlaylistImplCopyWith<$Res>
     implements $PlaylistCopyWith<$Res> {
   factory _$$PlaylistImplCopyWith(
-          _$PlaylistImpl value, $Res Function(_$PlaylistImpl) then) =
-      __$$PlaylistImplCopyWithImpl<$Res>;
+    _$PlaylistImpl value,
+    $Res Function(_$PlaylistImpl) then,
+  ) = __$$PlaylistImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      String description,
-      PlaylistType type,
-      MixMood? mood,
-      List<String> trackIds,
-      int createdAtMs,
-      int updatedAtMs,
-      String? coverArtPath,
-      List<String> coverArtPaths,
-      bool isPinned});
+  $Res call({
+    String id,
+    String name,
+    String description,
+    PlaylistType type,
+    MixMood? mood,
+    List<String> trackIds,
+    int createdAtMs,
+    int updatedAtMs,
+    String? coverArtPath,
+    List<String> coverArtPaths,
+    bool isPinned,
+  });
 }
 
 /// @nodoc
@@ -185,8 +192,9 @@ class __$$PlaylistImplCopyWithImpl<$Res>
     extends _$PlaylistCopyWithImpl<$Res, _$PlaylistImpl>
     implements _$$PlaylistImplCopyWith<$Res> {
   __$$PlaylistImplCopyWithImpl(
-      _$PlaylistImpl _value, $Res Function(_$PlaylistImpl) _then)
-      : super(_value, _then);
+    _$PlaylistImpl _value,
+    $Res Function(_$PlaylistImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Playlist
   /// with the given fields replaced by the non-null parameter values.
@@ -205,72 +213,74 @@ class __$$PlaylistImplCopyWithImpl<$Res>
     Object? coverArtPaths = null,
     Object? isPinned = null,
   }) {
-    return _then(_$PlaylistImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as PlaylistType,
-      mood: freezed == mood
-          ? _value.mood
-          : mood // ignore: cast_nullable_to_non_nullable
-              as MixMood?,
-      trackIds: null == trackIds
-          ? _value._trackIds
-          : trackIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAtMs: null == createdAtMs
-          ? _value.createdAtMs
-          : createdAtMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      updatedAtMs: null == updatedAtMs
-          ? _value.updatedAtMs
-          : updatedAtMs // ignore: cast_nullable_to_non_nullable
-              as int,
-      coverArtPath: freezed == coverArtPath
-          ? _value.coverArtPath
-          : coverArtPath // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coverArtPaths: null == coverArtPaths
-          ? _value._coverArtPaths
-          : coverArtPaths // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      isPinned: null == isPinned
-          ? _value.isPinned
-          : isPinned // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$PlaylistImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        description: null == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as PlaylistType,
+        mood: freezed == mood
+            ? _value.mood
+            : mood // ignore: cast_nullable_to_non_nullable
+                  as MixMood?,
+        trackIds: null == trackIds
+            ? _value._trackIds
+            : trackIds // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        createdAtMs: null == createdAtMs
+            ? _value.createdAtMs
+            : createdAtMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+        updatedAtMs: null == updatedAtMs
+            ? _value.updatedAtMs
+            : updatedAtMs // ignore: cast_nullable_to_non_nullable
+                  as int,
+        coverArtPath: freezed == coverArtPath
+            ? _value.coverArtPath
+            : coverArtPath // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        coverArtPaths: null == coverArtPaths
+            ? _value._coverArtPaths
+            : coverArtPaths // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        isPinned: null == isPinned
+            ? _value.isPinned
+            : isPinned // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PlaylistImpl implements _Playlist {
-  const _$PlaylistImpl(
-      {required this.id,
-      required this.name,
-      this.description = '',
-      this.type = PlaylistType.userCreated,
-      this.mood,
-      final List<String> trackIds = const [],
-      required this.createdAtMs,
-      required this.updatedAtMs,
-      this.coverArtPath,
-      final List<String> coverArtPaths = const [],
-      this.isPinned = false})
-      : _trackIds = trackIds,
-        _coverArtPaths = coverArtPaths;
+  const _$PlaylistImpl({
+    required this.id,
+    required this.name,
+    this.description = '',
+    this.type = PlaylistType.userCreated,
+    this.mood,
+    final List<String> trackIds = const [],
+    required this.createdAtMs,
+    required this.updatedAtMs,
+    this.coverArtPath,
+    final List<String> coverArtPaths = const [],
+    this.isPinned = false,
+  }) : _trackIds = trackIds,
+       _coverArtPaths = coverArtPaths;
 
   factory _$PlaylistImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlaylistImplFromJson(json);
@@ -361,8 +371,10 @@ class _$PlaylistImpl implements _Playlist {
                 other.updatedAtMs == updatedAtMs) &&
             (identical(other.coverArtPath, coverArtPath) ||
                 other.coverArtPath == coverArtPath) &&
-            const DeepCollectionEquality()
-                .equals(other._coverArtPaths, _coverArtPaths) &&
+            const DeepCollectionEquality().equals(
+              other._coverArtPaths,
+              _coverArtPaths,
+            ) &&
             (identical(other.isPinned, isPinned) ||
                 other.isPinned == isPinned));
   }
@@ -370,18 +382,19 @@ class _$PlaylistImpl implements _Playlist {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      description,
-      type,
-      mood,
-      const DeepCollectionEquality().hash(_trackIds),
-      createdAtMs,
-      updatedAtMs,
-      coverArtPath,
-      const DeepCollectionEquality().hash(_coverArtPaths),
-      isPinned);
+    runtimeType,
+    id,
+    name,
+    description,
+    type,
+    mood,
+    const DeepCollectionEquality().hash(_trackIds),
+    createdAtMs,
+    updatedAtMs,
+    coverArtPath,
+    const DeepCollectionEquality().hash(_coverArtPaths),
+    isPinned,
+  );
 
   /// Create a copy of Playlist
   /// with the given fields replaced by the non-null parameter values.
@@ -393,25 +406,24 @@ class _$PlaylistImpl implements _Playlist {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PlaylistImplToJson(
-      this,
-    );
+    return _$$PlaylistImplToJson(this);
   }
 }
 
 abstract class _Playlist implements Playlist {
-  const factory _Playlist(
-      {required final String id,
-      required final String name,
-      final String description,
-      final PlaylistType type,
-      final MixMood? mood,
-      final List<String> trackIds,
-      required final int createdAtMs,
-      required final int updatedAtMs,
-      final String? coverArtPath,
-      final List<String> coverArtPaths,
-      final bool isPinned}) = _$PlaylistImpl;
+  const factory _Playlist({
+    required final String id,
+    required final String name,
+    final String description,
+    final PlaylistType type,
+    final MixMood? mood,
+    final List<String> trackIds,
+    required final int createdAtMs,
+    required final int updatedAtMs,
+    final String? coverArtPath,
+    final List<String> coverArtPaths,
+    final bool isPinned,
+  }) = _$PlaylistImpl;
 
   factory _Playlist.fromJson(Map<String, dynamic> json) =
       _$PlaylistImpl.fromJson;
