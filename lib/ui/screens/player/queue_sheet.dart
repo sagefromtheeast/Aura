@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'queues_manager_sheet.dart';
 import '../../../domain/entities/track.dart';
 import '../../../shared/providers.dart';
 import '../../theme/design_tokens.dart';
@@ -74,6 +75,11 @@ class _QueueSheetState extends ConsumerState<QueueSheet> {
                     'Playing Next',
                     style: theme.textTheme.headlineMedium?.copyWith(fontSize: 22),
                   ),
+                ),
+                IconButton(
+                  tooltip: 'Manage queues',
+                  icon: const Icon(Icons.dynamic_feed_rounded),
+                  onPressed: () => QueuesManagerSheet.show(context),
                 ),
                 TextButton.icon(
                   onPressed: () {

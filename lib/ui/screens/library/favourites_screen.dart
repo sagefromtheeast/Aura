@@ -40,11 +40,10 @@ class FavouritesScreen extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: FilledButton.icon(
-                        onPressed: () {
-                          final orchestrator =
-                              ref.read(playbackOrchestratorProvider);
-                          orchestrator.playTrack(tracks.first);
-                        },
+                        onPressed: () => ref
+                            .read(playbackOrchestratorProvider)
+                            .playQueue(tracks,
+                                name: 'Favourites', source: 'favourites'),
                         style: FilledButton.styleFrom(
                           backgroundColor: DesignTokens.primarySeed,
                           foregroundColor: Colors.black,

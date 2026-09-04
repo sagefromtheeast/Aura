@@ -74,7 +74,7 @@ class TrackListScreen extends ConsumerWidget {
                   child: FilledButton.icon(
                     onPressed: () => ref
                         .read(playbackOrchestratorProvider)
-                        .playTrack(tracks.first),
+                        .playQueue(tracks, name: title, source: 'list'),
                     style: FilledButton.styleFrom(
                       backgroundColor: DesignTokens.primarySeed,
                       foregroundColor: Colors.black,
@@ -115,6 +115,8 @@ class _TrackRow extends ConsumerWidget {
       child: GlassCard(
         onTap: () => ref.read(playbackOrchestratorProvider).playTrack(track),
         onLongPress: () => TrackActionsSheet.show(context, track),
+        // (Row-level "play in context" is left to the header's Play-all; a tap
+        // plays just this track so the list can be sampled.)
         child: Row(
           children: [
             Icon(leadingIcon, color: DesignTokens.primarySeed),

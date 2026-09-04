@@ -136,6 +136,34 @@ class TrackActionsSheet extends ConsumerWidget {
 
             _action(
               context,
+              icon: Icons.playlist_play_rounded,
+              label: 'Play next',
+              onTap: () {
+                Navigator.of(context).pop();
+                ref
+                    .read(playbackOrchestratorProvider)
+                    .playNextInQueue(track);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('"${track.title}" plays next')),
+                );
+              },
+            ),
+
+            _action(
+              context,
+              icon: Icons.queue_music_rounded,
+              label: 'Add to queue',
+              onTap: () {
+                Navigator.of(context).pop();
+                ref.read(playbackOrchestratorProvider).addToQueue(track);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Added "${track.title}" to queue')),
+                );
+              },
+            ),
+
+            _action(
+              context,
               icon: isFavourite
                   ? Icons.favorite_rounded
                   : Icons.favorite_border_rounded,

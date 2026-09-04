@@ -11,6 +11,7 @@ import '../repositories/behavior_repository.dart';
 import '../repositories/music_repository.dart';
 import '../repositories/shuffle_state_repository.dart';
 import '../intelli_shuffle/intelli_shuffle_engine.dart';
+import '../queue/queue_manager.dart';
 import '../../core/constants.dart';
 import '../../core/errors.dart';
 import '../../native/audio_engine_ffi.dart';
@@ -52,6 +53,12 @@ class PlaybackOrchestrator {
   /// Optional hook fired after a track finishes naturally. The sleep timer's
   /// "stop at end of track" mode registers here.
   void Function()? onTrackFinishedHook;
+
+  /// Explicit user queues. When the active queue has tracks, it drives what
+  /// plays next; otherwise the shuffle engine does. Empty by default, so
+  /// nothing changes until the user adds to a queue or plays a collection.
+  final QueueManager _queueManager = QueueManager();
+  QueueManager get queueManager => _queueManager;
 
   /// Recently played tracks, oldest first — backs [previous].
   final List<Track> _history = [];
@@ -123,7 +130,7 @@ class PlaybackOrchestrator {
       ));
       _shuffleEngine.skip(track);
     }
-    await _playNextFromShuffle();
+    await _advanceNext();
   }
 
   /// Called by the engine callback when a track completes naturally.
@@ -152,7 +159,7 @@ class PlaybackOrchestrator {
     if (_state.repeatMode == RepeatMode.one && _currentTrack != null) {
       await playTrack(_currentTrack!);
     } else {
-      await _playNextFromShuffle();
+      await _advanceNext();
     }
   }
 
@@ -212,7 +219,21 @@ class PlaybackOrchestrator {
   /// Goes back one track, or restarts the current one when playback has been
   /// running for more than [_restartThresholdMs].
   Future<void> previous() async {
-    if (_state.positionMs > _restartThresholdMs || _history.isEmpty) {
+    if (_state.positionMs > _restartThresholdMs) {
+      seek(0);
+      return;
+    }
+    // A live queue walks backwards through itself before falling back to the
+    // cross-context play history.
+    final queue = _queueManager.active;
+    if (queue != null && !queue.isEmpty && queue.hasPrevious) {
+      final prev = _queueManager.goBack();
+      if (prev != null) {
+        await playTrack(prev);
+        return;
+      }
+    }
+    if (_history.isEmpty) {
       seek(0);
       return;
     }
@@ -256,6 +277,71 @@ class PlaybackOrchestrator {
   }
 
   // ── Private ────────────────────────────────────────────────────────────────
+
+  /// Advances the active explicit queue when it has one, otherwise the shuffle
+  /// engine. This is the single "what plays next" decision point.
+  Future<void> _advanceNext() async {
+    final queue = _queueManager.active;
+    if (queue != null && !queue.isEmpty) {
+      final next = _queueManager.advance();
+      if (next != null) {
+        await playTrack(next);
+        return;
+      }
+      // The queue is spent; fall through to shuffle so playback continues.
+    }
+    await _playNextFromShuffle();
+  }
+
+  // ── Explicit queue operations ──────────────────────────────────────────────
+
+  /// Plays [tracks] as the active queue, starting at [startIndex]. Used for
+  /// "play this playlist / album / list".
+  Future<void> playQueue(
+    List<Track> tracks, {
+    int startIndex = 0,
+    String name = 'Queue',
+    String? source,
+  }) async {
+    if (tracks.isEmpty) return;
+    _queueManager.replaceWith(tracks,
+        name: name, startIndex: startIndex, source: source);
+    final current = _queueManager.current;
+    if (current != null) await playTrack(current);
+  }
+
+  /// Appends [track] to the active queue (creating one if needed).
+  void addToQueue(Track track) => _queueManager.addToQueue(track);
+
+  /// Inserts [track] to play immediately after the current one.
+  void playNextInQueue(Track track) => _queueManager.playNext(track);
+
+  /// Saves [tracks] as an inactive named queue to return to later.
+  void saveQueue(List<Track> tracks, {required String name, String? source}) {
+    _queueManager.addQueue(tracks, name: name, source: source);
+  }
+
+  /// Jumps to [index] in the active queue and plays it.
+  Future<void> playQueueIndex(int index) async {
+    final track = _queueManager.jumpTo(index);
+    if (track != null) await playTrack(track);
+  }
+
+  /// Switches the active queue and resumes it at its saved position.
+  Future<void> switchQueue(String queueId) async {
+    if (_queueManager.switchTo(queueId)) {
+      final current = _queueManager.current;
+      if (current != null) await playTrack(current);
+    }
+  }
+
+  void removeFromQueue(int index) => _queueManager.removeAt(index);
+  void reorderQueue(int oldIndex, int newIndex) =>
+      _queueManager.reorder(oldIndex, newIndex);
+  void renameQueue(String queueId, String name) =>
+      _queueManager.renameQueue(queueId, name);
+  void removeQueue(String queueId) => _queueManager.removeQueue(queueId);
+  void removeAllOtherQueues() => _queueManager.removeAllButActive();
 
   Future<void> _playNextFromShuffle() async {
     if (!_shuffleEngine.hasQueue) return;
