@@ -21,6 +21,10 @@ _$PlaylistImpl _$$PlaylistImplFromJson(Map<String, dynamic> json) =>
       createdAtMs: (json['createdAtMs'] as num).toInt(),
       updatedAtMs: (json['updatedAtMs'] as num).toInt(),
       coverArtPath: json['coverArtPath'] as String?,
+      coverArtPaths: (json['coverArtPaths'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       isPinned: json['isPinned'] as bool? ?? false,
     );
 
@@ -35,6 +39,7 @@ Map<String, dynamic> _$$PlaylistImplToJson(_$PlaylistImpl instance) =>
       'createdAtMs': instance.createdAtMs,
       'updatedAtMs': instance.updatedAtMs,
       'coverArtPath': instance.coverArtPath,
+      'coverArtPaths': instance.coverArtPaths,
       'isPinned': instance.isPinned,
     };
 

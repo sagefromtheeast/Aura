@@ -492,7 +492,7 @@ void main() {
 
       expect(daily, hasLength(7));
       // Oldest first, ending today.
-      expect(daily.first.date, isBefore(daily.last.date));
+      expect(daily.first.date.isBefore(daily.last.date), isTrue);
       expect(daily.last.date, today);
       expect(daily.where((d) => d.hasListening), hasLength(2));
     });

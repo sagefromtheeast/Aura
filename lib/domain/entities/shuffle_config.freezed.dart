@@ -20,24 +20,37 @@ ShuffleConfig _$ShuffleConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ShuffleConfig {
+  /// How much to boost tracks the user rates highly or plays often.
+  /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
+  double get favouriteBias => throw _privateConstructorUsedError;
+
+  /// How aggressively to push recently-played tracks toward the end.
+  /// 0.0 = no avoidance, 1.0 = maximum avoidance.
+  double get recencyAvoidance => throw _privateConstructorUsedError;
+
+  /// Probability of drawing from the least-played tracks, so unplayed music
+  /// eventually gets heard. 0.0 = never, 1.0 = always.
+  double get discovery => throw _privateConstructorUsedError;
+
   /// Minimum number of tracks between plays of the same artist.
-  /// Range: 0–10. PRD §6.3: "Artist spacing (0‑5 tracks)" — extended to 10
-  /// for large libraries.
+  /// Range 0–5 in the UI; larger values are accepted for big libraries.
   int get artistSpacing => throw _privateConstructorUsedError;
 
-  /// How aggressively to avoid recently-played tracks.
-  /// 0.0 = no avoidance, 1.0 = maximum recency bias (λ in scoring formula).
-  double get recencyStrength => throw _privateConstructorUsedError;
+  /// Minimum number of tracks between plays from the same album.
+  int get albumSpacing => throw _privateConstructorUsedError;
 
-  /// How much to boost tracks the user explicitly rated or frequently plays.
-  /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
-  double get favoriteBias => throw _privateConstructorUsedError;
+  /// Bias the queue toward tracks with a similar mood to the seed track.
+  /// Requires audio features (populated by the C++ analyzer).
+  bool get moodMatching => throw _privateConstructorUsedError;
 
-  /// Fraction of the queue dedicated to tracks played <3 times (discovery).
-  /// 0.0 = no discovery, 1.0 = all discovery tracks.
-  double get discoveryFraction => throw _privateConstructorUsedError;
+  /// How strongly [moodMatching] applies. 0.0 = off, 1.0 = dominant.
+  double get moodStrength => throw _privateConstructorUsedError;
 
-  /// Optional seed for deterministic shuffle (used in tests; null = random).
+  /// Order adjacent tracks so tempo/energy flow smoothly.
+  /// Reserved — not yet applied to ordering (see IntelliShuffleEngine).
+  bool get smoothTransitions => throw _privateConstructorUsedError;
+
+  /// Optional seed for deterministic shuffles (tests; null = random).
   int? get seed => throw _privateConstructorUsedError;
 
   /// Serializes this ShuffleConfig to a JSON map.
@@ -57,10 +70,14 @@ abstract class $ShuffleConfigCopyWith<$Res> {
       _$ShuffleConfigCopyWithImpl<$Res, ShuffleConfig>;
   @useResult
   $Res call(
-      {int artistSpacing,
-      double recencyStrength,
-      double favoriteBias,
-      double discoveryFraction,
+      {double favouriteBias,
+      double recencyAvoidance,
+      double discovery,
+      int artistSpacing,
+      int albumSpacing,
+      bool moodMatching,
+      double moodStrength,
+      bool smoothTransitions,
       int? seed});
 }
 
@@ -79,29 +96,49 @@ class _$ShuffleConfigCopyWithImpl<$Res, $Val extends ShuffleConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? favouriteBias = null,
+    Object? recencyAvoidance = null,
+    Object? discovery = null,
     Object? artistSpacing = null,
-    Object? recencyStrength = null,
-    Object? favoriteBias = null,
-    Object? discoveryFraction = null,
+    Object? albumSpacing = null,
+    Object? moodMatching = null,
+    Object? moodStrength = null,
+    Object? smoothTransitions = null,
     Object? seed = freezed,
   }) {
     return _then(_value.copyWith(
+      favouriteBias: null == favouriteBias
+          ? _value.favouriteBias
+          : favouriteBias // ignore: cast_nullable_to_non_nullable
+              as double,
+      recencyAvoidance: null == recencyAvoidance
+          ? _value.recencyAvoidance
+          : recencyAvoidance // ignore: cast_nullable_to_non_nullable
+              as double,
+      discovery: null == discovery
+          ? _value.discovery
+          : discovery // ignore: cast_nullable_to_non_nullable
+              as double,
       artistSpacing: null == artistSpacing
           ? _value.artistSpacing
           : artistSpacing // ignore: cast_nullable_to_non_nullable
               as int,
-      recencyStrength: null == recencyStrength
-          ? _value.recencyStrength
-          : recencyStrength // ignore: cast_nullable_to_non_nullable
+      albumSpacing: null == albumSpacing
+          ? _value.albumSpacing
+          : albumSpacing // ignore: cast_nullable_to_non_nullable
+              as int,
+      moodMatching: null == moodMatching
+          ? _value.moodMatching
+          : moodMatching // ignore: cast_nullable_to_non_nullable
+              as bool,
+      moodStrength: null == moodStrength
+          ? _value.moodStrength
+          : moodStrength // ignore: cast_nullable_to_non_nullable
               as double,
-      favoriteBias: null == favoriteBias
-          ? _value.favoriteBias
-          : favoriteBias // ignore: cast_nullable_to_non_nullable
-              as double,
-      discoveryFraction: null == discoveryFraction
-          ? _value.discoveryFraction
-          : discoveryFraction // ignore: cast_nullable_to_non_nullable
-              as double,
+      smoothTransitions: null == smoothTransitions
+          ? _value.smoothTransitions
+          : smoothTransitions // ignore: cast_nullable_to_non_nullable
+              as bool,
       seed: freezed == seed
           ? _value.seed
           : seed // ignore: cast_nullable_to_non_nullable
@@ -119,10 +156,14 @@ abstract class _$$ShuffleConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int artistSpacing,
-      double recencyStrength,
-      double favoriteBias,
-      double discoveryFraction,
+      {double favouriteBias,
+      double recencyAvoidance,
+      double discovery,
+      int artistSpacing,
+      int albumSpacing,
+      bool moodMatching,
+      double moodStrength,
+      bool smoothTransitions,
       int? seed});
 }
 
@@ -139,29 +180,49 @@ class __$$ShuffleConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? favouriteBias = null,
+    Object? recencyAvoidance = null,
+    Object? discovery = null,
     Object? artistSpacing = null,
-    Object? recencyStrength = null,
-    Object? favoriteBias = null,
-    Object? discoveryFraction = null,
+    Object? albumSpacing = null,
+    Object? moodMatching = null,
+    Object? moodStrength = null,
+    Object? smoothTransitions = null,
     Object? seed = freezed,
   }) {
     return _then(_$ShuffleConfigImpl(
+      favouriteBias: null == favouriteBias
+          ? _value.favouriteBias
+          : favouriteBias // ignore: cast_nullable_to_non_nullable
+              as double,
+      recencyAvoidance: null == recencyAvoidance
+          ? _value.recencyAvoidance
+          : recencyAvoidance // ignore: cast_nullable_to_non_nullable
+              as double,
+      discovery: null == discovery
+          ? _value.discovery
+          : discovery // ignore: cast_nullable_to_non_nullable
+              as double,
       artistSpacing: null == artistSpacing
           ? _value.artistSpacing
           : artistSpacing // ignore: cast_nullable_to_non_nullable
               as int,
-      recencyStrength: null == recencyStrength
-          ? _value.recencyStrength
-          : recencyStrength // ignore: cast_nullable_to_non_nullable
+      albumSpacing: null == albumSpacing
+          ? _value.albumSpacing
+          : albumSpacing // ignore: cast_nullable_to_non_nullable
+              as int,
+      moodMatching: null == moodMatching
+          ? _value.moodMatching
+          : moodMatching // ignore: cast_nullable_to_non_nullable
+              as bool,
+      moodStrength: null == moodStrength
+          ? _value.moodStrength
+          : moodStrength // ignore: cast_nullable_to_non_nullable
               as double,
-      favoriteBias: null == favoriteBias
-          ? _value.favoriteBias
-          : favoriteBias // ignore: cast_nullable_to_non_nullable
-              as double,
-      discoveryFraction: null == discoveryFraction
-          ? _value.discoveryFraction
-          : discoveryFraction // ignore: cast_nullable_to_non_nullable
-              as double,
+      smoothTransitions: null == smoothTransitions
+          ? _value.smoothTransitions
+          : smoothTransitions // ignore: cast_nullable_to_non_nullable
+              as bool,
       seed: freezed == seed
           ? _value.seed
           : seed // ignore: cast_nullable_to_non_nullable
@@ -174,47 +235,72 @@ class __$$ShuffleConfigImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ShuffleConfigImpl implements _ShuffleConfig {
   const _$ShuffleConfigImpl(
-      {this.artistSpacing = kDefaultArtistSpacing,
-      this.recencyStrength = 0.5,
-      this.favoriteBias = 0.5,
-      this.discoveryFraction = 0.15,
+      {this.favouriteBias = 0.4,
+      this.recencyAvoidance = 0.5,
+      this.discovery = 0.3,
+      this.artistSpacing = kDefaultArtistSpacing,
+      this.albumSpacing = 5,
+      this.moodMatching = false,
+      this.moodStrength = 0.5,
+      this.smoothTransitions = false,
       this.seed});
 
   factory _$ShuffleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShuffleConfigImplFromJson(json);
 
+  /// How much to boost tracks the user rates highly or plays often.
+  /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
+  @override
+  @JsonKey()
+  final double favouriteBias;
+
+  /// How aggressively to push recently-played tracks toward the end.
+  /// 0.0 = no avoidance, 1.0 = maximum avoidance.
+  @override
+  @JsonKey()
+  final double recencyAvoidance;
+
+  /// Probability of drawing from the least-played tracks, so unplayed music
+  /// eventually gets heard. 0.0 = never, 1.0 = always.
+  @override
+  @JsonKey()
+  final double discovery;
+
   /// Minimum number of tracks between plays of the same artist.
-  /// Range: 0–10. PRD §6.3: "Artist spacing (0‑5 tracks)" — extended to 10
-  /// for large libraries.
+  /// Range 0–5 in the UI; larger values are accepted for big libraries.
   @override
   @JsonKey()
   final int artistSpacing;
 
-  /// How aggressively to avoid recently-played tracks.
-  /// 0.0 = no avoidance, 1.0 = maximum recency bias (λ in scoring formula).
+  /// Minimum number of tracks between plays from the same album.
   @override
   @JsonKey()
-  final double recencyStrength;
+  final int albumSpacing;
 
-  /// How much to boost tracks the user explicitly rated or frequently plays.
-  /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
+  /// Bias the queue toward tracks with a similar mood to the seed track.
+  /// Requires audio features (populated by the C++ analyzer).
   @override
   @JsonKey()
-  final double favoriteBias;
+  final bool moodMatching;
 
-  /// Fraction of the queue dedicated to tracks played <3 times (discovery).
-  /// 0.0 = no discovery, 1.0 = all discovery tracks.
+  /// How strongly [moodMatching] applies. 0.0 = off, 1.0 = dominant.
   @override
   @JsonKey()
-  final double discoveryFraction;
+  final double moodStrength;
 
-  /// Optional seed for deterministic shuffle (used in tests; null = random).
+  /// Order adjacent tracks so tempo/energy flow smoothly.
+  /// Reserved — not yet applied to ordering (see IntelliShuffleEngine).
+  @override
+  @JsonKey()
+  final bool smoothTransitions;
+
+  /// Optional seed for deterministic shuffles (tests; null = random).
   @override
   final int? seed;
 
   @override
   String toString() {
-    return 'ShuffleConfig(artistSpacing: $artistSpacing, recencyStrength: $recencyStrength, favoriteBias: $favoriteBias, discoveryFraction: $discoveryFraction, seed: $seed)';
+    return 'ShuffleConfig(favouriteBias: $favouriteBias, recencyAvoidance: $recencyAvoidance, discovery: $discovery, artistSpacing: $artistSpacing, albumSpacing: $albumSpacing, moodMatching: $moodMatching, moodStrength: $moodStrength, smoothTransitions: $smoothTransitions, seed: $seed)';
   }
 
   @override
@@ -222,21 +308,38 @@ class _$ShuffleConfigImpl implements _ShuffleConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ShuffleConfigImpl &&
+            (identical(other.favouriteBias, favouriteBias) ||
+                other.favouriteBias == favouriteBias) &&
+            (identical(other.recencyAvoidance, recencyAvoidance) ||
+                other.recencyAvoidance == recencyAvoidance) &&
+            (identical(other.discovery, discovery) ||
+                other.discovery == discovery) &&
             (identical(other.artistSpacing, artistSpacing) ||
                 other.artistSpacing == artistSpacing) &&
-            (identical(other.recencyStrength, recencyStrength) ||
-                other.recencyStrength == recencyStrength) &&
-            (identical(other.favoriteBias, favoriteBias) ||
-                other.favoriteBias == favoriteBias) &&
-            (identical(other.discoveryFraction, discoveryFraction) ||
-                other.discoveryFraction == discoveryFraction) &&
+            (identical(other.albumSpacing, albumSpacing) ||
+                other.albumSpacing == albumSpacing) &&
+            (identical(other.moodMatching, moodMatching) ||
+                other.moodMatching == moodMatching) &&
+            (identical(other.moodStrength, moodStrength) ||
+                other.moodStrength == moodStrength) &&
+            (identical(other.smoothTransitions, smoothTransitions) ||
+                other.smoothTransitions == smoothTransitions) &&
             (identical(other.seed, seed) || other.seed == seed));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, artistSpacing, recencyStrength,
-      favoriteBias, discoveryFraction, seed);
+  int get hashCode => Object.hash(
+      runtimeType,
+      favouriteBias,
+      recencyAvoidance,
+      discovery,
+      artistSpacing,
+      albumSpacing,
+      moodMatching,
+      moodStrength,
+      smoothTransitions,
+      seed);
 
   /// Create a copy of ShuffleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -256,37 +359,58 @@ class _$ShuffleConfigImpl implements _ShuffleConfig {
 
 abstract class _ShuffleConfig implements ShuffleConfig {
   const factory _ShuffleConfig(
-      {final int artistSpacing,
-      final double recencyStrength,
-      final double favoriteBias,
-      final double discoveryFraction,
+      {final double favouriteBias,
+      final double recencyAvoidance,
+      final double discovery,
+      final int artistSpacing,
+      final int albumSpacing,
+      final bool moodMatching,
+      final double moodStrength,
+      final bool smoothTransitions,
       final int? seed}) = _$ShuffleConfigImpl;
 
   factory _ShuffleConfig.fromJson(Map<String, dynamic> json) =
       _$ShuffleConfigImpl.fromJson;
 
+  /// How much to boost tracks the user rates highly or plays often.
+  /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
+  @override
+  double get favouriteBias;
+
+  /// How aggressively to push recently-played tracks toward the end.
+  /// 0.0 = no avoidance, 1.0 = maximum avoidance.
+  @override
+  double get recencyAvoidance;
+
+  /// Probability of drawing from the least-played tracks, so unplayed music
+  /// eventually gets heard. 0.0 = never, 1.0 = always.
+  @override
+  double get discovery;
+
   /// Minimum number of tracks between plays of the same artist.
-  /// Range: 0–10. PRD §6.3: "Artist spacing (0‑5 tracks)" — extended to 10
-  /// for large libraries.
+  /// Range 0–5 in the UI; larger values are accepted for big libraries.
   @override
   int get artistSpacing;
 
-  /// How aggressively to avoid recently-played tracks.
-  /// 0.0 = no avoidance, 1.0 = maximum recency bias (λ in scoring formula).
+  /// Minimum number of tracks between plays from the same album.
   @override
-  double get recencyStrength;
+  int get albumSpacing;
 
-  /// How much to boost tracks the user explicitly rated or frequently plays.
-  /// 0.0 = ignore ratings, 1.0 = strong bias toward favourites.
+  /// Bias the queue toward tracks with a similar mood to the seed track.
+  /// Requires audio features (populated by the C++ analyzer).
   @override
-  double get favoriteBias;
+  bool get moodMatching;
 
-  /// Fraction of the queue dedicated to tracks played <3 times (discovery).
-  /// 0.0 = no discovery, 1.0 = all discovery tracks.
+  /// How strongly [moodMatching] applies. 0.0 = off, 1.0 = dominant.
   @override
-  double get discoveryFraction;
+  double get moodStrength;
 
-  /// Optional seed for deterministic shuffle (used in tests; null = random).
+  /// Order adjacent tracks so tempo/energy flow smoothly.
+  /// Reserved — not yet applied to ordering (see IntelliShuffleEngine).
+  @override
+  bool get smoothTransitions;
+
+  /// Optional seed for deterministic shuffles (tests; null = random).
   @override
   int? get seed;
 

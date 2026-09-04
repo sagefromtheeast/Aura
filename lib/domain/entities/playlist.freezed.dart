@@ -47,6 +47,9 @@ mixin _$Playlist {
   /// Optional cover art path (overrides default album-art mosaic in UI).
   String? get coverArtPath => throw _privateConstructorUsedError;
 
+  /// Up to 4 album-art paths composited by the UI into a 2x2 mix cover.
+  List<String> get coverArtPaths => throw _privateConstructorUsedError;
+
   /// Whether this playlist is pinned to the top of the library.
   bool get isPinned => throw _privateConstructorUsedError;
 
@@ -75,6 +78,7 @@ abstract class $PlaylistCopyWith<$Res> {
       int createdAtMs,
       int updatedAtMs,
       String? coverArtPath,
+      List<String> coverArtPaths,
       bool isPinned});
 }
 
@@ -102,6 +106,7 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
     Object? createdAtMs = null,
     Object? updatedAtMs = null,
     Object? coverArtPath = freezed,
+    Object? coverArtPaths = null,
     Object? isPinned = null,
   }) {
     return _then(_value.copyWith(
@@ -141,6 +146,10 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
           ? _value.coverArtPath
           : coverArtPath // ignore: cast_nullable_to_non_nullable
               as String?,
+      coverArtPaths: null == coverArtPaths
+          ? _value.coverArtPaths
+          : coverArtPaths // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       isPinned: null == isPinned
           ? _value.isPinned
           : isPinned // ignore: cast_nullable_to_non_nullable
@@ -167,6 +176,7 @@ abstract class _$$PlaylistImplCopyWith<$Res>
       int createdAtMs,
       int updatedAtMs,
       String? coverArtPath,
+      List<String> coverArtPaths,
       bool isPinned});
 }
 
@@ -192,6 +202,7 @@ class __$$PlaylistImplCopyWithImpl<$Res>
     Object? createdAtMs = null,
     Object? updatedAtMs = null,
     Object? coverArtPath = freezed,
+    Object? coverArtPaths = null,
     Object? isPinned = null,
   }) {
     return _then(_$PlaylistImpl(
@@ -231,6 +242,10 @@ class __$$PlaylistImplCopyWithImpl<$Res>
           ? _value.coverArtPath
           : coverArtPath // ignore: cast_nullable_to_non_nullable
               as String?,
+      coverArtPaths: null == coverArtPaths
+          ? _value._coverArtPaths
+          : coverArtPaths // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       isPinned: null == isPinned
           ? _value.isPinned
           : isPinned // ignore: cast_nullable_to_non_nullable
@@ -252,8 +267,10 @@ class _$PlaylistImpl implements _Playlist {
       required this.createdAtMs,
       required this.updatedAtMs,
       this.coverArtPath,
+      final List<String> coverArtPaths = const [],
       this.isPinned = false})
-      : _trackIds = trackIds;
+      : _trackIds = trackIds,
+        _coverArtPaths = coverArtPaths;
 
   factory _$PlaylistImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlaylistImplFromJson(json);
@@ -304,6 +321,18 @@ class _$PlaylistImpl implements _Playlist {
   @override
   final String? coverArtPath;
 
+  /// Up to 4 album-art paths composited by the UI into a 2x2 mix cover.
+  final List<String> _coverArtPaths;
+
+  /// Up to 4 album-art paths composited by the UI into a 2x2 mix cover.
+  @override
+  @JsonKey()
+  List<String> get coverArtPaths {
+    if (_coverArtPaths is EqualUnmodifiableListView) return _coverArtPaths;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_coverArtPaths);
+  }
+
   /// Whether this playlist is pinned to the top of the library.
   @override
   @JsonKey()
@@ -311,7 +340,7 @@ class _$PlaylistImpl implements _Playlist {
 
   @override
   String toString() {
-    return 'Playlist(id: $id, name: $name, description: $description, type: $type, mood: $mood, trackIds: $trackIds, createdAtMs: $createdAtMs, updatedAtMs: $updatedAtMs, coverArtPath: $coverArtPath, isPinned: $isPinned)';
+    return 'Playlist(id: $id, name: $name, description: $description, type: $type, mood: $mood, trackIds: $trackIds, createdAtMs: $createdAtMs, updatedAtMs: $updatedAtMs, coverArtPath: $coverArtPath, coverArtPaths: $coverArtPaths, isPinned: $isPinned)';
   }
 
   @override
@@ -332,6 +361,8 @@ class _$PlaylistImpl implements _Playlist {
                 other.updatedAtMs == updatedAtMs) &&
             (identical(other.coverArtPath, coverArtPath) ||
                 other.coverArtPath == coverArtPath) &&
+            const DeepCollectionEquality()
+                .equals(other._coverArtPaths, _coverArtPaths) &&
             (identical(other.isPinned, isPinned) ||
                 other.isPinned == isPinned));
   }
@@ -349,6 +380,7 @@ class _$PlaylistImpl implements _Playlist {
       createdAtMs,
       updatedAtMs,
       coverArtPath,
+      const DeepCollectionEquality().hash(_coverArtPaths),
       isPinned);
 
   /// Create a copy of Playlist
@@ -378,6 +410,7 @@ abstract class _Playlist implements Playlist {
       required final int createdAtMs,
       required final int updatedAtMs,
       final String? coverArtPath,
+      final List<String> coverArtPaths,
       final bool isPinned}) = _$PlaylistImpl;
 
   factory _Playlist.fromJson(Map<String, dynamic> json) =
@@ -418,6 +451,10 @@ abstract class _Playlist implements Playlist {
   /// Optional cover art path (overrides default album-art mosaic in UI).
   @override
   String? get coverArtPath;
+
+  /// Up to 4 album-art paths composited by the UI into a 2x2 mix cover.
+  @override
+  List<String> get coverArtPaths;
 
   /// Whether this playlist is pinned to the top of the library.
   @override

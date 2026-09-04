@@ -1940,6 +1940,14 @@ class $PlaylistsTableTable extends PlaylistsTable
   late final GeneratedColumn<String> coverArtPath = GeneratedColumn<String>(
       'cover_art_path', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _coverArtPathsJsonMeta =
+      const VerificationMeta('coverArtPathsJson');
+  @override
+  late final GeneratedColumn<String> coverArtPathsJson =
+      GeneratedColumn<String>('cover_art_paths_json', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('[]'));
   static const VerificationMeta _isPinnedMeta =
       const VerificationMeta('isPinned');
   @override
@@ -1960,6 +1968,7 @@ class $PlaylistsTableTable extends PlaylistsTable
         createdAtMs,
         updatedAtMs,
         coverArtPath,
+        coverArtPathsJson,
         isPinned
       ];
   @override
@@ -2019,6 +2028,12 @@ class $PlaylistsTableTable extends PlaylistsTable
           coverArtPath.isAcceptableOrUnknown(
               data['cover_art_path']!, _coverArtPathMeta));
     }
+    if (data.containsKey('cover_art_paths_json')) {
+      context.handle(
+          _coverArtPathsJsonMeta,
+          coverArtPathsJson.isAcceptableOrUnknown(
+              data['cover_art_paths_json']!, _coverArtPathsJsonMeta));
+    }
     if (data.containsKey('is_pinned')) {
       context.handle(_isPinnedMeta,
           isPinned.isAcceptableOrUnknown(data['is_pinned']!, _isPinnedMeta));
@@ -2048,6 +2063,8 @@ class $PlaylistsTableTable extends PlaylistsTable
           .read(DriftSqlType.int, data['${effectivePrefix}updated_at_ms'])!,
       coverArtPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}cover_art_path']),
+      coverArtPathsJson: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}cover_art_paths_json'])!,
       isPinned: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_pinned'])!,
     );
@@ -2068,6 +2085,9 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
   final int createdAtMs;
   final int updatedAtMs;
   final String? coverArtPath;
+
+  /// JSON array of up to 4 album-art paths; the UI draws them as a 2x2 mosaic.
+  final String coverArtPathsJson;
   final bool isPinned;
   const PlaylistRow(
       {required this.id,
@@ -2078,6 +2098,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       required this.createdAtMs,
       required this.updatedAtMs,
       this.coverArtPath,
+      required this.coverArtPathsJson,
       required this.isPinned});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2094,6 +2115,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
     if (!nullToAbsent || coverArtPath != null) {
       map['cover_art_path'] = Variable<String>(coverArtPath);
     }
+    map['cover_art_paths_json'] = Variable<String>(coverArtPathsJson);
     map['is_pinned'] = Variable<bool>(isPinned);
     return map;
   }
@@ -2110,6 +2132,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       coverArtPath: coverArtPath == null && nullToAbsent
           ? const Value.absent()
           : Value(coverArtPath),
+      coverArtPathsJson: Value(coverArtPathsJson),
       isPinned: Value(isPinned),
     );
   }
@@ -2126,6 +2149,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       createdAtMs: serializer.fromJson<int>(json['createdAtMs']),
       updatedAtMs: serializer.fromJson<int>(json['updatedAtMs']),
       coverArtPath: serializer.fromJson<String?>(json['coverArtPath']),
+      coverArtPathsJson: serializer.fromJson<String>(json['coverArtPathsJson']),
       isPinned: serializer.fromJson<bool>(json['isPinned']),
     );
   }
@@ -2141,6 +2165,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       'createdAtMs': serializer.toJson<int>(createdAtMs),
       'updatedAtMs': serializer.toJson<int>(updatedAtMs),
       'coverArtPath': serializer.toJson<String?>(coverArtPath),
+      'coverArtPathsJson': serializer.toJson<String>(coverArtPathsJson),
       'isPinned': serializer.toJson<bool>(isPinned),
     };
   }
@@ -2154,6 +2179,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
           int? createdAtMs,
           int? updatedAtMs,
           Value<String?> coverArtPath = const Value.absent(),
+          String? coverArtPathsJson,
           bool? isPinned}) =>
       PlaylistRow(
         id: id ?? this.id,
@@ -2165,6 +2191,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
         updatedAtMs: updatedAtMs ?? this.updatedAtMs,
         coverArtPath:
             coverArtPath.present ? coverArtPath.value : this.coverArtPath,
+        coverArtPathsJson: coverArtPathsJson ?? this.coverArtPathsJson,
         isPinned: isPinned ?? this.isPinned,
       );
   PlaylistRow copyWithCompanion(PlaylistsTableCompanion data) {
@@ -2182,6 +2209,9 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
       coverArtPath: data.coverArtPath.present
           ? data.coverArtPath.value
           : this.coverArtPath,
+      coverArtPathsJson: data.coverArtPathsJson.present
+          ? data.coverArtPathsJson.value
+          : this.coverArtPathsJson,
       isPinned: data.isPinned.present ? data.isPinned.value : this.isPinned,
     );
   }
@@ -2197,6 +2227,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
           ..write('createdAtMs: $createdAtMs, ')
           ..write('updatedAtMs: $updatedAtMs, ')
           ..write('coverArtPath: $coverArtPath, ')
+          ..write('coverArtPathsJson: $coverArtPathsJson, ')
           ..write('isPinned: $isPinned')
           ..write(')'))
         .toString();
@@ -2204,7 +2235,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
 
   @override
   int get hashCode => Object.hash(id, name, description, type, mood,
-      createdAtMs, updatedAtMs, coverArtPath, isPinned);
+      createdAtMs, updatedAtMs, coverArtPath, coverArtPathsJson, isPinned);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2217,6 +2248,7 @@ class PlaylistRow extends DataClass implements Insertable<PlaylistRow> {
           other.createdAtMs == this.createdAtMs &&
           other.updatedAtMs == this.updatedAtMs &&
           other.coverArtPath == this.coverArtPath &&
+          other.coverArtPathsJson == this.coverArtPathsJson &&
           other.isPinned == this.isPinned);
 }
 
@@ -2229,6 +2261,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
   final Value<int> createdAtMs;
   final Value<int> updatedAtMs;
   final Value<String?> coverArtPath;
+  final Value<String> coverArtPathsJson;
   final Value<bool> isPinned;
   final Value<int> rowid;
   const PlaylistsTableCompanion({
@@ -2240,6 +2273,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     this.createdAtMs = const Value.absent(),
     this.updatedAtMs = const Value.absent(),
     this.coverArtPath = const Value.absent(),
+    this.coverArtPathsJson = const Value.absent(),
     this.isPinned = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -2252,6 +2286,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     required int createdAtMs,
     required int updatedAtMs,
     this.coverArtPath = const Value.absent(),
+    this.coverArtPathsJson = const Value.absent(),
     this.isPinned = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -2267,6 +2302,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     Expression<int>? createdAtMs,
     Expression<int>? updatedAtMs,
     Expression<String>? coverArtPath,
+    Expression<String>? coverArtPathsJson,
     Expression<bool>? isPinned,
     Expression<int>? rowid,
   }) {
@@ -2279,6 +2315,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
       if (createdAtMs != null) 'created_at_ms': createdAtMs,
       if (updatedAtMs != null) 'updated_at_ms': updatedAtMs,
       if (coverArtPath != null) 'cover_art_path': coverArtPath,
+      if (coverArtPathsJson != null) 'cover_art_paths_json': coverArtPathsJson,
       if (isPinned != null) 'is_pinned': isPinned,
       if (rowid != null) 'rowid': rowid,
     });
@@ -2293,6 +2330,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
       Value<int>? createdAtMs,
       Value<int>? updatedAtMs,
       Value<String?>? coverArtPath,
+      Value<String>? coverArtPathsJson,
       Value<bool>? isPinned,
       Value<int>? rowid}) {
     return PlaylistsTableCompanion(
@@ -2304,6 +2342,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
       createdAtMs: createdAtMs ?? this.createdAtMs,
       updatedAtMs: updatedAtMs ?? this.updatedAtMs,
       coverArtPath: coverArtPath ?? this.coverArtPath,
+      coverArtPathsJson: coverArtPathsJson ?? this.coverArtPathsJson,
       isPinned: isPinned ?? this.isPinned,
       rowid: rowid ?? this.rowid,
     );
@@ -2336,6 +2375,9 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
     if (coverArtPath.present) {
       map['cover_art_path'] = Variable<String>(coverArtPath.value);
     }
+    if (coverArtPathsJson.present) {
+      map['cover_art_paths_json'] = Variable<String>(coverArtPathsJson.value);
+    }
     if (isPinned.present) {
       map['is_pinned'] = Variable<bool>(isPinned.value);
     }
@@ -2356,6 +2398,7 @@ class PlaylistsTableCompanion extends UpdateCompanion<PlaylistRow> {
           ..write('createdAtMs: $createdAtMs, ')
           ..write('updatedAtMs: $updatedAtMs, ')
           ..write('coverArtPath: $coverArtPath, ')
+          ..write('coverArtPathsJson: $coverArtPathsJson, ')
           ..write('isPinned: $isPinned, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -2649,6 +2692,16 @@ class $PlaybackHistoryTableTable extends PlaybackHistoryTable
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("skipped" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _completedMeta =
+      const VerificationMeta('completed');
+  @override
+  late final GeneratedColumn<bool> completed = GeneratedColumn<bool>(
+      'completed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("completed" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _contextTypeMeta =
       const VerificationMeta('contextType');
   @override
@@ -2658,8 +2711,15 @@ class $PlaybackHistoryTableTable extends PlaybackHistoryTable
       requiredDuringInsert: false,
       defaultValue: const Constant('library'));
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, trackId, playedAtMs, durationPlayedMs, skipped, contextType];
+  List<GeneratedColumn> get $columns => [
+        id,
+        trackId,
+        playedAtMs,
+        durationPlayedMs,
+        skipped,
+        completed,
+        contextType
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2699,6 +2759,10 @@ class $PlaybackHistoryTableTable extends PlaybackHistoryTable
       context.handle(_skippedMeta,
           skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta));
     }
+    if (data.containsKey('completed')) {
+      context.handle(_completedMeta,
+          completed.isAcceptableOrUnknown(data['completed']!, _completedMeta));
+    }
     if (data.containsKey('context_type')) {
       context.handle(
           _contextTypeMeta,
@@ -2724,6 +2788,8 @@ class $PlaybackHistoryTableTable extends PlaybackHistoryTable
           DriftSqlType.int, data['${effectivePrefix}duration_played_ms'])!,
       skipped: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}skipped'])!,
+      completed: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}completed'])!,
       contextType: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}context_type'])!,
     );
@@ -2745,7 +2811,17 @@ class PlaybackHistoryRow extends DataClass
 
   /// How many ms were actually played.
   final int durationPlayedMs;
+
+  /// True when the user abandoned the track before [kListenCompletionRatio].
   final bool skipped;
+
+  /// True when the track was listened to past [kListenCompletionRatio].
+  ///
+  /// Not simply `!skipped`: a track can be neither, when playback stopped
+  /// partway without the user skipping (the app was closed, the queue ended,
+  /// a call came in). Only completed rows count toward listening totals, so
+  /// the statistics engine needs the distinction the skip flag cannot make.
+  final bool completed;
 
   /// 'library', 'playlist', 'shuffle', 'mix'
   final String contextType;
@@ -2755,6 +2831,7 @@ class PlaybackHistoryRow extends DataClass
       required this.playedAtMs,
       required this.durationPlayedMs,
       required this.skipped,
+      required this.completed,
       required this.contextType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2764,6 +2841,7 @@ class PlaybackHistoryRow extends DataClass
     map['played_at_ms'] = Variable<int>(playedAtMs);
     map['duration_played_ms'] = Variable<int>(durationPlayedMs);
     map['skipped'] = Variable<bool>(skipped);
+    map['completed'] = Variable<bool>(completed);
     map['context_type'] = Variable<String>(contextType);
     return map;
   }
@@ -2775,6 +2853,7 @@ class PlaybackHistoryRow extends DataClass
       playedAtMs: Value(playedAtMs),
       durationPlayedMs: Value(durationPlayedMs),
       skipped: Value(skipped),
+      completed: Value(completed),
       contextType: Value(contextType),
     );
   }
@@ -2788,6 +2867,7 @@ class PlaybackHistoryRow extends DataClass
       playedAtMs: serializer.fromJson<int>(json['playedAtMs']),
       durationPlayedMs: serializer.fromJson<int>(json['durationPlayedMs']),
       skipped: serializer.fromJson<bool>(json['skipped']),
+      completed: serializer.fromJson<bool>(json['completed']),
       contextType: serializer.fromJson<String>(json['contextType']),
     );
   }
@@ -2800,6 +2880,7 @@ class PlaybackHistoryRow extends DataClass
       'playedAtMs': serializer.toJson<int>(playedAtMs),
       'durationPlayedMs': serializer.toJson<int>(durationPlayedMs),
       'skipped': serializer.toJson<bool>(skipped),
+      'completed': serializer.toJson<bool>(completed),
       'contextType': serializer.toJson<String>(contextType),
     };
   }
@@ -2810,6 +2891,7 @@ class PlaybackHistoryRow extends DataClass
           int? playedAtMs,
           int? durationPlayedMs,
           bool? skipped,
+          bool? completed,
           String? contextType}) =>
       PlaybackHistoryRow(
         id: id ?? this.id,
@@ -2817,6 +2899,7 @@ class PlaybackHistoryRow extends DataClass
         playedAtMs: playedAtMs ?? this.playedAtMs,
         durationPlayedMs: durationPlayedMs ?? this.durationPlayedMs,
         skipped: skipped ?? this.skipped,
+        completed: completed ?? this.completed,
         contextType: contextType ?? this.contextType,
       );
   PlaybackHistoryRow copyWithCompanion(PlaybackHistoryTableCompanion data) {
@@ -2829,6 +2912,7 @@ class PlaybackHistoryRow extends DataClass
           ? data.durationPlayedMs.value
           : this.durationPlayedMs,
       skipped: data.skipped.present ? data.skipped.value : this.skipped,
+      completed: data.completed.present ? data.completed.value : this.completed,
       contextType:
           data.contextType.present ? data.contextType.value : this.contextType,
     );
@@ -2842,14 +2926,15 @@ class PlaybackHistoryRow extends DataClass
           ..write('playedAtMs: $playedAtMs, ')
           ..write('durationPlayedMs: $durationPlayedMs, ')
           ..write('skipped: $skipped, ')
+          ..write('completed: $completed, ')
           ..write('contextType: $contextType')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, trackId, playedAtMs, durationPlayedMs, skipped, contextType);
+  int get hashCode => Object.hash(id, trackId, playedAtMs, durationPlayedMs,
+      skipped, completed, contextType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2859,6 +2944,7 @@ class PlaybackHistoryRow extends DataClass
           other.playedAtMs == this.playedAtMs &&
           other.durationPlayedMs == this.durationPlayedMs &&
           other.skipped == this.skipped &&
+          other.completed == this.completed &&
           other.contextType == this.contextType);
 }
 
@@ -2869,6 +2955,7 @@ class PlaybackHistoryTableCompanion
   final Value<int> playedAtMs;
   final Value<int> durationPlayedMs;
   final Value<bool> skipped;
+  final Value<bool> completed;
   final Value<String> contextType;
   const PlaybackHistoryTableCompanion({
     this.id = const Value.absent(),
@@ -2876,6 +2963,7 @@ class PlaybackHistoryTableCompanion
     this.playedAtMs = const Value.absent(),
     this.durationPlayedMs = const Value.absent(),
     this.skipped = const Value.absent(),
+    this.completed = const Value.absent(),
     this.contextType = const Value.absent(),
   });
   PlaybackHistoryTableCompanion.insert({
@@ -2884,6 +2972,7 @@ class PlaybackHistoryTableCompanion
     required int playedAtMs,
     required int durationPlayedMs,
     this.skipped = const Value.absent(),
+    this.completed = const Value.absent(),
     this.contextType = const Value.absent(),
   })  : trackId = Value(trackId),
         playedAtMs = Value(playedAtMs),
@@ -2894,6 +2983,7 @@ class PlaybackHistoryTableCompanion
     Expression<int>? playedAtMs,
     Expression<int>? durationPlayedMs,
     Expression<bool>? skipped,
+    Expression<bool>? completed,
     Expression<String>? contextType,
   }) {
     return RawValuesInsertable({
@@ -2902,6 +2992,7 @@ class PlaybackHistoryTableCompanion
       if (playedAtMs != null) 'played_at_ms': playedAtMs,
       if (durationPlayedMs != null) 'duration_played_ms': durationPlayedMs,
       if (skipped != null) 'skipped': skipped,
+      if (completed != null) 'completed': completed,
       if (contextType != null) 'context_type': contextType,
     });
   }
@@ -2912,6 +3003,7 @@ class PlaybackHistoryTableCompanion
       Value<int>? playedAtMs,
       Value<int>? durationPlayedMs,
       Value<bool>? skipped,
+      Value<bool>? completed,
       Value<String>? contextType}) {
     return PlaybackHistoryTableCompanion(
       id: id ?? this.id,
@@ -2919,6 +3011,7 @@ class PlaybackHistoryTableCompanion
       playedAtMs: playedAtMs ?? this.playedAtMs,
       durationPlayedMs: durationPlayedMs ?? this.durationPlayedMs,
       skipped: skipped ?? this.skipped,
+      completed: completed ?? this.completed,
       contextType: contextType ?? this.contextType,
     );
   }
@@ -2941,6 +3034,9 @@ class PlaybackHistoryTableCompanion
     if (skipped.present) {
       map['skipped'] = Variable<bool>(skipped.value);
     }
+    if (completed.present) {
+      map['completed'] = Variable<bool>(completed.value);
+    }
     if (contextType.present) {
       map['context_type'] = Variable<String>(contextType.value);
     }
@@ -2955,6 +3051,7 @@ class PlaybackHistoryTableCompanion
           ..write('playedAtMs: $playedAtMs, ')
           ..write('durationPlayedMs: $durationPlayedMs, ')
           ..write('skipped: $skipped, ')
+          ..write('completed: $completed, ')
           ..write('contextType: $contextType')
           ..write(')'))
         .toString();
@@ -2976,6 +3073,14 @@ class $ShuffleStateTableTable extends ShuffleStateTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _contextIdMeta =
+      const VerificationMeta('contextId');
+  @override
+  late final GeneratedColumn<String> contextId = GeneratedColumn<String>(
+      'context_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('all_songs'));
   static const VerificationMeta _configJsonMeta =
       const VerificationMeta('configJson');
   @override
@@ -3002,9 +3107,33 @@ class $ShuffleStateTableTable extends ShuffleStateTable
   late final GeneratedColumn<int> createdAtMs = GeneratedColumn<int>(
       'created_at_ms', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMsMeta =
+      const VerificationMeta('updatedAtMs');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, configJson, shuffledIdsJson, currentIndex, createdAtMs];
+  late final GeneratedColumn<int> updatedAtMs = GeneratedColumn<int>(
+      'updated_at_ms', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _stateJsonMeta =
+      const VerificationMeta('stateJson');
+  @override
+  late final GeneratedColumn<String> stateJson = GeneratedColumn<String>(
+      'state_json', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        contextId,
+        configJson,
+        shuffledIdsJson,
+        currentIndex,
+        createdAtMs,
+        updatedAtMs,
+        stateJson
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -3017,6 +3146,10 @@ class $ShuffleStateTableTable extends ShuffleStateTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('context_id')) {
+      context.handle(_contextIdMeta,
+          contextId.isAcceptableOrUnknown(data['context_id']!, _contextIdMeta));
     }
     if (data.containsKey('config_json')) {
       context.handle(
@@ -3048,6 +3181,16 @@ class $ShuffleStateTableTable extends ShuffleStateTable
     } else if (isInserting) {
       context.missing(_createdAtMsMeta);
     }
+    if (data.containsKey('updated_at_ms')) {
+      context.handle(
+          _updatedAtMsMeta,
+          updatedAtMs.isAcceptableOrUnknown(
+              data['updated_at_ms']!, _updatedAtMsMeta));
+    }
+    if (data.containsKey('state_json')) {
+      context.handle(_stateJsonMeta,
+          stateJson.isAcceptableOrUnknown(data['state_json']!, _stateJsonMeta));
+    }
     return context;
   }
 
@@ -3059,6 +3202,8 @@ class $ShuffleStateTableTable extends ShuffleStateTable
     return ShuffleStateRow(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      contextId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}context_id'])!,
       configJson: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}config_json'])!,
       shuffledIdsJson: attachedDatabase.typeMapping.read(
@@ -3067,6 +3212,10 @@ class $ShuffleStateTableTable extends ShuffleStateTable
           .read(DriftSqlType.int, data['${effectivePrefix}current_index'])!,
       createdAtMs: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}created_at_ms'])!,
+      updatedAtMs: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}updated_at_ms'])!,
+      stateJson: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}state_json'])!,
     );
   }
 
@@ -3079,6 +3228,11 @@ class $ShuffleStateTableTable extends ShuffleStateTable
 class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
   final int id;
 
+  /// Shuffle context this state belongs to, e.g. 'all_songs' or 'playlist_42'.
+  /// One persisted state per context (enforced by a unique index; see
+  /// AppDatabase.migration).
+  final String contextId;
+
   /// JSON-encoded ShuffleConfig.
   final String configJson;
 
@@ -3086,30 +3240,46 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
   final String shuffledIdsJson;
   final int currentIndex;
   final int createdAtMs;
+
+  /// Epoch ms of the last save.
+  final int updatedAtMs;
+
+  /// Full engine state blob from IntelliShuffleEngine.serializeState().
+  /// The columns above are denormalised copies kept for debugging/queries.
+  final String stateJson;
   const ShuffleStateRow(
       {required this.id,
+      required this.contextId,
       required this.configJson,
       required this.shuffledIdsJson,
       required this.currentIndex,
-      required this.createdAtMs});
+      required this.createdAtMs,
+      required this.updatedAtMs,
+      required this.stateJson});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['context_id'] = Variable<String>(contextId);
     map['config_json'] = Variable<String>(configJson);
     map['shuffled_ids_json'] = Variable<String>(shuffledIdsJson);
     map['current_index'] = Variable<int>(currentIndex);
     map['created_at_ms'] = Variable<int>(createdAtMs);
+    map['updated_at_ms'] = Variable<int>(updatedAtMs);
+    map['state_json'] = Variable<String>(stateJson);
     return map;
   }
 
   ShuffleStateTableCompanion toCompanion(bool nullToAbsent) {
     return ShuffleStateTableCompanion(
       id: Value(id),
+      contextId: Value(contextId),
       configJson: Value(configJson),
       shuffledIdsJson: Value(shuffledIdsJson),
       currentIndex: Value(currentIndex),
       createdAtMs: Value(createdAtMs),
+      updatedAtMs: Value(updatedAtMs),
+      stateJson: Value(stateJson),
     );
   }
 
@@ -3118,10 +3288,13 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ShuffleStateRow(
       id: serializer.fromJson<int>(json['id']),
+      contextId: serializer.fromJson<String>(json['contextId']),
       configJson: serializer.fromJson<String>(json['configJson']),
       shuffledIdsJson: serializer.fromJson<String>(json['shuffledIdsJson']),
       currentIndex: serializer.fromJson<int>(json['currentIndex']),
       createdAtMs: serializer.fromJson<int>(json['createdAtMs']),
+      updatedAtMs: serializer.fromJson<int>(json['updatedAtMs']),
+      stateJson: serializer.fromJson<String>(json['stateJson']),
     );
   }
   @override
@@ -3129,29 +3302,39 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'contextId': serializer.toJson<String>(contextId),
       'configJson': serializer.toJson<String>(configJson),
       'shuffledIdsJson': serializer.toJson<String>(shuffledIdsJson),
       'currentIndex': serializer.toJson<int>(currentIndex),
       'createdAtMs': serializer.toJson<int>(createdAtMs),
+      'updatedAtMs': serializer.toJson<int>(updatedAtMs),
+      'stateJson': serializer.toJson<String>(stateJson),
     };
   }
 
   ShuffleStateRow copyWith(
           {int? id,
+          String? contextId,
           String? configJson,
           String? shuffledIdsJson,
           int? currentIndex,
-          int? createdAtMs}) =>
+          int? createdAtMs,
+          int? updatedAtMs,
+          String? stateJson}) =>
       ShuffleStateRow(
         id: id ?? this.id,
+        contextId: contextId ?? this.contextId,
         configJson: configJson ?? this.configJson,
         shuffledIdsJson: shuffledIdsJson ?? this.shuffledIdsJson,
         currentIndex: currentIndex ?? this.currentIndex,
         createdAtMs: createdAtMs ?? this.createdAtMs,
+        updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+        stateJson: stateJson ?? this.stateJson,
       );
   ShuffleStateRow copyWithCompanion(ShuffleStateTableCompanion data) {
     return ShuffleStateRow(
       id: data.id.present ? data.id.value : this.id,
+      contextId: data.contextId.present ? data.contextId.value : this.contextId,
       configJson:
           data.configJson.present ? data.configJson.value : this.configJson,
       shuffledIdsJson: data.shuffledIdsJson.present
@@ -3162,6 +3345,9 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
           : this.currentIndex,
       createdAtMs:
           data.createdAtMs.present ? data.createdAtMs.value : this.createdAtMs,
+      updatedAtMs:
+          data.updatedAtMs.present ? data.updatedAtMs.value : this.updatedAtMs,
+      stateJson: data.stateJson.present ? data.stateJson.value : this.stateJson,
     );
   }
 
@@ -3169,78 +3355,105 @@ class ShuffleStateRow extends DataClass implements Insertable<ShuffleStateRow> {
   String toString() {
     return (StringBuffer('ShuffleStateRow(')
           ..write('id: $id, ')
+          ..write('contextId: $contextId, ')
           ..write('configJson: $configJson, ')
           ..write('shuffledIdsJson: $shuffledIdsJson, ')
           ..write('currentIndex: $currentIndex, ')
-          ..write('createdAtMs: $createdAtMs')
+          ..write('createdAtMs: $createdAtMs, ')
+          ..write('updatedAtMs: $updatedAtMs, ')
+          ..write('stateJson: $stateJson')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, configJson, shuffledIdsJson, currentIndex, createdAtMs);
+  int get hashCode => Object.hash(id, contextId, configJson, shuffledIdsJson,
+      currentIndex, createdAtMs, updatedAtMs, stateJson);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ShuffleStateRow &&
           other.id == this.id &&
+          other.contextId == this.contextId &&
           other.configJson == this.configJson &&
           other.shuffledIdsJson == this.shuffledIdsJson &&
           other.currentIndex == this.currentIndex &&
-          other.createdAtMs == this.createdAtMs);
+          other.createdAtMs == this.createdAtMs &&
+          other.updatedAtMs == this.updatedAtMs &&
+          other.stateJson == this.stateJson);
 }
 
 class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
   final Value<int> id;
+  final Value<String> contextId;
   final Value<String> configJson;
   final Value<String> shuffledIdsJson;
   final Value<int> currentIndex;
   final Value<int> createdAtMs;
+  final Value<int> updatedAtMs;
+  final Value<String> stateJson;
   const ShuffleStateTableCompanion({
     this.id = const Value.absent(),
+    this.contextId = const Value.absent(),
     this.configJson = const Value.absent(),
     this.shuffledIdsJson = const Value.absent(),
     this.currentIndex = const Value.absent(),
     this.createdAtMs = const Value.absent(),
+    this.updatedAtMs = const Value.absent(),
+    this.stateJson = const Value.absent(),
   });
   ShuffleStateTableCompanion.insert({
     this.id = const Value.absent(),
+    this.contextId = const Value.absent(),
     required String configJson,
     required String shuffledIdsJson,
     this.currentIndex = const Value.absent(),
     required int createdAtMs,
+    this.updatedAtMs = const Value.absent(),
+    this.stateJson = const Value.absent(),
   })  : configJson = Value(configJson),
         shuffledIdsJson = Value(shuffledIdsJson),
         createdAtMs = Value(createdAtMs);
   static Insertable<ShuffleStateRow> custom({
     Expression<int>? id,
+    Expression<String>? contextId,
     Expression<String>? configJson,
     Expression<String>? shuffledIdsJson,
     Expression<int>? currentIndex,
     Expression<int>? createdAtMs,
+    Expression<int>? updatedAtMs,
+    Expression<String>? stateJson,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (contextId != null) 'context_id': contextId,
       if (configJson != null) 'config_json': configJson,
       if (shuffledIdsJson != null) 'shuffled_ids_json': shuffledIdsJson,
       if (currentIndex != null) 'current_index': currentIndex,
       if (createdAtMs != null) 'created_at_ms': createdAtMs,
+      if (updatedAtMs != null) 'updated_at_ms': updatedAtMs,
+      if (stateJson != null) 'state_json': stateJson,
     });
   }
 
   ShuffleStateTableCompanion copyWith(
       {Value<int>? id,
+      Value<String>? contextId,
       Value<String>? configJson,
       Value<String>? shuffledIdsJson,
       Value<int>? currentIndex,
-      Value<int>? createdAtMs}) {
+      Value<int>? createdAtMs,
+      Value<int>? updatedAtMs,
+      Value<String>? stateJson}) {
     return ShuffleStateTableCompanion(
       id: id ?? this.id,
+      contextId: contextId ?? this.contextId,
       configJson: configJson ?? this.configJson,
       shuffledIdsJson: shuffledIdsJson ?? this.shuffledIdsJson,
       currentIndex: currentIndex ?? this.currentIndex,
       createdAtMs: createdAtMs ?? this.createdAtMs,
+      updatedAtMs: updatedAtMs ?? this.updatedAtMs,
+      stateJson: stateJson ?? this.stateJson,
     );
   }
 
@@ -3249,6 +3462,9 @@ class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (contextId.present) {
+      map['context_id'] = Variable<String>(contextId.value);
     }
     if (configJson.present) {
       map['config_json'] = Variable<String>(configJson.value);
@@ -3262,6 +3478,12 @@ class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
     if (createdAtMs.present) {
       map['created_at_ms'] = Variable<int>(createdAtMs.value);
     }
+    if (updatedAtMs.present) {
+      map['updated_at_ms'] = Variable<int>(updatedAtMs.value);
+    }
+    if (stateJson.present) {
+      map['state_json'] = Variable<String>(stateJson.value);
+    }
     return map;
   }
 
@@ -3269,10 +3491,13 @@ class ShuffleStateTableCompanion extends UpdateCompanion<ShuffleStateRow> {
   String toString() {
     return (StringBuffer('ShuffleStateTableCompanion(')
           ..write('id: $id, ')
+          ..write('contextId: $contextId, ')
           ..write('configJson: $configJson, ')
           ..write('shuffledIdsJson: $shuffledIdsJson, ')
           ..write('currentIndex: $currentIndex, ')
-          ..write('createdAtMs: $createdAtMs')
+          ..write('createdAtMs: $createdAtMs, ')
+          ..write('updatedAtMs: $updatedAtMs, ')
+          ..write('stateJson: $stateJson')
           ..write(')'))
         .toString();
   }
@@ -3336,6 +3561,22 @@ class $AudioFeaturesTableTable extends AudioFeaturesTable
       type: DriftSqlType.double,
       requiredDuringInsert: false,
       defaultValue: const Constant(0.0));
+  static const VerificationMeta _musicalKeyMeta =
+      const VerificationMeta('musicalKey');
+  @override
+  late final GeneratedColumn<int> musicalKey = GeneratedColumn<int>(
+      'musical_key', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(-1));
+  static const VerificationMeta _keyNameMeta =
+      const VerificationMeta('keyName');
+  @override
+  late final GeneratedColumn<String> keyName = GeneratedColumn<String>(
+      'key_name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
   static const VerificationMeta _fingerprintHashMeta =
       const VerificationMeta('fingerprintHash');
   @override
@@ -3351,6 +3592,8 @@ class $AudioFeaturesTableTable extends AudioFeaturesTable
         danceability,
         loudness,
         acousticness,
+        musicalKey,
+        keyName,
         fingerprintHash
       ];
   @override
@@ -3397,6 +3640,16 @@ class $AudioFeaturesTableTable extends AudioFeaturesTable
           acousticness.isAcceptableOrUnknown(
               data['acousticness']!, _acousticnessMeta));
     }
+    if (data.containsKey('musical_key')) {
+      context.handle(
+          _musicalKeyMeta,
+          musicalKey.isAcceptableOrUnknown(
+              data['musical_key']!, _musicalKeyMeta));
+    }
+    if (data.containsKey('key_name')) {
+      context.handle(_keyNameMeta,
+          keyName.isAcceptableOrUnknown(data['key_name']!, _keyNameMeta));
+    }
     if (data.containsKey('fingerprint_hash')) {
       context.handle(
           _fingerprintHashMeta,
@@ -3426,6 +3679,10 @@ class $AudioFeaturesTableTable extends AudioFeaturesTable
           .read(DriftSqlType.double, data['${effectivePrefix}loudness'])!,
       acousticness: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}acousticness'])!,
+      musicalKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}musical_key'])!,
+      keyName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}key_name'])!,
       fingerprintHash: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}fingerprint_hash']),
     );
@@ -3461,6 +3718,11 @@ class AudioFeaturesRow extends DataClass
   final double acousticness;
 
   /// Chromaprint fingerprint hash (hex string). Used by DuplicateDetector path 3.
+  /// Camelot/pitch-class key, 0-11 (C..B). -1 when not yet analysed.
+  final int musicalKey;
+
+  /// Human-readable key, e.g. "A minor" / Camelot "8A". Empty when unknown.
+  final String keyName;
   final String? fingerprintHash;
   const AudioFeaturesRow(
       {required this.trackId,
@@ -3470,6 +3732,8 @@ class AudioFeaturesRow extends DataClass
       required this.danceability,
       required this.loudness,
       required this.acousticness,
+      required this.musicalKey,
+      required this.keyName,
       this.fingerprintHash});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3481,6 +3745,8 @@ class AudioFeaturesRow extends DataClass
     map['danceability'] = Variable<double>(danceability);
     map['loudness'] = Variable<double>(loudness);
     map['acousticness'] = Variable<double>(acousticness);
+    map['musical_key'] = Variable<int>(musicalKey);
+    map['key_name'] = Variable<String>(keyName);
     if (!nullToAbsent || fingerprintHash != null) {
       map['fingerprint_hash'] = Variable<String>(fingerprintHash);
     }
@@ -3496,6 +3762,8 @@ class AudioFeaturesRow extends DataClass
       danceability: Value(danceability),
       loudness: Value(loudness),
       acousticness: Value(acousticness),
+      musicalKey: Value(musicalKey),
+      keyName: Value(keyName),
       fingerprintHash: fingerprintHash == null && nullToAbsent
           ? const Value.absent()
           : Value(fingerprintHash),
@@ -3513,6 +3781,8 @@ class AudioFeaturesRow extends DataClass
       danceability: serializer.fromJson<double>(json['danceability']),
       loudness: serializer.fromJson<double>(json['loudness']),
       acousticness: serializer.fromJson<double>(json['acousticness']),
+      musicalKey: serializer.fromJson<int>(json['musicalKey']),
+      keyName: serializer.fromJson<String>(json['keyName']),
       fingerprintHash: serializer.fromJson<String?>(json['fingerprintHash']),
     );
   }
@@ -3527,6 +3797,8 @@ class AudioFeaturesRow extends DataClass
       'danceability': serializer.toJson<double>(danceability),
       'loudness': serializer.toJson<double>(loudness),
       'acousticness': serializer.toJson<double>(acousticness),
+      'musicalKey': serializer.toJson<int>(musicalKey),
+      'keyName': serializer.toJson<String>(keyName),
       'fingerprintHash': serializer.toJson<String?>(fingerprintHash),
     };
   }
@@ -3539,6 +3811,8 @@ class AudioFeaturesRow extends DataClass
           double? danceability,
           double? loudness,
           double? acousticness,
+          int? musicalKey,
+          String? keyName,
           Value<String?> fingerprintHash = const Value.absent()}) =>
       AudioFeaturesRow(
         trackId: trackId ?? this.trackId,
@@ -3548,6 +3822,8 @@ class AudioFeaturesRow extends DataClass
         danceability: danceability ?? this.danceability,
         loudness: loudness ?? this.loudness,
         acousticness: acousticness ?? this.acousticness,
+        musicalKey: musicalKey ?? this.musicalKey,
+        keyName: keyName ?? this.keyName,
         fingerprintHash: fingerprintHash.present
             ? fingerprintHash.value
             : this.fingerprintHash,
@@ -3565,6 +3841,9 @@ class AudioFeaturesRow extends DataClass
       acousticness: data.acousticness.present
           ? data.acousticness.value
           : this.acousticness,
+      musicalKey:
+          data.musicalKey.present ? data.musicalKey.value : this.musicalKey,
+      keyName: data.keyName.present ? data.keyName.value : this.keyName,
       fingerprintHash: data.fingerprintHash.present
           ? data.fingerprintHash.value
           : this.fingerprintHash,
@@ -3581,6 +3860,8 @@ class AudioFeaturesRow extends DataClass
           ..write('danceability: $danceability, ')
           ..write('loudness: $loudness, ')
           ..write('acousticness: $acousticness, ')
+          ..write('musicalKey: $musicalKey, ')
+          ..write('keyName: $keyName, ')
           ..write('fingerprintHash: $fingerprintHash')
           ..write(')'))
         .toString();
@@ -3588,7 +3869,7 @@ class AudioFeaturesRow extends DataClass
 
   @override
   int get hashCode => Object.hash(trackId, tempo, energy, valence, danceability,
-      loudness, acousticness, fingerprintHash);
+      loudness, acousticness, musicalKey, keyName, fingerprintHash);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3600,6 +3881,8 @@ class AudioFeaturesRow extends DataClass
           other.danceability == this.danceability &&
           other.loudness == this.loudness &&
           other.acousticness == this.acousticness &&
+          other.musicalKey == this.musicalKey &&
+          other.keyName == this.keyName &&
           other.fingerprintHash == this.fingerprintHash);
 }
 
@@ -3611,6 +3894,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
   final Value<double> danceability;
   final Value<double> loudness;
   final Value<double> acousticness;
+  final Value<int> musicalKey;
+  final Value<String> keyName;
   final Value<String?> fingerprintHash;
   final Value<int> rowid;
   const AudioFeaturesTableCompanion({
@@ -3621,6 +3906,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     this.danceability = const Value.absent(),
     this.loudness = const Value.absent(),
     this.acousticness = const Value.absent(),
+    this.musicalKey = const Value.absent(),
+    this.keyName = const Value.absent(),
     this.fingerprintHash = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -3632,6 +3919,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     this.danceability = const Value.absent(),
     this.loudness = const Value.absent(),
     this.acousticness = const Value.absent(),
+    this.musicalKey = const Value.absent(),
+    this.keyName = const Value.absent(),
     this.fingerprintHash = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : trackId = Value(trackId);
@@ -3643,6 +3932,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     Expression<double>? danceability,
     Expression<double>? loudness,
     Expression<double>? acousticness,
+    Expression<int>? musicalKey,
+    Expression<String>? keyName,
     Expression<String>? fingerprintHash,
     Expression<int>? rowid,
   }) {
@@ -3654,6 +3945,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
       if (danceability != null) 'danceability': danceability,
       if (loudness != null) 'loudness': loudness,
       if (acousticness != null) 'acousticness': acousticness,
+      if (musicalKey != null) 'musical_key': musicalKey,
+      if (keyName != null) 'key_name': keyName,
       if (fingerprintHash != null) 'fingerprint_hash': fingerprintHash,
       if (rowid != null) 'rowid': rowid,
     });
@@ -3667,6 +3960,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
       Value<double>? danceability,
       Value<double>? loudness,
       Value<double>? acousticness,
+      Value<int>? musicalKey,
+      Value<String>? keyName,
       Value<String?>? fingerprintHash,
       Value<int>? rowid}) {
     return AudioFeaturesTableCompanion(
@@ -3677,6 +3972,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
       danceability: danceability ?? this.danceability,
       loudness: loudness ?? this.loudness,
       acousticness: acousticness ?? this.acousticness,
+      musicalKey: musicalKey ?? this.musicalKey,
+      keyName: keyName ?? this.keyName,
       fingerprintHash: fingerprintHash ?? this.fingerprintHash,
       rowid: rowid ?? this.rowid,
     );
@@ -3706,6 +4003,12 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
     if (acousticness.present) {
       map['acousticness'] = Variable<double>(acousticness.value);
     }
+    if (musicalKey.present) {
+      map['musical_key'] = Variable<int>(musicalKey.value);
+    }
+    if (keyName.present) {
+      map['key_name'] = Variable<String>(keyName.value);
+    }
     if (fingerprintHash.present) {
       map['fingerprint_hash'] = Variable<String>(fingerprintHash.value);
     }
@@ -3725,6 +4028,8 @@ class AudioFeaturesTableCompanion extends UpdateCompanion<AudioFeaturesRow> {
           ..write('danceability: $danceability, ')
           ..write('loudness: $loudness, ')
           ..write('acousticness: $acousticness, ')
+          ..write('musicalKey: $musicalKey, ')
+          ..write('keyName: $keyName, ')
           ..write('fingerprintHash: $fingerprintHash, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3750,6 +4055,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final TrackDao trackDao = TrackDao(this as AppDatabase);
   late final BehaviorDao behaviorDao = BehaviorDao(this as AppDatabase);
   late final PlaylistDao playlistDao = PlaylistDao(this as AppDatabase);
+  late final ShuffleStateDao shuffleStateDao =
+      ShuffleStateDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4641,6 +4948,7 @@ typedef $$PlaylistsTableTableCreateCompanionBuilder = PlaylistsTableCompanion
   required int createdAtMs,
   required int updatedAtMs,
   Value<String?> coverArtPath,
+  Value<String> coverArtPathsJson,
   Value<bool> isPinned,
   Value<int> rowid,
 });
@@ -4654,6 +4962,7 @@ typedef $$PlaylistsTableTableUpdateCompanionBuilder = PlaylistsTableCompanion
   Value<int> createdAtMs,
   Value<int> updatedAtMs,
   Value<String?> coverArtPath,
+  Value<String> coverArtPathsJson,
   Value<bool> isPinned,
   Value<int> rowid,
 });
@@ -4714,6 +5023,10 @@ class $$PlaylistsTableTableFilterComposer
   ColumnFilters<String> get coverArtPath => $composableBuilder(
       column: $table.coverArtPath, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get coverArtPathsJson => $composableBuilder(
+      column: $table.coverArtPathsJson,
+      builder: (column) => ColumnFilters(column));
+
   ColumnFilters<bool> get isPinned => $composableBuilder(
       column: $table.isPinned, builder: (column) => ColumnFilters(column));
 
@@ -4773,6 +5086,10 @@ class $$PlaylistsTableTableOrderingComposer
       column: $table.coverArtPath,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get coverArtPathsJson => $composableBuilder(
+      column: $table.coverArtPathsJson,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<bool> get isPinned => $composableBuilder(
       column: $table.isPinned, builder: (column) => ColumnOrderings(column));
 }
@@ -4809,6 +5126,9 @@ class $$PlaylistsTableTableAnnotationComposer
 
   GeneratedColumn<String> get coverArtPath => $composableBuilder(
       column: $table.coverArtPath, builder: (column) => column);
+
+  GeneratedColumn<String> get coverArtPathsJson => $composableBuilder(
+      column: $table.coverArtPathsJson, builder: (column) => column);
 
   GeneratedColumn<bool> get isPinned =>
       $composableBuilder(column: $table.isPinned, builder: (column) => column);
@@ -4869,6 +5189,7 @@ class $$PlaylistsTableTableTableManager extends RootTableManager<
             Value<int> createdAtMs = const Value.absent(),
             Value<int> updatedAtMs = const Value.absent(),
             Value<String?> coverArtPath = const Value.absent(),
+            Value<String> coverArtPathsJson = const Value.absent(),
             Value<bool> isPinned = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4881,6 +5202,7 @@ class $$PlaylistsTableTableTableManager extends RootTableManager<
             createdAtMs: createdAtMs,
             updatedAtMs: updatedAtMs,
             coverArtPath: coverArtPath,
+            coverArtPathsJson: coverArtPathsJson,
             isPinned: isPinned,
             rowid: rowid,
           ),
@@ -4893,6 +5215,7 @@ class $$PlaylistsTableTableTableManager extends RootTableManager<
             required int createdAtMs,
             required int updatedAtMs,
             Value<String?> coverArtPath = const Value.absent(),
+            Value<String> coverArtPathsJson = const Value.absent(),
             Value<bool> isPinned = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4905,6 +5228,7 @@ class $$PlaylistsTableTableTableManager extends RootTableManager<
             createdAtMs: createdAtMs,
             updatedAtMs: updatedAtMs,
             coverArtPath: coverArtPath,
+            coverArtPathsJson: coverArtPathsJson,
             isPinned: isPinned,
             rowid: rowid,
           ),
@@ -5212,6 +5536,7 @@ typedef $$PlaybackHistoryTableTableCreateCompanionBuilder
   required int playedAtMs,
   required int durationPlayedMs,
   Value<bool> skipped,
+  Value<bool> completed,
   Value<String> contextType,
 });
 typedef $$PlaybackHistoryTableTableUpdateCompanionBuilder
@@ -5221,6 +5546,7 @@ typedef $$PlaybackHistoryTableTableUpdateCompanionBuilder
   Value<int> playedAtMs,
   Value<int> durationPlayedMs,
   Value<bool> skipped,
+  Value<bool> completed,
   Value<String> contextType,
 });
 
@@ -5248,6 +5574,9 @@ class $$PlaybackHistoryTableTableFilterComposer
 
   ColumnFilters<bool> get skipped => $composableBuilder(
       column: $table.skipped, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get completed => $composableBuilder(
+      column: $table.completed, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get contextType => $composableBuilder(
       column: $table.contextType, builder: (column) => ColumnFilters(column));
@@ -5278,6 +5607,9 @@ class $$PlaybackHistoryTableTableOrderingComposer
   ColumnOrderings<bool> get skipped => $composableBuilder(
       column: $table.skipped, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get completed => $composableBuilder(
+      column: $table.completed, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get contextType => $composableBuilder(
       column: $table.contextType, builder: (column) => ColumnOrderings(column));
 }
@@ -5305,6 +5637,9 @@ class $$PlaybackHistoryTableTableAnnotationComposer
 
   GeneratedColumn<bool> get skipped =>
       $composableBuilder(column: $table.skipped, builder: (column) => column);
+
+  GeneratedColumn<bool> get completed =>
+      $composableBuilder(column: $table.completed, builder: (column) => column);
 
   GeneratedColumn<String> get contextType => $composableBuilder(
       column: $table.contextType, builder: (column) => column);
@@ -5345,6 +5680,7 @@ class $$PlaybackHistoryTableTableTableManager extends RootTableManager<
             Value<int> playedAtMs = const Value.absent(),
             Value<int> durationPlayedMs = const Value.absent(),
             Value<bool> skipped = const Value.absent(),
+            Value<bool> completed = const Value.absent(),
             Value<String> contextType = const Value.absent(),
           }) =>
               PlaybackHistoryTableCompanion(
@@ -5353,6 +5689,7 @@ class $$PlaybackHistoryTableTableTableManager extends RootTableManager<
             playedAtMs: playedAtMs,
             durationPlayedMs: durationPlayedMs,
             skipped: skipped,
+            completed: completed,
             contextType: contextType,
           ),
           createCompanionCallback: ({
@@ -5361,6 +5698,7 @@ class $$PlaybackHistoryTableTableTableManager extends RootTableManager<
             required int playedAtMs,
             required int durationPlayedMs,
             Value<bool> skipped = const Value.absent(),
+            Value<bool> completed = const Value.absent(),
             Value<String> contextType = const Value.absent(),
           }) =>
               PlaybackHistoryTableCompanion.insert(
@@ -5369,6 +5707,7 @@ class $$PlaybackHistoryTableTableTableManager extends RootTableManager<
             playedAtMs: playedAtMs,
             durationPlayedMs: durationPlayedMs,
             skipped: skipped,
+            completed: completed,
             contextType: contextType,
           ),
           withReferenceMapper: (p0) => p0
@@ -5398,18 +5737,24 @@ typedef $$PlaybackHistoryTableTableProcessedTableManager
 typedef $$ShuffleStateTableTableCreateCompanionBuilder
     = ShuffleStateTableCompanion Function({
   Value<int> id,
+  Value<String> contextId,
   required String configJson,
   required String shuffledIdsJson,
   Value<int> currentIndex,
   required int createdAtMs,
+  Value<int> updatedAtMs,
+  Value<String> stateJson,
 });
 typedef $$ShuffleStateTableTableUpdateCompanionBuilder
     = ShuffleStateTableCompanion Function({
   Value<int> id,
+  Value<String> contextId,
   Value<String> configJson,
   Value<String> shuffledIdsJson,
   Value<int> currentIndex,
   Value<int> createdAtMs,
+  Value<int> updatedAtMs,
+  Value<String> stateJson,
 });
 
 class $$ShuffleStateTableTableFilterComposer
@@ -5424,6 +5769,9 @@ class $$ShuffleStateTableTableFilterComposer
   ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get contextId => $composableBuilder(
+      column: $table.contextId, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get configJson => $composableBuilder(
       column: $table.configJson, builder: (column) => ColumnFilters(column));
 
@@ -5436,6 +5784,12 @@ class $$ShuffleStateTableTableFilterComposer
 
   ColumnFilters<int> get createdAtMs => $composableBuilder(
       column: $table.createdAtMs, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get updatedAtMs => $composableBuilder(
+      column: $table.updatedAtMs, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get stateJson => $composableBuilder(
+      column: $table.stateJson, builder: (column) => ColumnFilters(column));
 }
 
 class $$ShuffleStateTableTableOrderingComposer
@@ -5450,6 +5804,9 @@ class $$ShuffleStateTableTableOrderingComposer
   ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get contextId => $composableBuilder(
+      column: $table.contextId, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get configJson => $composableBuilder(
       column: $table.configJson, builder: (column) => ColumnOrderings(column));
 
@@ -5463,6 +5820,12 @@ class $$ShuffleStateTableTableOrderingComposer
 
   ColumnOrderings<int> get createdAtMs => $composableBuilder(
       column: $table.createdAtMs, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get updatedAtMs => $composableBuilder(
+      column: $table.updatedAtMs, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get stateJson => $composableBuilder(
+      column: $table.stateJson, builder: (column) => ColumnOrderings(column));
 }
 
 class $$ShuffleStateTableTableAnnotationComposer
@@ -5477,6 +5840,9 @@ class $$ShuffleStateTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get contextId =>
+      $composableBuilder(column: $table.contextId, builder: (column) => column);
+
   GeneratedColumn<String> get configJson => $composableBuilder(
       column: $table.configJson, builder: (column) => column);
 
@@ -5488,6 +5854,12 @@ class $$ShuffleStateTableTableAnnotationComposer
 
   GeneratedColumn<int> get createdAtMs => $composableBuilder(
       column: $table.createdAtMs, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAtMs => $composableBuilder(
+      column: $table.updatedAtMs, builder: (column) => column);
+
+  GeneratedColumn<String> get stateJson =>
+      $composableBuilder(column: $table.stateJson, builder: (column) => column);
 }
 
 class $$ShuffleStateTableTableTableManager extends RootTableManager<
@@ -5519,31 +5891,43 @@ class $$ShuffleStateTableTableTableManager extends RootTableManager<
                   $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<String> contextId = const Value.absent(),
             Value<String> configJson = const Value.absent(),
             Value<String> shuffledIdsJson = const Value.absent(),
             Value<int> currentIndex = const Value.absent(),
             Value<int> createdAtMs = const Value.absent(),
+            Value<int> updatedAtMs = const Value.absent(),
+            Value<String> stateJson = const Value.absent(),
           }) =>
               ShuffleStateTableCompanion(
             id: id,
+            contextId: contextId,
             configJson: configJson,
             shuffledIdsJson: shuffledIdsJson,
             currentIndex: currentIndex,
             createdAtMs: createdAtMs,
+            updatedAtMs: updatedAtMs,
+            stateJson: stateJson,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<String> contextId = const Value.absent(),
             required String configJson,
             required String shuffledIdsJson,
             Value<int> currentIndex = const Value.absent(),
             required int createdAtMs,
+            Value<int> updatedAtMs = const Value.absent(),
+            Value<String> stateJson = const Value.absent(),
           }) =>
               ShuffleStateTableCompanion.insert(
             id: id,
+            contextId: contextId,
             configJson: configJson,
             shuffledIdsJson: shuffledIdsJson,
             currentIndex: currentIndex,
             createdAtMs: createdAtMs,
+            updatedAtMs: updatedAtMs,
+            stateJson: stateJson,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -5576,6 +5960,8 @@ typedef $$AudioFeaturesTableTableCreateCompanionBuilder
   Value<double> danceability,
   Value<double> loudness,
   Value<double> acousticness,
+  Value<int> musicalKey,
+  Value<String> keyName,
   Value<String?> fingerprintHash,
   Value<int> rowid,
 });
@@ -5588,6 +5974,8 @@ typedef $$AudioFeaturesTableTableUpdateCompanionBuilder
   Value<double> danceability,
   Value<double> loudness,
   Value<double> acousticness,
+  Value<int> musicalKey,
+  Value<String> keyName,
   Value<String?> fingerprintHash,
   Value<int> rowid,
 });
@@ -5621,6 +6009,12 @@ class $$AudioFeaturesTableTableFilterComposer
 
   ColumnFilters<double> get acousticness => $composableBuilder(
       column: $table.acousticness, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get musicalKey => $composableBuilder(
+      column: $table.musicalKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get keyName => $composableBuilder(
+      column: $table.keyName, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get fingerprintHash => $composableBuilder(
       column: $table.fingerprintHash,
@@ -5659,6 +6053,12 @@ class $$AudioFeaturesTableTableOrderingComposer
       column: $table.acousticness,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get musicalKey => $composableBuilder(
+      column: $table.musicalKey, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get keyName => $composableBuilder(
+      column: $table.keyName, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get fingerprintHash => $composableBuilder(
       column: $table.fingerprintHash,
       builder: (column) => ColumnOrderings(column));
@@ -5693,6 +6093,12 @@ class $$AudioFeaturesTableTableAnnotationComposer
 
   GeneratedColumn<double> get acousticness => $composableBuilder(
       column: $table.acousticness, builder: (column) => column);
+
+  GeneratedColumn<int> get musicalKey => $composableBuilder(
+      column: $table.musicalKey, builder: (column) => column);
+
+  GeneratedColumn<String> get keyName =>
+      $composableBuilder(column: $table.keyName, builder: (column) => column);
 
   GeneratedColumn<String> get fingerprintHash => $composableBuilder(
       column: $table.fingerprintHash, builder: (column) => column);
@@ -5733,6 +6139,8 @@ class $$AudioFeaturesTableTableTableManager extends RootTableManager<
             Value<double> danceability = const Value.absent(),
             Value<double> loudness = const Value.absent(),
             Value<double> acousticness = const Value.absent(),
+            Value<int> musicalKey = const Value.absent(),
+            Value<String> keyName = const Value.absent(),
             Value<String?> fingerprintHash = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -5744,6 +6152,8 @@ class $$AudioFeaturesTableTableTableManager extends RootTableManager<
             danceability: danceability,
             loudness: loudness,
             acousticness: acousticness,
+            musicalKey: musicalKey,
+            keyName: keyName,
             fingerprintHash: fingerprintHash,
             rowid: rowid,
           ),
@@ -5755,6 +6165,8 @@ class $$AudioFeaturesTableTableTableManager extends RootTableManager<
             Value<double> danceability = const Value.absent(),
             Value<double> loudness = const Value.absent(),
             Value<double> acousticness = const Value.absent(),
+            Value<int> musicalKey = const Value.absent(),
+            Value<String> keyName = const Value.absent(),
             Value<String?> fingerprintHash = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -5766,6 +6178,8 @@ class $$AudioFeaturesTableTableTableManager extends RootTableManager<
             danceability: danceability,
             loudness: loudness,
             acousticness: acousticness,
+            musicalKey: musicalKey,
+            keyName: keyName,
             fingerprintHash: fingerprintHash,
             rowid: rowid,
           ),

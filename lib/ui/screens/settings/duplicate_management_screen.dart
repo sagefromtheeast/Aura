@@ -206,7 +206,7 @@ class _ScanControls extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           value: deepScan,
           onChanged: state.isScanning ? null : onDeepScanChanged,
-          activeColor: DesignTokens.primarySeed,
+          activeThumbColor: DesignTokens.primarySeed,
           title: Text('Deep scan',
               style: DesignTokens.bodyLarge.copyWith(color: _primary(context))),
           subtitle: Text(
@@ -293,7 +293,7 @@ class _DupGroupCard extends StatelessWidget {
           ],
           const SizedBox(height: DesignTokens.spacing12),
           DropdownButtonFormField<DuplicateResolutionStrategy>(
-            value: strategy,
+            initialValue: strategy,
             isExpanded: true,
             decoration: const InputDecoration(
               isDense: true,

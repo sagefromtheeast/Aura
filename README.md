@@ -1,8 +1,8 @@
 # Aura 🎵 ✨
 
-> **The Intelligent Music Companion.** A privacy-first, offline-only audiophile music player built with Flutter 3.27+, Riverpod 2.x, Drift SQLite, and an ultra-low latency C++ audio engine via Dart FFI.
+> **The Intelligent Music Companion.** A privacy-first, offline-only audiophile music player built with Flutter 3.32+, Riverpod 2.x, Drift SQLite, and an ultra-low latency C++ audio engine via Dart FFI.
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.27+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.32+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.6+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -21,7 +21,7 @@ Aura is designed around a zero-compromise **offline and privacy-first** architec
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│ UI & Feature Layer (Flutter 3.27+ / Dart 3.6)          │
+│ UI & Feature Layer (Flutter 3.32+ / Dart 3.8)          │
 │ • Liquid Glass System • Dynamic Colors • Thumb-Zone UI │
 │ • Interactive Modal Suite • AI Smart Mix Dashboards     │
 ├────────────────────────────────────────────────────────┤
@@ -76,7 +76,7 @@ Keep your high-resolution audio repository clean with a three-tier deduplication
 ## 🚀 Getting Started & Development Setup
 
 ### Prerequisites
-- **Flutter SDK**: `>=3.27.0`
+- **Flutter SDK**: `>=3.32.0` (verified on 3.35.7 / Dart 3.9.2)
 - **Dart SDK**: `>=3.6.0`
 - **Platform Tooling**: Android Studio (AGP 8+, NDK enabled) or Xcode 16+ (for iOS builds)
 

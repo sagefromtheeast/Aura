@@ -22,7 +22,6 @@ import 'package:uuid/uuid.dart';
 import '../../core/constants.dart';
 import '../../core/errors.dart';
 import '../entities/audio_features.dart';
-import '../entities/camelot.dart';
 import '../entities/playlist.dart';
 import '../entities/track.dart';
 import '../repositories/audio_feature_repository.dart';

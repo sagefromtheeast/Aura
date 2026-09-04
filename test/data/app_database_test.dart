@@ -6,7 +6,9 @@
 // (After any schema change: `dart run build_runner build
 //  --delete-conflicting-outputs` first.)
 
-import 'package:drift/drift.dart';
+// drift also exports isNull/isNotNull as SQL expression builders; hide them
+// so the unqualified names here are flutter_test's matchers.
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
